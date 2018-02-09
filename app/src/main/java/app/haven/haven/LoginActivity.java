@@ -113,6 +113,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private void cancelLogin() {
         showProgress(false);
+        Thread.interrupted();
         canceledLogin = true;
     }
 
@@ -366,7 +367,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Intent i = new Intent(getApplicationContext(), SideBar.class);
                 startActivity(i);
             } else{
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                mPasswordView.setError("Incorrect Username or Password");
                 mPasswordView.requestFocus();
             }
         }

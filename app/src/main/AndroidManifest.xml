@@ -24,8 +24,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main" />
+            android:name=".RegisterActivity"
+            android:label="Register" />
         <activity
             android:name=".SideBar"
             android:label="@string/title_activity_side_bar"
