@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private View mCancelButtonView;
+    private View mRegisterButtonView;
     private boolean canceledLogin;
 
     @Override
@@ -104,6 +105,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                 cancelLogin();
+            }
+        });
+
+        /**
+         * Button that moves to create-account screen
+         */
+        mRegisterButtonView = (Button) findViewById(R.id.create_account_button);
+        mRegisterButtonView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+                startActivity(i);
             }
         });
     }

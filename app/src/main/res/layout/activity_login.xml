@@ -16,7 +16,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="108dp"
-        app:srcCompat="@mipmap/logo2" />
+        app:srcCompat="@mipmap/logo" />
 
     <ProgressBar
         android:id="@+id/login_progress"

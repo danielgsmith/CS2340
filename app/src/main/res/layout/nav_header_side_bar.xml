@@ -17,8 +17,8 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:paddingTop="0dp"
-        app:srcCompat="@mipmap/logo2"
-        android:contentDescription="Out Logo" />
+        app:srcCompat="@mipmap/logo"
+        android:contentDescription="Our Logo" />
 
     <TextView
         android:layout_width="match_parent"
