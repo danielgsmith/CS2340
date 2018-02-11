@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mCancelButtonView;
     private View mRegisterButtonView;
     private boolean canceledLogin;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
