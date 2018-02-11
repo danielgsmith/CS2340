@@ -55,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Username"
+            android:hint="Email"
             tools:layout_editor_absoluteX="15dp"
             tools:layout_editor_absoluteY="98dp" />
 

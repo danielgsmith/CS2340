@@ -18,6 +18,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class SideBar extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -98,6 +100,7 @@ public class SideBar extends AppCompatActivity
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // continue with delete
+                            FirebaseAuth.getInstance().signOut();
                             finish();
                             Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(i);
