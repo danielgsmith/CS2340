@@ -47,7 +47,7 @@ import java.util.List;
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
- * A login screen that offers login via username/password.
+ * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private FirebaseAuth mAuth;
 
     // UI references.
-    private AutoCompleteTextView musernameView;
+    private AutoCompleteTextView memailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -91,7 +91,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
-        musernameView = (AutoCompleteTextView) findViewById(R.id.username);
+        memailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -106,8 +106,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button musernameSignInButton = (Button) findViewById(R.id.username_sign_in_button);
-        musernameSignInButton.setOnClickListener(new OnClickListener() {
+        Button memailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        memailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
@@ -141,6 +141,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
         mAuth = FirebaseAuth.getInstance();
+        /**
+         * Button, logs in anonymously
+         */
+        Button mGuestButtonView = (Button) findViewById(R.id.continue_as_guest_button);
+        mGuestButtonView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signInAnonymously();
+            }
+        });
     }
 
     @Override
@@ -176,7 +186,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             return true;
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(musernameView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(memailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
@@ -206,7 +216,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     /**
      * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid username, missing fields, etc.), the
+     * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
@@ -215,11 +225,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         // Reset errors.
-        musernameView.setError(null);
+        memailView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String username = musernameView.getText().toString();
+        String email = memailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -232,14 +242,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cancel = true;
         }
 
-        // Check for a valid username address.
-        if (TextUtils.isEmpty(username)) {
-            musernameView.setError(getString(R.string.error_field_required));
-            focusView = musernameView;
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(email)) {
+            memailView.setError(getString(R.string.error_field_required));
+            focusView = memailView;
             cancel = true;
-        } /*else if (!isusernameValid(username)) {
-            musernameView.setError(getString(R.string.error_invalid_email));
-            focusView = musernameView;
+        } /*else if (!isemailValid(email)) {
+            memailView.setError(getString(R.string.error_invalid_email));
+            focusView = memailView;
             cancel = true;
         }*/
 
@@ -250,21 +260,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            mAuthTask = new UserLoginTask(username, password);
+            mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
             showProgress(true);
 
         }
     }
 
-    private boolean isusernameValid(String username) {
+    private boolean isemailValid(String email) {
         //TODO: Replace this with your own logic
-        return username.contains("@");
+        return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() >= 4;
+        return password.length() >= 6;
     }
 
     /**
@@ -312,26 +322,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
                         ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
 
-                // Select only username addresses.
+                // Select only email addresses.
                 ContactsContract.Contacts.Data.MIMETYPE +
                         " = ?", new String[]{ContactsContract.CommonDataKinds.Email
                 .CONTENT_ITEM_TYPE},
 
-                // Show primary username addresses first. Note that there won't be
-                // a primary username address if the user hasn't specified one.
+                // Show primary email addresses first. Note that there won't be
+                // a primary email address if the user hasn't specified one.
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> usernames = new ArrayList<>();
+        List<String> emails = new ArrayList<>();
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            usernames.add(cursor.getString(ProfileQuery.ADDRESS));
+            emails.add(cursor.getString(ProfileQuery.ADDRESS));
             cursor.moveToNext();
         }
 
-        addusernamesToAutoComplete(usernames);
+        addemailsToAutoComplete(emails);
 
     }
 
@@ -340,13 +350,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
-    private void addusernamesToAutoComplete(List<String> usernameAddressCollection) {
+    private void addemailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, usernameAddressCollection);
+                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
-        musernameView.setAdapter(adapter);
+        memailView.setAdapter(adapter);
     }
 
 
@@ -366,11 +376,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String musername;
+        private final String memail;
         private final String mPassword;
 
-        UserLoginTask(String username, String password) {
-            musername = username;
+        UserLoginTask(String email, String password) {
+            memail = email;
             mPassword = password;
         }
 
@@ -379,7 +389,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
 
             try {
-                signIn(musername, mPassword);
+                signIn(memail, mPassword);
                 if (signedIn) {
                     return true;
                 }
@@ -390,13 +400,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
+            /*for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
-                if (pieces[0].equals(musername)) {
+                if (pieces[0].equals(memail)) {
                     // Account exists, return true if the password matches.
                     return pieces[1].equals(mPassword);
                 }
-            }
+            }*/
 
 
             // TODO: register the new account here.
@@ -417,7 +427,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Intent i = new Intent(getApplicationContext(), SideBar.class);
                 startActivity(i);
             } else{
-                mPasswordView.setError("Incorrect Username or Password");
+                mPasswordView.setError("Incorrect email or Password");
                 mPasswordView.requestFocus();
                 Log.v(TAG, "Failed");
             }
@@ -468,12 +478,31 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // [END sign_in_with_email]
     }
 
-    /*@Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        //updateUI(currentUser);
-    }*/
+    private void signInAnonymously() {
+        mAuth.signInAnonymously()
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInAnonymously:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            finish();
+                            Intent i = new Intent(getApplicationContext(), SideBar.class);
+                            startActivity(i);
+                            //updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInAnonymously:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            //updateUI(null);
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
 }
 

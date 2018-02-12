@@ -39,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText mPassword;
     private EditText mConfirmPassowrd;
     private Spinner userSpinner;
+    private TextView spinnerError;
     //private Button mCreatAccountButton;
 
 
@@ -64,6 +65,8 @@ public class RegisterActivity extends AppCompatActivity {
         mEmail = findViewById(R.id.reg_user_username);
         mPassword = findViewById(R.id.reg_user_password);
         mConfirmPassowrd = findViewById(R.id.reg_user_confirm_password);
+
+        //Create Account Button
         Button mCreateAccountButton = (Button) findViewById(R.id.button_reg_create_account);
         mCreateAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +75,27 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        //Back to sign-in button
+        Button mBackToSignIn = (Button) findViewById(R.id.button_back_sign_in);
+        mBackToSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(i);
+            }
+        });
+
+        //Cancel Button
+        Button mCancel = (Button) findViewById(R.id.button_reg_cancel);
+        mCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(i);
+            }
+        });
         mAuth = FirebaseAuth.getInstance();
     }
 
@@ -84,13 +108,20 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void createAccount() {
-
+        //spinnerError = (TextView) userSpinner.getSelectedItem();
         // Reset errors.
         mEmail.setError(null);
         mPassword.setError(null);
+        mFirstName.setError(null);
+        mLastName.setError(null);
+        ((TextView)userSpinner.getSelectedView()).setError(null);
+
 
         final String email = mEmail.getText().toString();
         final String password = mPassword.getText().toString();
+        //final String firstName = mFirstName.getText().toString();
+        //final String lastName = mLastName.getText().toString();
+
         String confirm = mConfirmPassowrd.toString();
 
         boolean valid = validateForm();
@@ -112,6 +143,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 Log.d(TAG, "createUserWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 signIn(email, password);
+                                createUser();
                                 finish();
                                 Intent i = new Intent(getApplicationContext(), SideBar.class);
                                 startActivity(i);
@@ -128,6 +160,17 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     });
         }
+    }
+
+    private void createUser(){
+        final String email = mEmail.getText().toString().replaceAll("\\s+","");
+        final String firseName = mFirstName.getText().toString().replaceAll("\\s+","");
+        final String lastName = mLastName.getText().toString().replaceAll("\\s+","");
+        //final String email =
+        final String type = userSpinner.toString();
+
+        User user = new User(firseName, lastName, email, type);
+        Log.v("UserType", type);
     }
 
     private boolean isPasswordValid(String password) {
@@ -201,6 +244,25 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             mPassword.setError(null);
         }
+
+        String firstName = mFirstName.getText().toString();
+        if(firstName.isEmpty() || firstName.replaceAll("\\s+","").isEmpty()){
+            mFirstName.setError("Required");
+            valid = false;
+        }
+
+        String lastName = mLastName.getText().toString();
+        if(lastName.isEmpty() || lastName.replaceAll("\\s+","").isEmpty()){
+            mLastName.setError("Required");
+            valid = false;
+        }
+
+        String accountType = userSpinner.toString();
+        if (!accountType.equals("User") || !accountType.equals("Admin")){
+            ((TextView)userSpinner.getSelectedView()).setError("Required");
+            valid = false;
+        }
+
 
         return valid;
     }
