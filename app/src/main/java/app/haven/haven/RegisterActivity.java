@@ -171,6 +171,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         User user = new User(firseName, lastName, email, type);
         Log.v("UserType", type);
+
+
     }
 
     private boolean isPasswordValid(String password) {

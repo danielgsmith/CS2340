@@ -1,5 +1,7 @@
 package app.haven.haven;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 /**
  * Created by benar on 2/12/2018.
  */
