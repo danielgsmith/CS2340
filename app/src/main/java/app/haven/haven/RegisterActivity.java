@@ -203,12 +203,14 @@ public class RegisterActivity extends AppCompatActivity {
         final long type = userSpinner.getSelectedItemId();
 
         database = FirebaseDatabase.getInstance();
-        mRef = database.getReference();
+        DatabaseReference reference = database.getReference();
+
         FirebaseUser mFireUser = mAuth.getCurrentUser();
 
         User user = new User(firseName, lastName, email, type);
 
-        mRef.child("user").child(mFireUser.getUid()).child("info").setValue(user);
+        reference.child("users").child(mFireUser.getUid()).setValue(user);
+        //mRef.child("users").child(mFireUser.getUid()).push().setValue(user);
 
 
     }

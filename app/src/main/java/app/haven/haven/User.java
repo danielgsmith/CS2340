@@ -30,9 +30,9 @@ public class User {
         this.accountType = accountType;
     }
 
-    public String getFullName(){
+    /*public String getFullName(){
         return firstName + " " + lastName;
-    }
+    }*/
     public String getFirstName() {
         return firstName;
     }
@@ -58,10 +58,10 @@ public class User {
     public void setEmail(String email){
         this.email = email;
     }
-    public void setAccountType(){
+    public void setAccountType(long accountType){
         this.accountType = accountType;
     }
-    public void setPushId(String pushId) {
+    /*public void setPushId(String pushId) {
         this.pushId = pushId;
-    }
+    }*/
 }

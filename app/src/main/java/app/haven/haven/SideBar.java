@@ -27,18 +27,22 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SideBar extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ValueEventListener mUserlistener;
     private FirebaseUser mFireUser;
     private FirebaseDatabase database;
-    private User user;
-    private DatabaseReference mUserRef;
+    private User user = new User();
+    private DatabaseReference mDataRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_side_bar);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -65,13 +69,28 @@ public class SideBar extends AppCompatActivity
 
         mFireUser = FirebaseAuth.getInstance().getCurrentUser();
         //database = FirebaseDatabase.getInstance();
-        mUserRef = FirebaseDatabase.getInstance().getReference("user").child(mFireUser.getUid()).child("info");
-        //DatabaseReference pushRef = mUserRef.push();
+        mDataRef = FirebaseDatabase.getInstance().getReference();
 
+        mDataRef.child("users").child(mFireUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
+                //Log.w("test", "" + value);
+                /*user.setFirstName(value.getFirstName());
+                user.setLastName(value.getLastName());
+                user.setEmail(value.getEmail());
+                user.setAccountType(value.getAccountType());*/
+                user = dataSnapshot.getValue(User.class);
+                //Log.w("test", "" + user.getLastName());
+            }
 
-        //mUserRef = FirebaseDatabase.getInstance().getReference().child(mFireUser.getUid()).child("info");
-        getUser();
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        Log.w("User Info", "" + user.getEmail());
     }
 
     @Override
@@ -163,47 +182,5 @@ public class SideBar extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    private void getUser() {
-        /*mUserlistener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                user = (User) dataSnapshot.child(mFireUser.getUid()).child("info").getValue();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("getUser:", "loadPost:onCancelled", databaseError.toException());
-            }
-        };
-        mUserRef.addValueEventListener(mUserlistener);*/
-
-
-        /*mUserRef.child("users").child(mFireUser.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                //System.out.println(snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
-                Log.d("User Error", "" + snapshot.getValue());
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });*/
-        Log.d("User Error", "" + mUserRef.child("info"));
-        //databaseReference = FirebaseDatabase.getInstance().getReference().child("yKlWu19vhqQXfL2tDlBNfMSduMe2");
-        mUserRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                user = dataSnapshot.getValue(User.class);
-                Log.d("getUser", "" + dataSnapshot.child("info").getValue(User.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("getUser:", "loadPost:onCancelled", databaseError.toException());
-            }
-        });
-    }
-
 
 }
