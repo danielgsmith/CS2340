@@ -26,6 +26,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.ProviderQueryResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -36,6 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
     //Makes Firebase parts
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
+    private DatabaseReference mRef;
 
     private EditText mFirstName;
     private EditText mLastName;
@@ -161,8 +163,9 @@ public class RegisterActivity extends AppCompatActivity {
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(RegisterActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
+                                checkEmailUse();
+                                /*Toast.makeText(RegisterActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();*/
                                 //updateUI(null);
                             }
 
@@ -172,18 +175,40 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    private void checkEmailUse() {
+        mAuth.fetchProvidersForEmail(mEmail.getText().toString())
+                .addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ProviderQueryResult> task) {
+
+                        boolean check = !task.getResult().getProviders().isEmpty();
+
+                        if(check) {
+                            Toast.makeText(RegisterActivity.this, "Email already in use.",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
     private void createUser(){
         //Creates user in database
         final String email = mEmail.getText().toString().replaceAll("\\s+","");
         final String firseName = mFirstName.getText().toString().replaceAll("\\s+","");
         final String lastName = mLastName.getText().toString().replaceAll("\\s+","");
         //final String email =
-        final String type = userSpinner.toString();
+        final long type = userSpinner.getSelectedItemId();
 
         database = FirebaseDatabase.getInstance();
+        mRef = database.getReference();
+        FirebaseUser mFireUser = mAuth.getCurrentUser();
+
         User user = new User(firseName, lastName, email, type);
 
-        
+        mRef.child("user").child(mFireUser.getUid()).child("info").setValue(user);
 
 
     }
@@ -251,12 +276,13 @@ public class RegisterActivity extends AppCompatActivity {
 
         //checks if Password is there and if passwords match
         String password = mPassword.getText().toString();
+        String confirm = mConfirmPassowrd.getText().toString();
         if (TextUtils.isEmpty(password)) {
             mPassword.setError("Required.");
             valid = false;
-        } else if (!mPassword.toString().equals(mConfirmPassowrd.toString())) {
-          mConfirmPassowrd.setError("Passwords must match.");
-          valid = false;
+        } else if (!password.equals(confirm)) {
+            mConfirmPassowrd.setError("Passwords must match.");
+            valid = false;
         } else { //removes errors
             mPassword.setError(null);
             mConfirmPassowrd.setError(null);

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,9 +20,21 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class SideBar extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private ValueEventListener mUserlistener;
+    private FirebaseUser mFireUser;
+    private FirebaseDatabase database;
+    private User user;
+    private DatabaseReference mUserRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +62,16 @@ public class SideBar extends AppCompatActivity
         //The icons/buttons on the sidebar
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        mFireUser = FirebaseAuth.getInstance().getCurrentUser();
+        //database = FirebaseDatabase.getInstance();
+        mUserRef = FirebaseDatabase.getInstance().getReference("user").child(mFireUser.getUid()).child("info");
+        //DatabaseReference pushRef = mUserRef.push();
+
+
+
+        //mUserRef = FirebaseDatabase.getInstance().getReference().child(mFireUser.getUid()).child("info");
+        getUser();
     }
 
     @Override
@@ -92,13 +115,14 @@ public class SideBar extends AppCompatActivity
 
         //Handles logout action
         if (id == R.id.nav_logout) {
-            // Adds Alert when logging out to make sure you want to
             AlertDialog.Builder builder;
+            // Depending on Android Version, do one of these
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
             } else {
                 builder = new AlertDialog.Builder(this);
             }
+            // Adds Alert when logging out to make sure you want to
             builder.setTitle("Log out?")
                     .setMessage("Are you sure you would like to log out?")
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -127,13 +151,46 @@ public class SideBar extends AppCompatActivity
 
         } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_account) {
+            if (user.getFirstName() != null) {
+                Log.w("User Info:", "" + user.getFirstName());
+            }else {
+                Log.w("User Info:", "null");
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void getUser() {
+        /*mUserlistener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user = (User) dataSnapshot.child(mFireUser.getUid()).child("info").getValue();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("getUser:", "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+        mUserRef.addValueEventListener(mUserlistener);*/
+
+
+        /*mUserRef.child("users").child(mFireUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                //System.out.println(snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
+                Log.d("User Error", "" + snapshot.getValue());
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });*/
+        Log.d("User Error", "" + mUserRef.child("info"));
+
     }
 
 

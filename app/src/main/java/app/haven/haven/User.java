@@ -11,9 +11,19 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
-    private String accountType;
+    /**
+     * -1 form null
+     * 0 for user
+     * 1 for admin
+     */
+    private long accountType;
+    private String pushId;
 
-    public User(String firstName, String lastName, String email, String accountType){
+    public User() {
+        // Default constructor required for calls for database
+    }
+
+    public User(String firstName, String lastName, String email, long accountType){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -32,8 +42,11 @@ public class User {
     public String getEmail(){
         return email;
     }
-    public String getAccountType(){
+    public long getAccountType(){
         return accountType;
+    }
+    public String getPushId(){
+        return pushId;
     }
 
     public void setFirstName(String firstName) {
@@ -47,5 +60,8 @@ public class User {
     }
     public void setAccountType(){
         this.accountType = accountType;
+    }
+    public void setPushId(String pushId) {
+        this.pushId = pushId;
     }
 }
