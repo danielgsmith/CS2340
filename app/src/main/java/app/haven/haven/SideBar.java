@@ -190,7 +190,19 @@ public class SideBar extends AppCompatActivity
             }
         });*/
         Log.d("User Error", "" + mUserRef.child("info"));
+        //databaseReference = FirebaseDatabase.getInstance().getReference().child("yKlWu19vhqQXfL2tDlBNfMSduMe2");
+        mUserRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(User.class);
+                Log.d("getUser", "" + dataSnapshot.child("info").getValue(User.class));
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("getUser:", "loadPost:onCancelled", databaseError.toException());
+            }
+        });
     }
 
 
