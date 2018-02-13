@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     FirebaseDatabase database;
 
     // UI references.
-    private AutoCompleteTextView memailView;
+    private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -98,9 +98,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
-        memailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
+        //Password enter
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -113,19 +114,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button memailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        memailSignInButton.setOnClickListener(new OnClickListener() {
+        //Sets up Sign in button and adds listener to login
+        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
             }
         });
 
+        //Gets views
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-        /**
-         * Button that comes up when you try to log in
-         */
+
+        //Button that comes up when you try to log in, if clicked cancels and mvoes back to ;login screen
         mCancelButtonView = (Button) findViewById(R.id.cancel_action_button);
         mCancelButtonView.setOnClickListener(new OnClickListener() {
             @Override
@@ -134,9 +136,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        /**
-         * Button that moves to create-account screen
-         */
+        //Button that moves to create account screen
         mRegisterButtonView = (Button) findViewById(R.id.create_account_button);
         mRegisterButtonView.setOnClickListener(new OnClickListener() {
             @Override
@@ -148,9 +148,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
         mAuth = FirebaseAuth.getInstance();
-        /**
-         * Button, logs in anonymously
-         */
+
+        //Logs in anonymously
         Button mGuestButtonView = (Button) findViewById(R.id.continue_as_guest_button);
         mGuestButtonView.setOnClickListener(new OnClickListener() {
             @Override
@@ -168,9 +167,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         //updateUI(currentUser);
     }
 
-    /**
-     * If the cancel button is clicked return to main screen and don't give an error
-     */
+
+    //If the cancel button is clicked return to main screen and don't give an error
     private void cancelLogin() {
         showProgress(false);
         Thread.interrupted();
@@ -193,7 +191,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             return true;
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(memailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
@@ -232,11 +230,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         // Reset errors.
-        memailView.setError(null);
+        mEmailView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = memailView.getText().toString();
+        String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -251,14 +249,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            memailView.setError(getString(R.string.error_field_required));
-            focusView = memailView;
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
             cancel = true;
-        } /*else if (!isemailValid(email)) {
-            memailView.setError(getString(R.string.error_invalid_email));
-            focusView = memailView;
+        } else if (!isemailValid(email)) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailView;
             cancel = true;
-        }*/
+        }
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -274,11 +272,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    //Checks if Email is valid by having an @
     private boolean isemailValid(String email) {
         //TODO: Replace this with your own logic
         return email.contains("@");
     }
 
+    //Checks if password is >= 6 characters long
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
         return password.length() >= 6;
@@ -348,7 +348,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cursor.moveToNext();
         }
 
-        addemailsToAutoComplete(emails);
+        addEmailsToAutoComplete(emails);
 
     }
 
@@ -357,13 +357,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
-    private void addemailsToAutoComplete(List<String> emailAddressCollection) {
+    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
-        memailView.setAdapter(adapter);
+        mEmailView.setAdapter(adapter);
     }
 
 
@@ -383,11 +383,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String memail;
+        private final String mEmail;
         private final String mPassword;
 
         UserLoginTask(String email, String password) {
-            memail = email;
+            mEmail = email;
             mPassword = password;
         }
 
@@ -396,7 +396,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
 
             try {
-                signIn(memail, mPassword);
+                signIn(mEmail, mPassword);
                 if (signedIn) {
                     return true;
                 }
@@ -409,7 +409,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             /*for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
-                if (pieces[0].equals(memail)) {
+                if (pieces[0].equals(mEmail)) {
                     // Account exists, return true if the password matches.
                     return pieces[1].equals(mPassword);
                 }
@@ -426,14 +426,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
 
-            if(canceledLogin) {
+            if(canceledLogin) { //if login was canceled set focus to password and try again
                 mPasswordView.requestFocus();
                 canceledLogin = false;
-            } else if (success || signedIn) {
+            } else if (success || signedIn) { //if user is signed in, move to SideBar class
                 finish();
                 Intent i = new Intent(getApplicationContext(), SideBar.class);
                 startActivity(i);
-            } else{
+            } else{ //Tell them incorrect and put focus on password
                 mPasswordView.setError("Incorrect email or Password");
                 mPasswordView.requestFocus();
                 Log.v(TAG, "Failed");
@@ -447,6 +447,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    //Sign into FireBase Authentication
     private void signIn(String email, String password) {
         Log.d(TAG, "signIn:" + email);
             /*if (!validateForm()) {
@@ -485,6 +486,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // [END sign_in_with_email]
     }
 
+    //Signs in to FireBase Authentication Anonymously
     private void signInAnonymously() {
         mAuth.signInAnonymously()
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

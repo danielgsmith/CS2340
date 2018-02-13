@@ -33,8 +33,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "EmailPassword";
 
+    //Makes Firebase parts
     private FirebaseAuth mAuth;
-    FirebaseDatabase database;
+    private FirebaseDatabase database;
 
     private EditText mFirstName;
     private EditText mLastName;
@@ -42,7 +43,6 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText mPassword;
     private EditText mConfirmPassowrd;
     private Spinner userSpinner;
-    private TextView spinnerError;
     //private Button mCreatAccountButton;
 
 
@@ -51,6 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        //Makes Spinner with Invisible first item so it has a prompt on it
         String[] userTypes = new String[]{"User","Admin"};
         userSpinner = findViewById(R.id.spinner_user_type);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, userTypes);
@@ -63,6 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
                         // R.layout.contact_spinner_nothing_selected_dropdown, // Optional
                         this));
 
+        //Grabs Text fields from GUI
         mFirstName = findViewById(R.id.reg_users_first_name);
         mLastName = findViewById(R.id.reg_users_last_name);
         mEmail = findViewById(R.id.reg_user_username);
@@ -99,6 +101,7 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        //Makes Firebase Authentication instance
         mAuth = FirebaseAuth.getInstance();
     }
 
@@ -120,7 +123,7 @@ public class RegisterActivity extends AppCompatActivity {
         mConfirmPassowrd.setError(null);
         ((TextView)userSpinner.getSelectedView()).setError(null);
 
-
+        //Saved Strings
         final String email = mEmail.getText().toString();
         final String password = mPassword.getText().toString();
         //final String firstName = mFirstName.getText().toString();
@@ -128,7 +131,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         String confirm = mConfirmPassowrd.toString();
 
+        //Checks if all parts are filled and correct
         boolean valid = validateForm();
+        //where the focus is
         View focusView = null;
 
 
@@ -138,6 +143,7 @@ public class RegisterActivity extends AppCompatActivity {
             //focusView.requestFocus();
             return;
         } else {
+            //Creates a Email/Password user Authentication in FireBase or says failed
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -167,6 +173,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void createUser(){
+        //Creates user in database
         final String email = mEmail.getText().toString().replaceAll("\\s+","");
         final String firseName = mFirstName.getText().toString().replaceAll("\\s+","");
         final String lastName = mLastName.getText().toString().replaceAll("\\s+","");
@@ -230,6 +237,7 @@ public class RegisterActivity extends AppCompatActivity {
     private boolean validateForm() {
         boolean valid = true;
 
+        //Checks if email is there and has an @ sign
         String email = mEmail.getText().toString();
         if (TextUtils.isEmpty(email)) {
             mEmail.setError("Required.");
@@ -237,10 +245,11 @@ public class RegisterActivity extends AppCompatActivity {
         } else if (!isEmailValid(email)) {
             mEmail.setError(getString(R.string.error_invalid_email));
             valid = false;
-        } else {
+        } else { //Removes errors
             mEmail.setError(null);
         }
 
+        //checks if Password is there and if passwords match
         String password = mPassword.getText().toString();
         if (TextUtils.isEmpty(password)) {
             mPassword.setError("Required.");
@@ -248,32 +257,35 @@ public class RegisterActivity extends AppCompatActivity {
         } else if (!mPassword.toString().equals(mConfirmPassowrd.toString())) {
           mConfirmPassowrd.setError("Passwords must match.");
           valid = false;
-        } else {
+        } else { //removes errors
             mPassword.setError(null);
             mConfirmPassowrd.setError(null);
         }
 
+        //Checks if First Name field is written to and not just empty or spaces
         String firstName = mFirstName.getText().toString();
         if(firstName.isEmpty() || firstName.replaceAll("\\s+","").isEmpty()){
             mFirstName.setError("Required");
             valid = false;
-        } else {
+        } else { //Removes errors
             mFirstName.setError(null);
         }
 
+        //Checks if Last Name field is written to and not just empty or spaces
         String lastName = mLastName.getText().toString();
         if(lastName.isEmpty() || lastName.replaceAll("\\s+","").isEmpty()){
             mLastName.setError("Required");
             valid = false;
-        } else {
+        } else { //Removes errors
             mLastName.setError(null);
         }
 
+        //Checks if spinner has been selected
         if (userSpinner.getSelectedItemId() == -1){
             ((TextView)userSpinner.getSelectedView()).setError("Required");
-            Log.v("Spinner", "" + userSpinner.getSelectedItemId());
+            //Log.v("Spinner", "" + userSpinner.getSelectedItemId());
             valid = false;
-        } else {
+        } else { //Removes errors
             ((TextView)userSpinner.getSelectedView()).setError(null);
         }
 
