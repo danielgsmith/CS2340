@@ -117,6 +117,7 @@ public class RegisterActivity extends AppCompatActivity {
         mPassword.setError(null);
         mFirstName.setError(null);
         mLastName.setError(null);
+        mConfirmPassowrd.setError(null);
         ((TextView)userSpinner.getSelectedView()).setError(null);
 
 
@@ -236,8 +237,7 @@ public class RegisterActivity extends AppCompatActivity {
         } else if (!isEmailValid(email)) {
             mEmail.setError(getString(R.string.error_invalid_email));
             valid = false;
-        }
-        else {
+        } else {
             mEmail.setError(null);
         }
 
@@ -245,29 +245,36 @@ public class RegisterActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(password)) {
             mPassword.setError("Required.");
             valid = false;
-        } else if (mPassword.toString().equals(mConfirmPassowrd.toString())) {
-          mPassword.setError("Passwords must match.");
+        } else if (!mPassword.toString().equals(mConfirmPassowrd.toString())) {
+          mConfirmPassowrd.setError("Passwords must match.");
           valid = false;
         } else {
             mPassword.setError(null);
+            mConfirmPassowrd.setError(null);
         }
 
         String firstName = mFirstName.getText().toString();
         if(firstName.isEmpty() || firstName.replaceAll("\\s+","").isEmpty()){
             mFirstName.setError("Required");
             valid = false;
+        } else {
+            mFirstName.setError(null);
         }
 
         String lastName = mLastName.getText().toString();
         if(lastName.isEmpty() || lastName.replaceAll("\\s+","").isEmpty()){
             mLastName.setError("Required");
             valid = false;
+        } else {
+            mLastName.setError(null);
         }
 
-        String accountType = userSpinner.toString();
-        if (!accountType.equals("User") || !accountType.equals("Admin")){
+        if (userSpinner.getSelectedItemId() == -1){
             ((TextView)userSpinner.getSelectedView()).setError("Required");
+            Log.v("Spinner", "" + userSpinner.getSelectedItemId());
             valid = false;
+        } else {
+            ((TextView)userSpinner.getSelectedView()).setError(null);
         }
 
 
