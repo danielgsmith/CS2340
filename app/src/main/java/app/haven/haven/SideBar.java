@@ -34,23 +34,26 @@ public class SideBar extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Not Implemented Yet", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
 
+        //Makes side drawer and adds functionality
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        //The icons/buttons on the sidebar
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
     public void onBackPressed() {
+        //If drawer is open go back to main screen, otherwise do SUPER
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -87,8 +90,9 @@ public class SideBar extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        //Handles logout action
         if (id == R.id.nav_logout) {
-            // Handle the logout action
+            // Adds Alert when logging out to make sure you want to
             AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);

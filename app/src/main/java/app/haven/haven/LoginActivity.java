@@ -90,11 +90,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //Checks if device is still logged into Firebase, if so skip login page and go to Sidebar
         if(FirebaseAuth.getInstance().getCurrentUser() != null && !FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
             finish();
             Intent i = new Intent(getApplicationContext(), SideBar.class);
             startActivity(i);
         }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
