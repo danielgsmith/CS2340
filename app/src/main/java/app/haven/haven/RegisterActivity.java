@@ -26,12 +26,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "EmailPassword";
 
     private FirebaseAuth mAuth;
+    FirebaseDatabase database;
 
     private EditText mFirstName;
     private EditText mLastName;
@@ -169,8 +172,10 @@ public class RegisterActivity extends AppCompatActivity {
         //final String email =
         final String type = userSpinner.toString();
 
+        database = FirebaseDatabase.getInstance();
         User user = new User(firseName, lastName, email, type);
-        Log.v("UserType", type);
+
+        
 
 
     }
