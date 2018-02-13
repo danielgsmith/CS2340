@@ -18,6 +18,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -67,28 +69,34 @@ public class SideBar extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
         mFireUser = FirebaseAuth.getInstance().getCurrentUser();
-        //database = FirebaseDatabase.getInstance();
         mDataRef = FirebaseDatabase.getInstance().getReference();
+        //Gets user out of the database
+        if (mFireUser.isAnonymous() && mFireUser != null) {
 
-        mDataRef.child("users").child(mFireUser.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        } else {
+            mDataRef.child("users").child(mFireUser.getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                //Log.w("test", "" + value);
+                    //Log.w("test", "" + value);
                 /*user.setFirstName(value.getFirstName());
                 user.setLastName(value.getLastName());
                 user.setEmail(value.getEmail());
                 user.setAccountType(value.getAccountType());*/
-                user = dataSnapshot.getValue(User.class);
-                //Log.w("test", "" + user.getLastName());
-            }
+                    user = dataSnapshot.getValue(User.class);
+                    //Log.w("test", "" + user.getLastName());
+                    TextView welcomeText = (TextView) findViewById(R.id.textView);
+                    welcomeText.setText("Welcome " + user.getFirstName() + " " + user.getLastName());
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
 
         Log.w("User Info", "" + user.getEmail());
     }
@@ -171,10 +179,11 @@ public class SideBar extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_account) {
-            if (user.getFirstName() != null) {
-                Log.w("User Info:", "" + user.getFirstName());
-            }else {
-                Log.w("User Info:", "null");
+            if (mFireUser.isAnonymous() && mFireUser != null) {
+                Toast.makeText(this, "Must be logged in.",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Log.w("Logged in:", "Implement account page");
             }
         }
 
