@@ -200,8 +200,8 @@ public class SideBar extends AppCompatActivity
             if (!mFireUser.isAnonymous() && user.getAccountType() == 1) {
                 fragment = new AdminPageFragment();
                 setTitle("Admin Page");
-                Toast.makeText(this, "Permission Granted",
-                        Toast.LENGTH_SHORT).show();
+                /*Toast.makeText(this, "Permission Granted",
+                        Toast.LENGTH_SHORT).show();*/
             }
             else {
                 Toast.makeText(this, "Permission Denied",

@@ -1,6 +1,7 @@
 package app.haven.haven;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -108,6 +109,8 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
         switch (view.getId()) {
             case R.id.button_admin_create_shelter:
                 Log.w("CreateShelter:", "Worked");
+                Intent i = new Intent(getActivity(), CreateNewShelterActivity.class);
+                startActivity(i);
                 break;
             case R.id.button_admin_remove_shelter:
                 Log.w("RemoveShelter:", "Worked");

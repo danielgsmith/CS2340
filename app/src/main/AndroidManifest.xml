@@ -29,9 +29,11 @@
         <activity
             android:name=".SideBar"
             android:label="@string/title_activity_side_bar"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".CreateNewShelterActivity"
+            android:label="@string/title_activity_create_new_shelter"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
