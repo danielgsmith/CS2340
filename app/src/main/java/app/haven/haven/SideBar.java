@@ -20,7 +20,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,9 +30,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SideBar extends AppCompatActivity
         implements
@@ -46,6 +42,7 @@ public class SideBar extends AppCompatActivity
     private FirebaseDatabase database;
     private User user = new User();
     private DatabaseReference mDataRef;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,37 +61,34 @@ public class SideBar extends AppCompatActivity
             }
         });
 
-        //Makes side drawer and adds functionality
+        // Makes side drawer and adds functionality
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        //The icons/buttons on the sidebar
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        // The icons/buttons on the sidebar
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
         mFireUser = FirebaseAuth.getInstance().getCurrentUser();
         mDataRef = FirebaseDatabase.getInstance().getReference();
         //Gets user out of the database
-        if (mFireUser.isAnonymous() && mFireUser != null) {
-
-        } else {
+        if (!mFireUser.isAnonymous() || mFireUser == null) {
             mDataRef.child("users").child(mFireUser.getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    //Log.w("test", "" + value);
-                /*user.setFirstName(value.getFirstName());
-                user.setLastName(value.getLastName());
-                user.setEmail(value.getEmail());
-                user.setAccountType(value.getAccountType());*/
+                    // Grabs saved user class from database
                     user = dataSnapshot.getValue(User.class);
                     //Log.w("test", "" + user.getLastName());
+                    // Sets Welcome text have have their full name
                     TextView welcomeText = (TextView) findViewById(R.id.textView);
                     welcomeText.setText("Welcome " + user.getFirstName() + " " + user.getLastName());
+                    // Checks if user is an admin, if so sets admin menu to visible
+                    if (!mFireUser.isAnonymous() && user.getAccountType() == 1)
+                        unhiddenAdminMenu();
                 }
 
                 @Override
@@ -104,23 +98,31 @@ public class SideBar extends AppCompatActivity
             });
         }
 
-        Log.w("User Info", "" + user.getEmail());
+        //Log.w("User Info", "" + user.getEmail());
 
 
-
-        //NOTE:  Checks first item in the navigation drawer initially
+        // Checks first item in the navigation drawer initially
         navigationView.setCheckedItem(R.id.nav_map);
         setTitle("Map");
 
-        //NOTE:  Open fragment1 initially.
+        // Open ShelterMap Fragment initially.
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.mainFrame, new ShelterMapFragment());
         ft.commit();
+
+    }
+
+    // Sets admin menu to visible
+    private void unhiddenAdminMenu()
+    {
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.admin_menu).setVisible(true);
     }
 
     @Override
     public void onBackPressed() {
-        //If drawer is open go back to main screen, otherwise do SUPER
+        // If drawer is open go back to main screen, otherwise do SUPER
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -143,7 +145,7 @@ public class SideBar extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        // noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -157,7 +159,7 @@ public class SideBar extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         Fragment fragment = null;
-        //Handles logout action
+        // Handles logout action
         if (id == R.id.nav_logout) {
             AlertDialog.Builder builder;
             // Depending on Android Version, do one of these

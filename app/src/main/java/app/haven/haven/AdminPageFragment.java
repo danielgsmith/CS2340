@@ -29,6 +29,10 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
     private String mParam1;
     private String mParam2;
 
+    View view;
+    Button createShelter;
+    Button remvoeShelter;
+
     private OnFragmentInteractionListener mListener;
 
     public AdminPageFragment() {
@@ -66,7 +70,12 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_admin_page, container, false);
+        view = inflater.inflate(R.layout.fragment_admin_page, container, false);
+        createShelter = (Button) view.findViewById(R.id.button_admin_create_shelter);
+        createShelter.setOnClickListener(this);
+        remvoeShelter = (Button) view.findViewById(R.id.button_admin_remove_shelter);
+        remvoeShelter.setOnClickListener(this);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -97,8 +106,11 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.button_add_shelter:
-                Log.w("Create Shelter", "Worked");
+            case R.id.button_admin_create_shelter:
+                Log.w("CreateShelter:", "Worked");
+                break;
+            case R.id.button_admin_remove_shelter:
+                Log.w("RemoveShelter:", "Worked");
         }
     }
 
