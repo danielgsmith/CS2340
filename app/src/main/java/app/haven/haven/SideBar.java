@@ -2,10 +2,13 @@ package app.haven.haven;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -33,7 +36,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SideBar extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements
+        ShelterMapFragment.OnFragmentInteractionListener,
+        AdminPageFragment.OnFragmentInteractionListener,
+        NavigationView.OnNavigationItemSelectedListener {
 
     private ValueEventListener mUserlistener;
     private FirebaseUser mFireUser;
@@ -99,6 +105,17 @@ public class SideBar extends AppCompatActivity
         }
 
         Log.w("User Info", "" + user.getEmail());
+
+
+
+        //NOTE:  Checks first item in the navigation drawer initially
+        navigationView.setCheckedItem(R.id.nav_map);
+        setTitle("Map");
+
+        //NOTE:  Open fragment1 initially.
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.mainFrame, new ShelterMapFragment());
+        ft.commit();
     }
 
     @Override
@@ -139,7 +156,7 @@ public class SideBar extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        Fragment fragment = null;
         //Handles logout action
         if (id == R.id.nav_logout) {
             AlertDialog.Builder builder;
@@ -171,20 +188,37 @@ public class SideBar extends AppCompatActivity
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
         } else if (id == R.id.nav_map) {
-
+            fragment = new ShelterMapFragment();
+            setTitle("Map");
         } else if (id == R.id.nav_search) {
-
+            setTitle("Criteria");
         } else if (id == R.id.nav_shelters) {
-
-        } else if (id == R.id.nav_share) {
-
+            setTitle("Shelters");
+        } else if (id == R.id.nav_admin_page) {
+            if (!mFireUser.isAnonymous() && user.getAccountType() == 1) {
+                fragment = new AdminPageFragment();
+                setTitle("Admin Page");
+                Toast.makeText(this, "Permission Granted",
+                        Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(this, "Permission Denied",
+                        Toast.LENGTH_SHORT).show();
+            }
         } else if (id == R.id.nav_account) {
             if (mFireUser.isAnonymous() && mFireUser != null) {
                 Toast.makeText(this, "Must be logged in.",
                         Toast.LENGTH_SHORT).show();
             } else {
+                setTitle("Account Settings");
                 Log.w("Logged in:", "Implement account page");
             }
+        }
+
+        if (fragment != null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.mainFrame, fragment);
+            ft.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -192,4 +226,8 @@ public class SideBar extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 }
