@@ -84,8 +84,8 @@ public class SideBar extends AppCompatActivity
                     user = dataSnapshot.getValue(User.class);
                     //Log.w("test", "" + user.getLastName());
                     // Sets Welcome text have have their full name
-                    TextView welcomeText = (TextView) findViewById(R.id.textView);
-                    welcomeText.setText("Welcome " + user.getFirstName() + " " + user.getLastName());
+                    //TextView welcomeText = (TextView) findViewById(R.id.textView);
+                    //welcomeText.setText("Welcome " + user.getFirstName() + " " + user.getLastName());
                     // Checks if user is an admin, if so sets admin menu to visible
                     if (!mFireUser.isAnonymous() && user.getAccountType() == 1)
                         unhiddenAdminMenu();
