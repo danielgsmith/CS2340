@@ -197,7 +197,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void createUser(){
         //Creates user in database
         final String email = mEmail.getText().toString().replaceAll("\\s+","");
-        final String firseName = mFirstName.getText().toString().replaceAll("\\s+","");
+        final String firstName = mFirstName.getText().toString().replaceAll("\\s+","");
         final String lastName = mLastName.getText().toString().replaceAll("\\s+","");
         //final String email =
         final long type = userSpinner.getSelectedItemId();
@@ -207,7 +207,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         FirebaseUser mFireUser = mAuth.getCurrentUser();
 
-        User user = new User(firseName, lastName, email, type);
+        User user = new User(firstName, lastName, email, type);
 
         reference.child("users").child(mFireUser.getUid()).setValue(user);
         //mRef.child("users").child(mFireUser.getUid()).push().setValue(user);
@@ -216,7 +216,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean isPasswordValid(String password) {
-        return password.length() >= 4;
+        return password.length() >= 6;
     }
 
     private boolean isEmailValid(String username) {
@@ -282,7 +282,10 @@ public class RegisterActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(password)) {
             mPassword.setError("Required.");
             valid = false;
-        } else if (!password.equals(confirm)) {
+        } else if(!isPasswordValid(password)) {
+            mPassword.setError("Must beat least 6 characters long.");
+            valid = false;
+        }else if (!password.equals(confirm)) {
             mConfirmPassowrd.setError("Passwords must match.");
             valid = false;
         } else { //removes errors

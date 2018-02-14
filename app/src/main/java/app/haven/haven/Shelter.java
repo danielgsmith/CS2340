@@ -7,7 +7,7 @@ public class Shelter {
     private boolean acceptsMale;
     private boolean acceptsFemale;
     private double longitude;
-    private double latatude;
+    private double latitude;
     private int phone;
     private String address;
 
@@ -18,13 +18,13 @@ public class Shelter {
     }
 
     Shelter(String name, int capacity, boolean acceptsMale, boolean acceptsFemale,
-            double longitude, double latatude, int phone, String address) {
+            double longitude, double latitude, int phone, String address) {
         this.shelterName = name;
         this.capacity = capacity;
         this.acceptsMale = acceptsMale;
         this.acceptsFemale = acceptsFemale;
         this.longitude = longitude;
-        this.latatude = latatude;
+        this.latitude = latitude;
         this.phone = phone;
         this.address = address;
     }
@@ -57,11 +57,39 @@ public class Shelter {
         return longitude;
     }
 
-    public double getLatatude(){
-        return latatude;
+    public double getLatitude(){
+        return latitude;
     }
 
     public void setShelterName(String shelterName){
         this.shelterName = shelterName;
+    }
+
+    public void setAddress(String address){
+        this.address = address;
+    }
+
+    public void setCapacity(int capacity){
+        this.capacity = capacity;
+    }
+
+    public void setPhone(int phone) {
+        this.phone = phone;
+    }
+
+    public void setAcceptMale(boolean acceptsMale){
+        this.acceptsMale = acceptsMale;
+    }
+
+    public void setAcceptsFemale(boolean acceptsFemale){
+        this.acceptsFemale = acceptsFemale;
+    }
+
+    public void setLongitude(double longitude){
+        this.longitude = longitude;
+    }
+
+    public void setLatitude(double latitude){
+        this.latitude = latitude;
     }
 }
