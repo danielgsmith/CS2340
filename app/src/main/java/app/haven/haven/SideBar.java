@@ -76,7 +76,7 @@ public class SideBar extends AppCompatActivity
         mFireUser = FirebaseAuth.getInstance().getCurrentUser();
         mDataRef = FirebaseDatabase.getInstance().getReference();
         //Gets user out of the database
-        if (!mFireUser.isAnonymous() || mFireUser == null) {
+        if (!mFireUser.isAnonymous() || mFireUser != null) {
             mDataRef.child("users").child(mFireUser.getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

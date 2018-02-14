@@ -24,8 +24,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Congrats on being an admin"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="30sp" />
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="27sp" />
 
             <Space
                 android:layout_width="match_parent"
