@@ -13,7 +13,12 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class CreateNewShelterActivity extends AppCompatActivity {
+
+    FirebaseDatabase database;
 
     private EditText textShelterName;
     private EditText textShelterCapacity;
@@ -66,6 +71,7 @@ public class CreateNewShelterActivity extends AppCompatActivity {
                 createShelter();
             }
         });
+
     }
 
     private void createShelter(){
@@ -82,7 +88,8 @@ public class CreateNewShelterActivity extends AppCompatActivity {
         shelterName = textShelterName.getText().toString();
         address = textAddress.getText().toString();
         if (!TextUtils.isEmpty(textPhone.getText()))
-            phone = Integer.parseInt(textPhone.getText().toString().replaceAll("-", "").replaceAll("\\(", "").replaceAll("\\)", ""));
+            phone = Integer.parseInt(textPhone.getText().toString().replaceAll("-", "")
+                    .replaceAll("\\(", "").replaceAll("\\)", ""));
         male = checkMale.isSelected();
         female = checkFemale.isSelected();
         if (!TextUtils.isEmpty(textLatitude.getText().toString()))
@@ -97,6 +104,15 @@ public class CreateNewShelterActivity extends AppCompatActivity {
         boolean valid = validateForm();
         // where the focus is
         View focusView = null;
+
+        if(valid) {
+            database = FirebaseDatabase.getInstance();
+            DatabaseReference reference = database.getReference();
+
+            Shelter shelter = new Shelter(shelterName, capacity, male, female, longitude, latitiude, phone, address);
+
+            reference.child("shelters").child(shelterName).setValue(shelter);
+        }
     }
 
     private boolean validateForm(){
@@ -112,8 +128,14 @@ public class CreateNewShelterActivity extends AppCompatActivity {
             valid = false;
         }
 
+        String stringphone = textPhone.getText().toString().replaceAll("-", "").
+                replaceAll("\\(", "").replaceAll("\\)", "");
         if(TextUtils.isEmpty(textPhone.getText().toString())){
             textPhone.setError("Required");
+            valid = false;
+        } else if ((stringphone.length() < 10 && stringphone.length() != 11) || (stringphone.length() > 10 && stringphone.length() != 11))
+        {
+            textPhone.setError("Must be a valid phone number.");
             valid = false;
         }
 
