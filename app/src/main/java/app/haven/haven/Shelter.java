@@ -60,4 +60,8 @@ public class Shelter {
     public double getLatatude(){
         return latatude;
     }
+
+    public void setShelterName(String shelterName){
+        this.shelterName = shelterName;
+    }
 }
