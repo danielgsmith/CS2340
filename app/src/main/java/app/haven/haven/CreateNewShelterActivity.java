@@ -50,7 +50,7 @@ public class CreateNewShelterActivity extends AppCompatActivity {
     private double latitude;
     private double longitude;
     private int capacity;
-    private TextView acceptedText = findViewById(R.id.text_shelter_criteria);
+    private TextView acceptedText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +84,7 @@ public class CreateNewShelterActivity extends AppCompatActivity {
         checkChildren = findViewById(R.id.check_children);
         checkVeteran = findViewById(R.id.check_vets);
         textKey = findViewById(R.id.shelter_key);
+        acceptedText = findViewById(R.id.text_shelter_criteria);
 
         addShelter = (Button) findViewById(R.id.button_create_shelter);
         addShelter.setOnClickListener(new View.OnClickListener() {
