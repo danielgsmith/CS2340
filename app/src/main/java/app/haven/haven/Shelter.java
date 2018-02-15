@@ -3,7 +3,9 @@ package app.haven.haven;
 public class Shelter {
 
     private String shelterName;
+    private long capacityType;
     private int capacity;
+    private int subCapacity; // Used if place has family rooms and singles
     private boolean acceptsMale;
     private boolean acceptsFemale;
     private double longitude;
@@ -25,11 +27,13 @@ public class Shelter {
         // Default constructor required for calls for database
     }
 
-    Shelter(String name, int capacity, boolean acceptsMale, boolean acceptsFemale, boolean acceptsAdults, boolean acceptsNewBorns,
+    Shelter(String name, long capacityType, int capacity, int subCapacity, boolean acceptsMale, boolean acceptsFemale, boolean acceptsAdults, boolean acceptsNewBorns,
             boolean acceptsChildUnder5, boolean acceptsFamilies, boolean acceptsChild, boolean acceptsVeterans, double longitude,
             double latitude, String phone, String address, int uniqueKey, String notes) {
         this.shelterName = name;
+        this.capacityType = capacityType;
         this.capacity = capacity;
+        this.subCapacity = capacity;
         this.acceptsMale = acceptsMale;
         this.acceptsFemale = acceptsFemale;
         this.longitude = longitude;
@@ -173,5 +177,21 @@ public class Shelter {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public long getCapacityType() {
+        return capacityType;
+    }
+
+    public void setCapacityType(long capacityType) {
+        this.capacityType = capacityType;
+    }
+
+    public int getSubCapacity() {
+        return subCapacity;
+    }
+
+    public void setSubCapacity(int subCapacity) {
+        this.subCapacity = subCapacity;
     }
 }

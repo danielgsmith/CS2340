@@ -53,6 +53,145 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
+            <LinearLayout
+                android:id="@+id/text_shelter_holder_capacity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Capacity:"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <Space
+                    android:id="@+id/space_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_weight="1"
+                    android:visibility="gone" />
+
+                <Spinner
+                    android:id="@+id/shelter_capacity_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/holder_apartments"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/text_shelter_capacity_appartments"
+                android:layout_width="214dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Capacity:"
+                android:textAlignment="textEnd"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/shelter_capacity_apartments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="Apartments"
+                android:inputType="number" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/holder_single_rooms"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/text_shelter_capacity_rooms_single"
+                android:layout_width="214dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Capacity:"
+                android:textAlignment="textEnd"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/shelter_capacity_single_rooms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="Single Rooms"
+                android:inputType="number" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/holder_family_rooms"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/text_shelter_capacity_family_rooms"
+                android:layout_width="214dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Capacity:"
+                android:textAlignment="textEnd"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/shelter_capacity_family_rooms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="Family Rooms"
+                android:inputType="number" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/holer_spaces"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
             <TextView
                 android:id="@+id/text_shelter_capacity"
                 android:layout_width="214dp"
@@ -60,7 +199,8 @@
                 android:layout_weight="1"
                 android:text="Capacity:"
                 android:textAlignment="textEnd"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:visibility="invisible" />
 
             <EditText
                 android:id="@+id/shelter_capacity"
@@ -68,7 +208,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Total Capacity"
+                android:hint="Total Spaces"
                 android:inputType="number" />
 
         </LinearLayout>

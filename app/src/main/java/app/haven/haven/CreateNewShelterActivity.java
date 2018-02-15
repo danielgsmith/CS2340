@@ -7,10 +7,14 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +46,8 @@ public class CreateNewShelterActivity extends AppCompatActivity {
     private String address;
     private String notes;
     private String phone;
+    private Spinner capacitySpinner;
+    private EditText selectedCapacity;
     private int key;
     private boolean male;
     private boolean female;
@@ -54,7 +60,9 @@ public class CreateNewShelterActivity extends AppCompatActivity {
     private double latitude;
     private double longitude;
     private int capacity;
+    private int subCapacity = 0;
     private TextView acceptedText;
+    private long selected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +80,18 @@ public class CreateNewShelterActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        String[] capacityTypes = new String[]{"Spaces", "Family Rooms", "Single Rooms", "Family and Single", "Apartments"};
+        capacitySpinner = findViewById(R.id.shelter_capacity_spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, capacityTypes);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        capacitySpinner.setPrompt("Choose Capacity Type: ");
+        capacitySpinner.setAdapter(
+                new NothingSelectedSpinnerAdapter(
+                        adapter,
+                        R.layout.capacity_spinner_row_nothing_selected,
+                        // R.layout.contact_spinner_nothing_selected_dropdown, // Optional
+                        this));
 
         textShelterName = findViewById(R.id.shelter_name);
         textShelterCapacity = findViewById(R.id.shelter_capacity);
@@ -99,6 +119,55 @@ public class CreateNewShelterActivity extends AppCompatActivity {
             }
         });
 
+
+        capacitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selected = capacitySpinner.getSelectedItemId();
+                Log.w("Spinner ID:", "" + selected);
+                if (selected != -1) {
+                    findViewById(R.id.text_shelter_holder_capacity).setVisibility(View.VISIBLE);
+                    findViewById(R.id.space_spinner).setVisibility(View.VISIBLE);
+                }
+
+                if(selected == 0) {
+                    findViewById(R.id.holer_spaces).setVisibility(View.VISIBLE);
+                    findViewById(R.id.holder_family_rooms).setVisibility(View.GONE);
+                    findViewById(R.id.holder_single_rooms).setVisibility(View.GONE);
+                    findViewById(R.id.holder_apartments).setVisibility(View.GONE);
+                    selectedCapacity = findViewById(R.id.shelter_capacity);
+                } else if(selected == 1) {
+                    findViewById(R.id.holer_spaces).setVisibility(View.GONE);
+                    findViewById(R.id.holder_family_rooms).setVisibility(View.VISIBLE);
+                    findViewById(R.id.holder_single_rooms).setVisibility(View.GONE);
+                    findViewById(R.id.holder_apartments).setVisibility(View.GONE);
+                    selectedCapacity = findViewById(R.id.shelter_capacity_family_rooms);
+                } else if(selected == 2){
+                    findViewById(R.id.holer_spaces).setVisibility(View.GONE);
+                    findViewById(R.id.holder_family_rooms).setVisibility(View.GONE);
+                    findViewById(R.id.holder_single_rooms).setVisibility(View.VISIBLE);
+                    findViewById(R.id.holder_apartments).setVisibility(View.GONE);
+                    selectedCapacity = findViewById(R.id.shelter_capacity_single_rooms);
+                } else if(selected == 3){
+                    findViewById(R.id.holer_spaces).setVisibility(View.GONE);
+                    findViewById(R.id.holder_family_rooms).setVisibility(View.VISIBLE);
+                    findViewById(R.id.holder_single_rooms).setVisibility(View.VISIBLE);
+                    findViewById(R.id.holder_apartments).setVisibility(View.GONE);
+                    selectedCapacity = findViewById(R.id.shelter_capacity_family_rooms);
+                } else if(selected == 4) {
+                    findViewById(R.id.holer_spaces).setVisibility(View.GONE);
+                    findViewById(R.id.holder_family_rooms).setVisibility(View.GONE);
+                    findViewById(R.id.holder_single_rooms).setVisibility(View.GONE);
+                    findViewById(R.id.holder_apartments).setVisibility(View.VISIBLE);
+                    selectedCapacity = findViewById(R.id.shelter_capacity_apartments);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     private void createShelter(){
@@ -129,8 +198,11 @@ public class CreateNewShelterActivity extends AppCompatActivity {
             latitude = Double.parseDouble(textLatitude.getText().toString());
         if (!TextUtils.isEmpty(textLongitude.getText().toString()))
             longitude = Double.parseDouble(textLongitude.getText().toString());
-        if (!TextUtils.isEmpty(textShelterCapacity.getText().toString()))
-            capacity = Integer.parseInt(textShelterCapacity.getText().toString());
+        capacity = Integer.parseInt(selectedCapacity.getText().toString());
+        if(selected == 3){
+            EditText sub = findViewById(R.id.shelter_capacity_single_rooms);
+            subCapacity = Integer.parseInt(sub.getText().toString());
+        }
         if(!TextUtils.isEmpty(textKey.getText().toString()))
             key = Integer.parseInt(textKey.getText().toString());
         notes = textNotes.getText().toString();
@@ -144,7 +216,7 @@ public class CreateNewShelterActivity extends AppCompatActivity {
             database = FirebaseDatabase.getInstance();
             DatabaseReference reference = database.getReference();
 
-            Shelter shelter = new Shelter(shelterName, capacity, male, female, adults, newBorns, childUnder5,
+            Shelter shelter = new Shelter(shelterName, selected, capacity, subCapacity, male, female, adults, newBorns, childUnder5,
                     families, child, veterans, longitude, latitude, phone, address, key, notes);
 
             reference.child("shelters").push().setValue(shelter);
@@ -163,7 +235,7 @@ public class CreateNewShelterActivity extends AppCompatActivity {
             textShelterName.setError("Required");
             valid = false;
         } else {
-            textShelterCapacity.setError(null);
+            textShelterName.setError(null);
         }
 
         if (TextUtils.isEmpty(address)){
@@ -205,7 +277,7 @@ public class CreateNewShelterActivity extends AppCompatActivity {
             textLongitude.setError(null);
         }
 
-        if(TextUtils.isEmpty(textShelterCapacity.getText().toString())){
+        if(selected == -1){
             textShelterCapacity.setError("Required");
             valid = false;
         }else{
