@@ -33,7 +33,7 @@ public class Shelter {
         this.shelterName = name;
         this.capacityType = capacityType;
         this.capacity = capacity;
-        this.subCapacity = capacity;
+        this.subCapacity = subCapacity;
         this.acceptsMale = acceptsMale;
         this.acceptsFemale = acceptsFemale;
         this.longitude = longitude;
