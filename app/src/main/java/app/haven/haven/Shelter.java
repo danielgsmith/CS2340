@@ -10,6 +10,13 @@ public class Shelter {
     private double latitude;
     private int phone;
     private String address;
+    private boolean acceptsAdults;
+    private boolean acceptsNewBorns;
+    private boolean acceptsChildUnder5;
+    private boolean acceptsFamilies;
+    private boolean acceptsChild;
+    private boolean acceptsVeterans;
+    private int uniqueKey;
 
 
 
@@ -17,8 +24,9 @@ public class Shelter {
         // Default constructor required for calls for database
     }
 
-    Shelter(String name, int capacity, boolean acceptsMale, boolean acceptsFemale,
-            double longitude, double latitude, int phone, String address) {
+    Shelter(String name, int capacity, boolean acceptsMale, boolean acceptsFemale, boolean acceptsAdults, boolean acceptsNewBorns,
+            boolean acceptsChildUnder5, boolean acceptsFamilies, boolean acceptsChild, boolean acceptsVeterans, double longitude,
+            double latitude, int phone, String address, int uniqueKey) {
         this.shelterName = name;
         this.capacity = capacity;
         this.acceptsMale = acceptsMale;
@@ -27,6 +35,13 @@ public class Shelter {
         this.latitude = latitude;
         this.phone = phone;
         this.address = address;
+        this.acceptsAdults = acceptsAdults;
+        this.acceptsNewBorns = acceptsNewBorns;
+        this.acceptsChildUnder5 = acceptsChildUnder5;
+        this.acceptsFamilies = acceptsFamilies;
+        this.acceptsChild = acceptsChild;
+        this.acceptsVeterans = acceptsVeterans;
+        this.uniqueKey = uniqueKey;
     }
 
     public String getShelterName() {
@@ -53,6 +68,13 @@ public class Shelter {
         return acceptsFemale;
     }
 
+    public boolean getAcceptsAdults(){
+        return acceptsAdults;
+    }
+
+
+
+
     public double getLongitude(){
         return longitude;
     }
@@ -60,6 +82,8 @@ public class Shelter {
     public double getLatitude(){
         return latitude;
     }
+
+
 
     public void setShelterName(String shelterName){
         this.shelterName = shelterName;
@@ -91,5 +115,53 @@ public class Shelter {
 
     public void setLatitude(double latitude){
         this.latitude = latitude;
+    }
+
+    public boolean isAcceptsNewBorns() {
+        return acceptsNewBorns;
+    }
+
+    public void setAcceptsNewBorns(boolean acceptsNewBorns) {
+        this.acceptsNewBorns = acceptsNewBorns;
+    }
+
+    public boolean isAcceptsChildUnder5() {
+        return acceptsChildUnder5;
+    }
+
+    public void setAcceptsChildUnder5(boolean acceptsChildUnder5) {
+        this.acceptsChildUnder5 = acceptsChildUnder5;
+    }
+
+    public boolean isAcceptsFamilies() {
+        return acceptsFamilies;
+    }
+
+    public void setAcceptsFamilies(boolean acceptsFamilies) {
+        this.acceptsFamilies = acceptsFamilies;
+    }
+
+    public boolean isAcceptsChild() {
+        return acceptsChild;
+    }
+
+    public void setAcceptsChild(boolean acceptsChild) {
+        this.acceptsChild = acceptsChild;
+    }
+
+    public boolean isAcceptsVeterans() {
+        return acceptsVeterans;
+    }
+
+    public void setAcceptsVeterans(boolean acceptsVeterans) {
+        this.acceptsVeterans = acceptsVeterans;
+    }
+
+    public int getUniqueKey() {
+        return uniqueKey;
+    }
+
+    public void setUniqueKey(int uniqueKey) {
+        this.uniqueKey = uniqueKey;
     }
 }
