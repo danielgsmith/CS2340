@@ -8,7 +8,7 @@ public class Shelter {
     private boolean acceptsFemale;
     private double longitude;
     private double latitude;
-    private int phone;
+    private String phone;
     private String address;
     private boolean acceptsAdults;
     private boolean acceptsNewBorns;
@@ -17,6 +17,7 @@ public class Shelter {
     private boolean acceptsChild;
     private boolean acceptsVeterans;
     private int uniqueKey;
+    private String notes;
 
 
 
@@ -26,7 +27,7 @@ public class Shelter {
 
     Shelter(String name, int capacity, boolean acceptsMale, boolean acceptsFemale, boolean acceptsAdults, boolean acceptsNewBorns,
             boolean acceptsChildUnder5, boolean acceptsFamilies, boolean acceptsChild, boolean acceptsVeterans, double longitude,
-            double latitude, int phone, String address, int uniqueKey) {
+            double latitude, String phone, String address, int uniqueKey, String notes) {
         this.shelterName = name;
         this.capacity = capacity;
         this.acceptsMale = acceptsMale;
@@ -42,6 +43,7 @@ public class Shelter {
         this.acceptsChild = acceptsChild;
         this.acceptsVeterans = acceptsVeterans;
         this.uniqueKey = uniqueKey;
+        this.notes = notes;
     }
 
     public String getShelterName() {
@@ -56,7 +58,7 @@ public class Shelter {
         return capacity;
     }
 
-    public int getPhone(){
+    public String getPhone(){
         return phone;
     }
 
@@ -97,7 +99,7 @@ public class Shelter {
         this.capacity = capacity;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
@@ -163,5 +165,13 @@ public class Shelter {
 
     public void setUniqueKey(int uniqueKey) {
         this.uniqueKey = uniqueKey;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

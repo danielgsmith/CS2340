@@ -1,5 +1,6 @@
 package app.haven.haven;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -34,10 +36,12 @@ public class CreateNewShelterActivity extends AppCompatActivity {
     private EditText textAddress;
     private EditText textPhone;
     private EditText textKey;
+    private EditText textNotes;
     private Button addShelter;
     private String shelterName;
     private String address;
-    private int phone;
+    private String notes;
+    private String phone;
     private int key;
     private boolean male;
     private boolean female;
@@ -85,6 +89,7 @@ public class CreateNewShelterActivity extends AppCompatActivity {
         checkVeteran = findViewById(R.id.check_vets);
         textKey = findViewById(R.id.shelter_key);
         acceptedText = findViewById(R.id.text_shelter_criteria);
+        textNotes = findViewById(R.id.shelter_notes);
 
         addShelter = (Button) findViewById(R.id.button_create_shelter);
         addShelter.setOnClickListener(new View.OnClickListener() {
@@ -110,16 +115,16 @@ public class CreateNewShelterActivity extends AppCompatActivity {
         shelterName = textShelterName.getText().toString();
         address = textAddress.getText().toString();
         if (!TextUtils.isEmpty(textPhone.getText()))
-            phone = Integer.parseInt(textPhone.getText().toString().replaceAll("-", "")
-                    .replaceAll("\\(", "").replaceAll("\\)", ""));
+            phone =textPhone.getText().toString().replaceAll("-", "").replaceAll("\\(", "")
+                    .replaceAll("\\)", "").replaceAll(" ", "");
         male = checkMale.isSelected();
-        female = checkFemale.isSelected();
-        adults = checkAdult.isSelected();
-        newBorns = checkNew.isSelected();
-        childUnder5 = checkYoung.isSelected();
-        families = checkFamily.isSelected();
-        child = checkChildren.isSelected();
-        veterans = checkVeteran.isSelected();
+        female = checkFemale.isChecked();
+        adults = checkAdult.isChecked();
+        newBorns = checkNew.isChecked();
+        childUnder5 = checkYoung.isChecked();
+        families = checkFamily.isChecked();
+        child = checkChildren.isChecked();
+        veterans = checkVeteran.isChecked();
         if (!TextUtils.isEmpty(textLatitude.getText().toString()))
             latitude = Double.parseDouble(textLatitude.getText().toString());
         if (!TextUtils.isEmpty(textLongitude.getText().toString()))
@@ -128,6 +133,7 @@ public class CreateNewShelterActivity extends AppCompatActivity {
             capacity = Integer.parseInt(textShelterCapacity.getText().toString());
         if(!TextUtils.isEmpty(textKey.getText().toString()))
             key = Integer.parseInt(textKey.getText().toString());
+        notes = textNotes.getText().toString();
 
         // Checks if all parts are filled and correct
         boolean valid = validateForm();
@@ -139,9 +145,14 @@ public class CreateNewShelterActivity extends AppCompatActivity {
             DatabaseReference reference = database.getReference();
 
             Shelter shelter = new Shelter(shelterName, capacity, male, female, adults, newBorns, childUnder5,
-                    families, child, veterans, longitude, latitude, phone, address, key);
+                    families, child, veterans, longitude, latitude, phone, address, key, notes);
 
             reference.child("shelters").push().setValue(shelter);
+
+            Toast.makeText(this, "Shelter added", Toast.LENGTH_SHORT).show();
+            finish();
+            Intent i = new Intent(getApplicationContext(), SideBar.class);
+            startActivity(i);
         }
     }
 
@@ -151,47 +162,61 @@ public class CreateNewShelterActivity extends AppCompatActivity {
         if(TextUtils.isEmpty(shelterName)){
             textShelterName.setError("Required");
             valid = false;
+        } else {
+            textShelterCapacity.setError(null);
         }
 
         if (TextUtils.isEmpty(address)){
             textAddress.setError("Required");
             valid = false;
+        }else {
+            textAddress.setError(null);
         }
 
-        String stringphone = textPhone.getText().toString().replaceAll("-", "").
-                replaceAll("\\(", "").replaceAll("\\)", "");
-        if(TextUtils.isEmpty(textPhone.getText().toString())){
+        if(TextUtils.isEmpty(phone)){
             textPhone.setError("Required");
             valid = false;
-        } else if ((stringphone.length() < 10 && stringphone.length() != 11) || (stringphone.length() > 10 && stringphone.length() != 11))
+        } else if ((phone.length() < 10 && phone.length() != 11) || (phone.length() > 10 && phone.length() != 11))
         {
             textPhone.setError("Must be a valid phone number.");
             valid = false;
+        } else {
+            textPhone.setError(null);
         }
 
-        if(!male && !female && !adults && !newBorns && !childUnder5 && !families && !child && !veterans) {
+        if ((!male && !female && !adults && !newBorns && !childUnder5 && !families && !child && !veterans)) {
             acceptedText.setError("At least one must be selected");
             valid = false;
+        } else {
+            acceptedText.setError(null);
         }
 
         if (TextUtils.isEmpty(textLatitude.getText().toString())){
             textLatitude.setError("Required");
             valid = false;
+        }else {
+            textLatitude.setError(null);
         }
 
         if(TextUtils.isEmpty(textLongitude.getText().toString())){
-            textLatitude.setError("Required");
+            textLongitude.setError("Required");
             valid = false;
+        }else{
+            textLongitude.setError(null);
         }
 
         if(TextUtils.isEmpty(textShelterCapacity.getText().toString())){
             textShelterCapacity.setError("Required");
             valid = false;
+        }else{
+            textShelterCapacity.setError(null);
         }
 
         if(TextUtils.isEmpty(textKey.getText().toString())){
             textKey.setError("Required");
             valid = false;
+        }else{
+            textKey.setError(null);
         }
 
         return valid;
