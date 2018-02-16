@@ -1,11 +1,15 @@
 package app.haven.haven;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -27,6 +31,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.ProviderQueryResult;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -103,6 +108,7 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
         //Makes Firebase Authentication instance
         mAuth = FirebaseAuth.getInstance();
     }
@@ -197,7 +203,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void createUser(){
         //Creates user in database
         final String email = mEmail.getText().toString().replaceAll("\\s+","");
-        final String firseName = mFirstName.getText().toString().replaceAll("\\s+","");
+        final String firstName = mFirstName.getText().toString().replaceAll("\\s+","");
         final String lastName = mLastName.getText().toString().replaceAll("\\s+","");
         //final String email =
         final long type = userSpinner.getSelectedItemId();
@@ -206,8 +212,21 @@ public class RegisterActivity extends AppCompatActivity {
         DatabaseReference reference = database.getReference();
 
         FirebaseUser mFireUser = mAuth.getCurrentUser();
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(firstName)
+                .build();
 
-        User user = new User(firseName, lastName, email, type);
+        mFireUser.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User profile updated.");
+                        }
+                    }
+                });
+
+        User user = new User(firstName, lastName, email, type);
 
         reference.child("users").child(mFireUser.getUid()).setValue(user);
         //mRef.child("users").child(mFireUser.getUid()).push().setValue(user);
@@ -216,7 +235,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean isPasswordValid(String password) {
-        return password.length() >= 4;
+        return password.length() >= 6;
     }
 
     private boolean isEmailValid(String username) {
@@ -282,7 +301,10 @@ public class RegisterActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(password)) {
             mPassword.setError("Required.");
             valid = false;
-        } else if (!password.equals(confirm)) {
+        } else if(!isPasswordValid(password)) {
+            mPassword.setError("Must beat least 6 characters long.");
+            valid = false;
+        }else if (!password.equals(confirm)) {
             mConfirmPassowrd.setError("Passwords must match.");
             valid = false;
         } else { //removes errors
@@ -321,28 +343,10 @@ public class RegisterActivity extends AppCompatActivity {
         return valid;
     }
 
-    /**
-    private void updateUI(FirebaseUser user) {
-        hideProgressDialog();
-        if (user != null) {
-            mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
-                    user.getEmail(), user.isEmailVerified()));
-            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-
-            findViewById(R.id.email_password_buttons).setVisibility(View.GONE);
-            findViewById(R.id.email_password_fields).setVisibility(View.GONE);
-            findViewById(R.id.signed_in_buttons).setVisibility(View.VISIBLE);
-
-            findViewById(R.id.verify_email_button).setEnabled(!user.isEmailVerified());
-        } else {
-            mStatusTextView.setText(R.string.signed_out);
-            mDetailTextView.setText(null);
-
-            findViewById(R.id.email_password_buttons).setVisibility(View.VISIBLE);
-            findViewById(R.id.email_password_fields).setVisibility(View.VISIBLE);
-            findViewById(R.id.signed_in_buttons).setVisibility(View.GONE);
-        }
-    } */
-
-
+    @Override
+    public void onBackPressed() {
+        finish();
+        Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(i);
+    }
 }
