@@ -38,6 +38,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.ProviderQueryResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -473,6 +474,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             signedIn = true;
                             //updateUI(user);
                         } else {
+                            checkEmailUse();
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
@@ -518,5 +520,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 });
     }
 
+    private void checkEmailUse() {
+        mAuth.fetchProvidersForEmail(mEmailView.getText().toString())
+                .addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ProviderQueryResult> task) {
+
+                        boolean check = !task.getResult().getProviders().isEmpty();
+
+                        if(!check) {
+                            Toast.makeText(LoginActivity.this, "No account associated with this email.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
 }
 
