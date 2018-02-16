@@ -4,10 +4,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.SearchManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -20,11 +22,14 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -86,6 +91,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mRegisterButtonView;
     private boolean canceledLogin;
     private boolean signedIn;
+    private String emailAddress = "";
     //private FirebaseDatabase database = FirebaseDatabase.getInstance();
     //DatabaseReference myRef = database.getReference("message");
     //private FirebaseAuth mAuth;
@@ -150,6 +156,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 finish();
                 Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(i);
+            }
+        });
+
+        // Reset password Button
+        Button mReset = (Button) findViewById(R.id.forgot_password_button);
+        mReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resetPassword();
             }
         });
 
@@ -530,6 +545,63 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                         if(!check) {
                             Toast.makeText(LoginActivity.this, "No account associated with this email.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    public void resetPassword(){
+
+        Log.w("Forgot Button:", "Clicked");
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Reset Password? ");
+
+        //final EditText input = new EditText(this);
+        View viewInflated = LayoutInflater.from(this).inflate(R.layout.popup_reset_password, (ViewGroup) findViewById(android.R.id.input), false);
+        // Set up the input
+        final EditText input = (EditText) viewInflated.findViewById(R.id.input);
+
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(viewInflated);
+
+        //builder.setMessage("Would you like to reset you password?");
+        // Set up the buttons
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (!TextUtils.isEmpty(input.getText().toString())) {
+                    emailAddress = input.getText().toString();
+                    sendResetEmail();
+                } else {
+                    Toast.makeText(LoginActivity.this, "No email detected.",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void sendResetEmail(){
+        mAuth.sendPasswordResetEmail(emailAddress)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Reset Email sent.",
+                                    Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "Email sent.");
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Reset Failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
