@@ -31,10 +31,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import app.haven.haven.dummy.DummyContent;
+
 public class SideBar extends AppCompatActivity
         implements
         ShelterMapFragment.OnFragmentInteractionListener,
         AdminPageFragment.OnFragmentInteractionListener,
+        ShelterListFragment.OnListFragmentInteractionListener,
         NavigationView.OnNavigationItemSelectedListener {
 
     private ValueEventListener mUserlistener;
@@ -195,6 +198,7 @@ public class SideBar extends AppCompatActivity
         } else if (id == R.id.nav_search) {
             setTitle("Criteria");
         } else if (id == R.id.nav_shelters) {
+            fragment = new ShelterListFragment();
             setTitle("Shelters");
         } else if (id == R.id.nav_admin_page) {
             if (!mFireUser.isAnonymous() && user.getAccountType() == 1) {
@@ -230,6 +234,11 @@ public class SideBar extends AppCompatActivity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onListFragmentInteraction(DummyContent.DummyItem item) {
 
     }
 }
