@@ -7,17 +7,23 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import app.haven.haven.dummy.DummyContent;
 import app.haven.haven.dummy.DummyContent.DummyItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,6 +42,12 @@ public class ShelterListFragment extends Fragment {
 
     private FirebaseUser mFireUser;
     private DatabaseReference mDataRef;
+
+
+    private ArrayList<Shelter> sheltersArray;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter rvAdapter;
+    private RecyclerView.LayoutManager rvLayoutManager;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -68,18 +80,52 @@ public class ShelterListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shelter_list, container, false);
 
+        mFireUser = FirebaseAuth.getInstance().getCurrentUser();
+        mDataRef = FirebaseDatabase.getInstance().getReference();
+
+
+        sheltersArray = new ArrayList<>();
+
+        mDataRef.child("shelters").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot child : children) {
+                    Shelter place = child.getValue(Shelter.class);
+                    sheltersArray.add(place);
+                    Log.w("Item", ""+ sheltersArray.get(0));
+                }
+                Log.w("Item", ""+ sheltersArray.get(0));
+                rvAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("LogFragment", "loadLog:onCancelled", databaseError.toException());
+            }
+        });
+
+
+
         // Set the adapter
-        if (view instanceof RecyclerView) {
+        /*if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyShelterRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-        }
-        return view;
+            recyclerView.setAdapter(new MyShelterRecyclerViewAdapter(sheltersArray, mListener));
+        }*/
+        recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        rvLayoutManager = new LinearLayoutManager(view.getContext());
+        recyclerView.setLayoutManager(rvLayoutManager);
+
+        rvAdapter = new MyShelterRecyclerViewAdapter(sheltersArray, mListener);
+        recyclerView.setAdapter(rvAdapter);
+        return recyclerView;
     }
 
 
@@ -92,6 +138,7 @@ public class ShelterListFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
+        Log.w("something", "something");
     }
 
     @Override

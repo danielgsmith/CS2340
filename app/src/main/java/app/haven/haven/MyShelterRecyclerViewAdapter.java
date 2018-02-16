@@ -9,6 +9,7 @@ import android.widget.TextView;
 import app.haven.haven.ShelterListFragment.OnListFragmentInteractionListener;
 import app.haven.haven.dummy.DummyContent.DummyItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,10 +19,10 @@ import java.util.List;
  */
 public class MyShelterRecyclerViewAdapter extends RecyclerView.Adapter<MyShelterRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final ArrayList<Shelter> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyShelterRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyShelterRecyclerViewAdapter(ArrayList<Shelter> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -36,8 +37,8 @@ public class MyShelterRecyclerViewAdapter extends RecyclerView.Adapter<MyShelter
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(mValues.get(position).getShelterName());
+        //holder.mContentView.setText(mValues.get(position).getPhone());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,7 +46,7 @@ public class MyShelterRecyclerViewAdapter extends RecyclerView.Adapter<MyShelter
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    //mListener.onListFragmentInteraction(holder.mItem);
                 }
             }
         });
@@ -60,7 +61,7 @@ public class MyShelterRecyclerViewAdapter extends RecyclerView.Adapter<MyShelter
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public Shelter mItem;
 
         public ViewHolder(View view) {
             super(view);

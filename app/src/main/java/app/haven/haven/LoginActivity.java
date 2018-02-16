@@ -492,8 +492,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             checkEmailUse();
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
                             //updateUI(null);
                         }
 
@@ -545,6 +543,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                         if(!check) {
                             Toast.makeText(LoginActivity.this, "No account associated with this email.",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
