@@ -198,7 +198,8 @@ public class CreateNewShelterActivity extends AppCompatActivity {
             latitude = Double.parseDouble(textLatitude.getText().toString());
         if (!TextUtils.isEmpty(textLongitude.getText().toString()))
             longitude = Double.parseDouble(textLongitude.getText().toString());
-        capacity = Integer.parseInt(selectedCapacity.getText().toString());
+        if (selected != -1)
+            capacity = Integer.parseInt(selectedCapacity.getText().toString());
         if(selected == 3){
             EditText sub = findViewById(R.id.shelter_capacity_single_rooms);
             subCapacity = Integer.parseInt(sub.getText().toString());
