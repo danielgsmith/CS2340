@@ -21,6 +21,8 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.lang.ref.WeakReference;
+
 public class CreateNewShelterActivity extends AppCompatActivity {
 
     FirebaseDatabase database;
@@ -111,6 +113,10 @@ public class CreateNewShelterActivity extends AppCompatActivity {
         acceptedText = findViewById(R.id.text_shelter_criteria);
         textNotes = findViewById(R.id.shelter_notes);
 
+        UsPhoneNumberFormatter addLineNumberFormatter = new UsPhoneNumberFormatter(
+                new WeakReference<EditText>(textPhone));
+        textPhone.addTextChangedListener(addLineNumberFormatter);
+
         addShelter = (Button) findViewById(R.id.button_create_shelter);
         addShelter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,9 +189,12 @@ public class CreateNewShelterActivity extends AppCompatActivity {
         // Saved Strings
         shelterName = textShelterName.getText().toString();
         address = textAddress.getText().toString();
+
         if (!TextUtils.isEmpty(textPhone.getText()))
             phone =textPhone.getText().toString().replaceAll("-", "").replaceAll("\\(", "")
                     .replaceAll("\\)", "").replaceAll(" ", "");
+
+
         male = checkMale.isSelected();
         female = checkFemale.isChecked();
         adults = checkAdult.isChecked();

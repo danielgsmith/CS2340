@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import app.haven.haven.ShelterListFragment.OnListFragmentInteractionListener;
-import app.haven.haven.dummy.DummyContent.DummyItem;
 
 import java.util.ArrayList;
 import java.util.List;
