@@ -20,8 +20,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import app.haven.haven.dummy.DummyContent;
-import app.haven.haven.dummy.DummyContent.DummyItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -159,6 +157,6 @@ public class ShelterListFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Shelter item);
     }
 }
