@@ -136,7 +136,7 @@ public class ShelterListFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
-        Log.w("something", "something");
+        //Log.w("something", "something");
     }
 
     @Override
@@ -156,7 +156,6 @@ public class ShelterListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(Shelter item);
+        void onListFragmentInteraction(Shelter shelter);
     }
 }

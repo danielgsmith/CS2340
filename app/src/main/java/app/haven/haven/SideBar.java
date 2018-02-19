@@ -45,6 +45,7 @@ public class SideBar extends AppCompatActivity
     private User user = new User();
     private DatabaseReference mDataRef;
     private NavigationView navigationView;
+    public static Shelter selectedShelter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,7 +239,15 @@ public class SideBar extends AppCompatActivity
 
 
     @Override
-    public void onListFragmentInteraction(Shelter item) {
+    public void onListFragmentInteraction(Shelter shelter) {
+        //Toast.makeText(this, "Item Clicked " + shelter.getShelterName(), Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(getApplicationContext(), ShelterDetailsActivity.class);
+        startActivity(i);
+        selectedShelter = shelter;
 
+    }
+
+    public static Shelter getSelectedShelter(){
+        return selectedShelter;
     }
 }
