@@ -54,6 +54,7 @@ public class Shelter {
         this.acceptsVeterans = acceptsVeterans;
         this.uniqueKey = uniqueKey;
         this.notes = notes;
+        this.occupancy = 0;
     }
 
     public String getShelterName() {
