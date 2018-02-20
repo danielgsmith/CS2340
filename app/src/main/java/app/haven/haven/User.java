@@ -17,7 +17,7 @@ public class User {
      * 1 for admin
      */
     private long accountType;
-    private String pushId;
+    //private String pushId;
 
     public User() {
         // Default constructor required for calls for database
@@ -45,9 +45,9 @@ public class User {
     public long getAccountType(){
         return accountType;
     }
-    public String getPushId(){
-        return pushId;
-    }
+//    public String getPushId(){
+//        return pushId;
+//    }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;

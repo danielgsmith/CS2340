@@ -31,10 +31,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+
 public class SideBar extends AppCompatActivity
         implements
         ShelterMapFragment.OnFragmentInteractionListener,
         AdminPageFragment.OnFragmentInteractionListener,
+        ShelterListFragment.OnListFragmentInteractionListener,
         NavigationView.OnNavigationItemSelectedListener {
 
     private ValueEventListener mUserlistener;
@@ -43,6 +45,7 @@ public class SideBar extends AppCompatActivity
     private User user = new User();
     private DatabaseReference mDataRef;
     private NavigationView navigationView;
+    public static Shelter selectedShelter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,6 +198,7 @@ public class SideBar extends AppCompatActivity
         } else if (id == R.id.nav_search) {
             setTitle("Criteria");
         } else if (id == R.id.nav_shelters) {
+            fragment = new ShelterListFragment();
             setTitle("Shelters");
         } else if (id == R.id.nav_admin_page) {
             if (!mFireUser.isAnonymous() && user.getAccountType() == 1) {
@@ -231,5 +235,19 @@ public class SideBar extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+
+    @Override
+    public void onListFragmentInteraction(Shelter shelter) {
+        //Toast.makeText(this, "Item Clicked " + shelter.getShelterName(), Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(getApplicationContext(), ShelterDetailsActivity.class);
+        startActivity(i);
+        selectedShelter = shelter;
+
+    }
+
+    public static Shelter getSelectedShelter(){
+        return selectedShelter;
     }
 }
