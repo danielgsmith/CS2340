@@ -3,6 +3,11 @@ package app.haven.haven;
 public class Shelter {
 
     private String shelterName;
+    // 0 - Spaces
+    // 1 - family rooms
+    // 2 - single rooms
+    // 3 - family and single
+    // 4 Apartments
     private long capacityType;
     private int capacity;
     private int subCapacity; // Used if place has family rooms and singles
@@ -20,6 +25,7 @@ public class Shelter {
     private boolean acceptsVeterans;
     private int uniqueKey;
     private String notes;
+    private int occupancy;
 
 
 
@@ -193,5 +199,13 @@ public class Shelter {
 
     public void setSubCapacity(int subCapacity) {
         this.subCapacity = subCapacity;
+    }
+
+    public int getOccupancy() {
+        return occupancy;
+    }
+
+    public void setOccupancy(int occupancy) {
+        this.occupancy = occupancy;
     }
 }
