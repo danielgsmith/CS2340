@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -87,14 +88,14 @@ public class ShelterListFragment extends Fragment {
         mDataRef.child("shelters").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                sheltersArray.clear();
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 for (DataSnapshot child : children) {
                     Shelter place = child.getValue(Shelter.class);
                     sheltersArray.add(place);
-                    Log.w("Item", ""+ sheltersArray.get(0));
+                    //Log.w("Item", ""+ sheltersArray.get(0));
                 }
-                Log.w("Item", ""+ sheltersArray.get(0));
+                //Log.w("Item", ""+ sheltersArray.get(0));
                 rvAdapter.notifyDataSetChanged();
             }
 
@@ -122,6 +123,7 @@ public class ShelterListFragment extends Fragment {
         recyclerView.setLayoutManager(rvLayoutManager);
 
         rvAdapter = new MyShelterRecyclerViewAdapter(sheltersArray, mListener);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this.getActivity(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(rvAdapter);
         return recyclerView;
     }

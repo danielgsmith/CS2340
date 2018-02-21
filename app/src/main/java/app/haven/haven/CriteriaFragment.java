@@ -4,9 +4,16 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 /**
@@ -28,6 +35,13 @@ public class CriteriaFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private View view;
+    private Spinner genderSpinner;
+    private long genderselected;
+    private Spinner rangeSpinner;
+    private long rangeSelected;
+    private Button searchButton;
 
     public CriteriaFragment() {
         // Required empty public constructor
@@ -63,8 +77,76 @@ public class CriteriaFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_criteria, container, false);
+
+
+
+        final TextView text = (TextView) view.findViewById(R.id.textView_gender);
+        String[] genders = new String[]{"Male", "Female", "Either"};
+        genderSpinner = view.findViewById(R.id.genderspinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, genders);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        genderSpinner.setPrompt("Choose Gender: ");
+        genderSpinner.setAdapter(
+                new NothingSelectedSpinnerAdapter(
+                        adapter,
+                        R.layout.gender_spinner_row_nothing_selected,
+                        // R.layout.contact_spinner_nothing_selected_dropdown, // Optional
+                        this.getActivity()));
+        genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                genderselected = genderSpinner.getSelectedItemId();
+                if (genderselected != -1) {
+                    text.setVisibility(View.VISIBLE);
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+
+        final TextView ageRange = (TextView) view.findViewById(R.id.textView_age_range);
+        String[] age = new String[]{"Families with newborns", "Children", "Young Adults", "Anyone"};
+        rangeSpinner = view.findViewById(R.id.age_range_spinner);
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, age);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        rangeSpinner.setPrompt("Age Range: ");
+        rangeSpinner.setAdapter(
+                new NothingSelectedSpinnerAdapter(
+                        adapter1,
+                        R.layout.age_range_spinner_row_nothing_selected,
+                        // R.layout.contact_spinner_nothing_selected_dropdown, // Optional
+                        this.getActivity()));
+        rangeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                rangeSelected = rangeSpinner.getSelectedItemId();
+                if (rangeSelected != -1) {
+                    ageRange.setVisibility(View.VISIBLE);
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+        searchButton = (Button) view.findViewById(R.id.search_shelters);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchShelters();
+            }
+        });
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_criteria, container, false);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -104,5 +186,11 @@ public class CriteriaFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void searchShelters(){
+
+        
+        Toast.makeText(this.getActivity(), "No Shelters Found", Toast.LENGTH_SHORT).show();
     }
 }
