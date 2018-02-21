@@ -37,6 +37,7 @@ public class SideBar extends AppCompatActivity
         ShelterMapFragment.OnFragmentInteractionListener,
         AdminPageFragment.OnFragmentInteractionListener,
         ShelterListFragment.OnListFragmentInteractionListener,
+        CriteriaFragment.OnFragmentInteractionListener,
         NavigationView.OnNavigationItemSelectedListener {
 
     private ValueEventListener mUserlistener;
@@ -196,6 +197,7 @@ public class SideBar extends AppCompatActivity
             fragment = new ShelterMapFragment();
             setTitle("Map");
         } else if (id == R.id.nav_search) {
+            fragment = new CriteriaFragment();
             setTitle("Criteria");
         } else if (id == R.id.nav_shelters) {
             fragment = new ShelterListFragment();
