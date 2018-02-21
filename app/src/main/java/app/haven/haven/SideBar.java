@@ -37,6 +37,7 @@ public class SideBar extends AppCompatActivity
         ShelterMapFragment.OnFragmentInteractionListener,
         AdminPageFragment.OnFragmentInteractionListener,
         ShelterListFragment.OnListFragmentInteractionListener,
+        CriteriaFragment.OnFragmentInteractionListener,
         NavigationView.OnNavigationItemSelectedListener {
 
     private ValueEventListener mUserlistener;
@@ -55,14 +56,14 @@ public class SideBar extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Not Implemented Yet", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
 
         // Makes side drawer and adds functionality
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -196,6 +197,7 @@ public class SideBar extends AppCompatActivity
             fragment = new ShelterMapFragment();
             setTitle("Map");
         } else if (id == R.id.nav_search) {
+            fragment = new CriteriaFragment();
             setTitle("Criteria");
         } else if (id == R.id.nav_shelters) {
             fragment = new ShelterListFragment();
