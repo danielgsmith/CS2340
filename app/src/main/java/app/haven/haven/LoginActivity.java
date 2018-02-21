@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         //Checks if device is still logged into Firebase, if so skip login page and go to Sidebar
         if(FirebaseAuth.getInstance().getCurrentUser() != null && !FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
-            //finish();
+            finish();
             Intent i = new Intent(getApplicationContext(), SideBar.class);
             startActivity(i);
         }
