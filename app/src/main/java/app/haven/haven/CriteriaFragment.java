@@ -40,11 +40,11 @@ public class CriteriaFragment extends Fragment {
 
     private View view;
     private Spinner genderSpinner;
-    private long genderselected;
+    public static long genderselected;
     private Spinner rangeSpinner;
-    private long rangeSelected;
+    public static long rangeSelected;
     private Button searchButton;
-    private String searchedName;
+    public static String searchedName;
     private EditText textName;
 
     public CriteriaFragment() {

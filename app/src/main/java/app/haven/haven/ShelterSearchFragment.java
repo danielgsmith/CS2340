@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,9 +20,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import app.haven.haven.dummy.DummyContent;
-import app.haven.haven.dummy.DummyContent.DummyItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,9 +90,41 @@ public class ShelterSearchFragment extends Fragment {
                 sheltersArray.clear();
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 for (DataSnapshot child : children) {
+
                     Shelter place = child.getValue(Shelter.class);
-                    sheltersArray.add(place);
+                    //Log.w("String", "" + place.getAcceptsFemale());
+                    //Log.w("String", "" + CriteriaFragment.genderselected);
+                    boolean add = true;
+                    String name = CriteriaFragment.searchedName;
+                    //Log.w("Name", name);
+
+                    if (name.length() == 0) {
+                        if (CriteriaFragment.genderselected == 0)
+                            if (!place.getAcceptsMale())
+                                add = false;
+                            else if (CriteriaFragment.genderselected == 1)
+                                if (!place.getAcceptsFemale())
+                                    add = false;
+
+                        if (CriteriaFragment.rangeSelected == 0)
+                            if (!place.isAcceptsChildUnder5())
+                                add = false;
+                            else if (CriteriaFragment.rangeSelected == 1)
+                                if (!place.isAcceptsChild())
+                                    add = false;
+                                else if (CriteriaFragment.rangeSelected == 2)
+                                    if (!place.getAcceptsAdults())
+                                        add = false;
+                    } else if (!place.getShelterName().equals(name))
+                        add = false;
+
+
+                    if (add)
+                        sheltersArray.add(place);
                     //Log.w("Item", ""+ sheltersArray.get(0));
+                }
+                if (sheltersArray.isEmpty()) {
+                    Toast.makeText(getActivity(), "No results found", Toast.LENGTH_SHORT).show();
                 }
                 //Log.w("Item", ""+ sheltersArray.get(0));
                 rvAdapter.notifyDataSetChanged();
