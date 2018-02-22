@@ -1,6 +1,7 @@
 package app.haven.haven;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,10 +40,12 @@ public class CriteriaFragment extends Fragment {
 
     private View view;
     private Spinner genderSpinner;
-    private long genderselected;
+    public static long genderselected;
     private Spinner rangeSpinner;
-    private long rangeSelected;
+    public static long rangeSelected;
     private Button searchButton;
+    public static String searchedName;
+    private EditText textName;
 
     public CriteriaFragment() {
         // Required empty public constructor
@@ -79,7 +83,7 @@ public class CriteriaFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_criteria, container, false);
 
-
+        textName = view.findViewById(R.id.input_shelter_name);
 
         final TextView text = (TextView) view.findViewById(R.id.textView_gender);
         String[] genders = new String[]{"Male", "Female", "Either"};
@@ -140,6 +144,7 @@ public class CriteriaFragment extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                searchedName = textName.getText().toString();
                 searchShelters();
             }
         });
@@ -189,8 +194,8 @@ public class CriteriaFragment extends Fragment {
     }
 
     private void searchShelters(){
-
-        
-        Toast.makeText(this.getActivity(), "No Shelters Found", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this.getActivity(), "No Shelters Found", Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(getActivity(), SearchedSheltersActivity.class);
+        startActivity(i);
     }
 }
