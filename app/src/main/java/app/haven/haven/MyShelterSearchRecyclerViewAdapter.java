@@ -9,19 +9,19 @@ import android.widget.TextView;
 import app.haven.haven.ShelterSearchFragment.OnListFragmentInteractionListener;
 import app.haven.haven.dummy.DummyContent.DummyItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link Shelter} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
  */
 public class MyShelterSearchRecyclerViewAdapter extends RecyclerView.Adapter<MyShelterSearchRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Shelter> mValues;
+    private final ArrayList<Shelter> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyShelterSearchRecyclerViewAdapter(List<Shelter> items, OnListFragmentInteractionListener listener) {
+    public MyShelterSearchRecyclerViewAdapter(ArrayList<Shelter> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }

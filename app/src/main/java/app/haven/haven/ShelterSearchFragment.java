@@ -106,19 +106,6 @@ public class ShelterSearchFragment extends Fragment {
             }
         });
 
-
-
-        // Set the adapter
-        /*if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new MyShelterRecyclerViewAdapter(sheltersArray, mListener));
-        }*/
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
         rvLayoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(rvLayoutManager);
