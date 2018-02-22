@@ -19,7 +19,7 @@ public class SearchedSheltersActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
-        
+
     }
 
     @Override
