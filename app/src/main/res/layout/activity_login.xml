@@ -16,7 +16,8 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="108dp"
-        app:srcCompat="@mipmap/logo" />
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/ic_haven_banner" />
 
     <ProgressBar
         android:id="@+id/login_progress"
@@ -77,13 +78,21 @@
                 tools:layout_editor_absoluteX="15dp"
                 tools:layout_editor_absoluteY="165dp" />
 
-            <Button
-                android:id="@+id/email_sign_in_button"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Sign In"
-                android:textStyle="bold" />
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/email_sign_in_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="1"
+                    android:text="Sign In" />
+
+            </LinearLayout>
 
             <Space
                 android:layout_width="match_parent"

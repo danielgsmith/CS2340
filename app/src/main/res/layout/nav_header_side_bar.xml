@@ -14,23 +14,25 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="115dp"
+        android:contentDescription="Our Logo"
         android:paddingTop="0dp"
-        app:srcCompat="@mipmap/logo"
-        android:contentDescription="Our Logo" />
+        app:srcCompat="@drawable/ic_haven_banner" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="Haven"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome" />
+        android:text="Welcome"
+        android:visibility="invisible" />
 
 </LinearLayout>
