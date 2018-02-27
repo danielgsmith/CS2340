@@ -96,9 +96,8 @@
 
     <Button
         android:id="@+id/button_reg_create_account"
-        style="@android:style/Widget.Button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="18dp"
         android:layout_weight="1"
         android:text="Create Account"
         tools:layout_editor_absoluteX="15dp"

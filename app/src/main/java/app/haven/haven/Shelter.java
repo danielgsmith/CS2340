@@ -7,7 +7,7 @@ public class Shelter {
     // 1 - family rooms
     // 2 - single rooms
     // 3 - family and single
-    // 4 Apartments
+    // 4 - Apartments
     private long capacityType;
     private int capacity;
     private int subCapacity; // Used if place has family rooms and singles
@@ -54,6 +54,7 @@ public class Shelter {
         this.acceptsVeterans = acceptsVeterans;
         this.uniqueKey = uniqueKey;
         this.notes = notes;
+        this.occupancy = 0;
     }
 
     public String getShelterName() {
