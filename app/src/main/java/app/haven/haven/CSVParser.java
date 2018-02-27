@@ -1,44 +1,47 @@
 package app.haven.haven;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class CSVParser {
 
     public static int DEFAULT_CAPACITY = -1; //this can be a number if we just want a default instead of allowing them not to specify
 
-    private List<ShelterInfo> shelterInfoList;
+    private List<Shelter> shelterList;
 
-    Shelter(String name, long capacityType, int capacity, int subCapacity, boolean acceptsMale, boolean acceptsFemale, boolean acceptsAdults, boolean acceptsNewBorns,
-//            boolean acceptsChildUnder5, boolean acceptsFamilies, boolean acceptsChild, boolean acceptsVeterans, double longitude,
-//            double latitude, String phone, String address, int uniqueKey, String notes) {
-    public CSVParser(String fileName) throws IOException{
-        shelterInfoList = new ArrayList<>();
-        try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
-            stream.filter(line -> line.charAt(0) <= '9' && line.charAt(0) >= 0).forEach(line -> {
-                line = parseLineForCommas(line.replace("~", ""));
-                String[] csLine = line.split("~");
-                shelterInfoList.add(new ShelterInfo(
-                        csLine[1],
-                        parseCapacity(csLine[2]), //currently sums all numbers found in the line
-                        new Restrictions(csLine[3]),
-                        Double.parseDouble(csLine[4]),
-                        Double.parseDouble(csLine[5]),
-                        csLine[6],
-                        csLine[8]
-                ));
-            });
+    public CSVParser(File file) {
+        shelterList = new ArrayList<>();
+        try {
+            BufferedReader b = new BufferedReader(new FileReader(file));
+            for (String line = ""; (line = b.readLine()) != null;) {
+                if (line.startsWith("^[0-9]")) {
+                    line = parseLineForCommas(line.replace("~", ""));
+                    String[] csLine = line.split("~");
+                    shelterList.add(new Shelter(
+                            csLine[1],
+                            Capacity.parseFromString(csLine[2]),
+                            Restrictions.parseFrom(csLine[3]),
+                            Double.parseDouble(csLine[4]),
+                            Double.parseDouble(csLine[5]),
+                            csLine[8],
+                            csLine[6],
+                            Integer.parseInt(csLine[0]),
+                            csLine[7]
+                    ));
+                }
+            }
         } catch (IOException e) {
+            System.out.println("An error occured parsing file " + file);
             e.printStackTrace();
         }
     }
 
-    public List<ShelterInfo> getShelterInfoList() {
-        return shelterInfoList;
+    public List<Shelter> getShelterList() {
+        return shelterList;
     }
 
     /***
@@ -57,20 +60,6 @@ public class CSVParser {
             if (c == '"') ignore = !ignore;
         }
         return line;
-    }
-
-    /***
-     * we will have to make this better if we want to care about families/singles etc.
-     *
-     * Currently this sums all numbers found in the line
-     */
-    private int parseCapacity(String line) {
-        if (line.isEmpty()) return DEFAULT_CAPACITY;
-        int count = 0;
-        for (String s : line.replaceAll("[^0-9,]", ",").split(",")) {
-            if (!s.isEmpty()) count += Integer.parseInt(s);
-        }
-        return count;
     }
 
 }

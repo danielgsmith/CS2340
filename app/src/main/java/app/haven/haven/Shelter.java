@@ -1,16 +1,11 @@
 package app.haven.haven;
 
+import android.graphics.Paint;
+
 public class Shelter {
 
     private String shelterName;
-    // 0 - Spaces
-    // 1 - family rooms
-    // 2 - single rooms
-    // 3 - family and single
-    // 4 Apartments
-    private long capacityType;
-    private int capacity;
-    private int subCapacity; // Used if place has family rooms and singles
+    private Capacity capacity;
     private double longitude;
     private double latitude;
     private String phone;
@@ -26,12 +21,10 @@ public class Shelter {
         // Default constructor required for calls for database
     }
 
-    Shelter(String name, long capacityType, int capacity, int subCapacity, Restrictions restrictions,
-            double longitude, double latitude, String phone, String address, int uniqueKey, String notes) {
+    Shelter(String name, Capacity capacity, Restrictions restrictions, double longitude,
+            double latitude, String phone, String address, int uniqueKey, String notes) {
         this.shelterName = name;
-        this.capacityType = capacityType;
         this.capacity = capacity;
-        this.subCapacity = subCapacity;
         this.longitude = longitude;
         this.latitude = latitude;
         this.phone = phone;
@@ -54,9 +47,17 @@ public class Shelter {
         return address;
     }
 
+    public Capacity getCapacityObject() { return capacity; }
+
+    public Capacity.CapacityType getCapacityType() { return capacity.getCapacityType(); }
+
     public int getCapacity(){
-        return capacity;
+        return capacity.getCapacity();
     }
+
+    public int getIndividualCapacity() { return capacity.getIndividualCapacity(); }
+
+    public int getGroupCapacity() { return capacity.getGroupCapacity(); }
 
     public String getPhone(){
         return phone;
@@ -86,10 +87,6 @@ public class Shelter {
         this.address = address;
     }
 
-    public void setCapacity(int capacity){
-        this.capacity = capacity;
-    }
-
     public void setPhone(String phone) {
         this.phone = phone;
     }
@@ -116,22 +113,6 @@ public class Shelter {
 
     public void setNotes(String notes) {
         this.notes = notes;
-    }
-
-    public long getCapacityType() {
-        return capacityType;
-    }
-
-    public void setCapacityType(long capacityType) {
-        this.capacityType = capacityType;
-    }
-
-    public int getSubCapacity() {
-        return subCapacity;
-    }
-
-    public void setSubCapacity(int subCapacity) {
-        this.subCapacity = subCapacity;
     }
 
     public int getOccupancy() {

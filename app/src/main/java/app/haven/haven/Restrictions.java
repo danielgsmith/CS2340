@@ -2,15 +2,16 @@ package app.haven.haven;
 
 public enum Restrictions {
 
-    WOMEN_CHILDREN("women/children", false, true, false, false, false, false, false, false),
-    MEN("men", true, false, false, false, false, false, false, false),
-    FAMILIES("families", true, true, true, false, false, false, false, false),
-    FAMILIES_CHILDREN_UNDER_5("familiesw/childrenunder5", true, true, true, false, true, false, false, false),
-    FAMILIES_NEWBORNS("familiesw/newborns", true, true, true, true, false, false, false, false),
-    CHILDRENS_YOUNG_ADULTS("childrens/youngadults", true, true, false, false, false, true, false, true),
-    ANYONE("anyone", true, true, false, false, false, false, false, false),
-    YOUNG_ADULTS("youngadults", true, true, false, false, false, true, false, false),
-    VETERANS("veterans", true, true, false, false, false, false, true, false);
+    WOMEN_CHILDREN("women/children", false, true, false, false, false, false, false, false, false),
+    MEN("men", true, false, false, false, false, false, false, false, true),
+    FAMILIES("families", true, true, true, false, false, false, false, false, false),
+    FAMILIES_CHILDREN_UNDER_5("familiesw/childrenunder5", true, true, true, false, true, false, false, false, false),
+    FAMILIES_NEWBORNS("familiesw/newborns", true, true, true, true, false, false, false, false, false),
+    CHILDRENS_YOUNG_ADULTS("childrens/youngadults", true, true, false, false, false, true, false, true, false),
+    ANYONE("anyone", true, true, false, false, false, false, false, false, false),
+    YOUNG_ADULTS("youngadults", true, true, false, false, false, true, false, false, false),
+    VETERANS("veterans", true, true, false, false, false, false, true, false, true),
+    WOMEN("women", false, true, false, false, false, false, false, false, true);
 
     private String parseFrom;
     private boolean men;
@@ -21,10 +22,11 @@ public enum Restrictions {
     private boolean youngAdultsOnly;
     private boolean veteransOnly;
     private boolean childrenOnly;
+    private boolean adultsOnly;
 
     Restrictions(String parseFrom, boolean men, boolean women, boolean familyOnly,
-                 boolean newbornsOnly, boolean childrenUnder5Only,
-                 boolean youngAdultsOnly, boolean veteransOnly, boolean childrenOnly) {
+                 boolean newbornsOnly, boolean childrenUnder5Only, boolean youngAdultsOnly,
+                 boolean veteransOnly, boolean childrenOnly, boolean adultsOnly) {
         this.parseFrom = parseFrom;
         this.men = men;
         this.women = women;
@@ -78,4 +80,6 @@ public enum Restrictions {
     public boolean isChildrenOnly() {
         return childrenOnly;
     }
+
+    public boolean isAdultsOnly() { return adultsOnly; }
 }
