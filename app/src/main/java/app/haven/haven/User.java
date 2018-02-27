@@ -12,6 +12,7 @@ public class User {
     private String lastName;
     private String email;
     private int numLoginAttempts;
+    private boolean lockedOut;
     /**
      * -1 form null
      * 0 for user
@@ -21,7 +22,6 @@ public class User {
 
     public User() {
         // Default constructor required for calls for database
-        this("test", "test", "test@email.com",12345);
     }
 
     public User(String firstName, String lastName, String email, long accountType){
@@ -29,6 +29,8 @@ public class User {
         this.lastName = lastName;
         this.email = email;
         this.accountType = accountType;
+        this.numLoginAttempts = 0;
+        this.lockedOut = false;
     }
 
     /*public String getFullName(){
@@ -67,5 +69,13 @@ public class User {
 
     public int getNumLoginAttempts() {
         return numLoginAttempts;
+    }
+
+    public void setLockedOut(boolean lockedOut){
+        this.lockedOut = lockedOut;
+    }
+
+    public boolean isLockedOut() {
+        return lockedOut;
     }
 }
