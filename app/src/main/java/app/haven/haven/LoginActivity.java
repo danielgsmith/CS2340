@@ -463,12 +463,31 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 mPasswordView.requestFocus();
                 canceledLogin = false;
             } else if (success || signedIn) { //if user is signed in, move to SideBar class
+                final String[] firebaseID = new String[1];
+                final User[] lockOutUser = new User[1];
+                final String emailWithout = mEmail.replace(".", "|");
+                addLoginAttempt = true;
+                mDataRef = FirebaseDatabase.getInstance().getReference();
+                mDataRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (addLoginAttempt) {
+                            firebaseID[0] = dataSnapshot.child("emailtouid").child(emailWithout).getValue(String.class);
+                            Log.w("String", firebaseID[0]);
+                            lockOutUser[0] = dataSnapshot.child("users").child(firebaseID[0]).getValue(User.class);
+                            mDataRef.child("users").child(firebaseID[0]).child("numLoginAttempts").setValue(0);
+                        }
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
                 finish();
                 Intent i = new Intent(getApplicationContext(), SideBar.class);
                 startActivity(i);
             } else { //Tell them incorrect and put focus on password
                 //onLockedOut();
-
+                addLoginAttempt = true;
                 mDataRef = FirebaseDatabase.getInstance().getReference();
                 final String[] firebaseID = new String[1];
                 final User[] lockOutUser = new User[1];
@@ -486,17 +505,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                             mDataRef.child("users").child(firebaseID[0]).child("numLoginAttempts").setValue(lockOutUser[0].getNumLoginAttempts());
 
-                            if (lockOutUser[0].getNumLoginAttempts() == 3) {
+                            if (lockOutUser[0].getNumLoginAttempts() >= 3) {
                                 //onLockedOut();
                                 Log.w("SUCCESS", "SUC");
-                                Toast.makeText(LoginActivity.this, "Password Reset",
-                                        Toast.LENGTH_SHORT).show();
-                                
+                                Toast.makeText(LoginActivity.this, "Password reset email sent, please check email and reset your password",
+                                        Toast.LENGTH_LONG).show();
                                 addLoginAttempt = false;
-                            }else if(lockOutUser[0].getNumLoginAttempts() == 2) {
-                                Toast.makeText(LoginActivity.this, "One more incorrect and password will be reset",
-                                        Toast.LENGTH_SHORT).show();
-                            } else {
+
+                                mAuth.sendPasswordResetEmail(lockOutUser[0].getEmail());
+
+
+
+                            }else {
                                 mPasswordView.setError("Invalid Email or Password");
                                 Log.w("FAIL", "SUC");
                                 addLoginAttempt = false;
@@ -524,7 +544,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 //add 1 to lockedOut
                 //update user class in database
                 //Otherwise: set an error: incorrect password;
-                mPasswordView.setError("Incorrect email"); //or password
+
+
+                //mPasswordView.setError("Incorrect email"); //or password
                 mPasswordView.requestFocus();
 
                 Log.v(TAG, "Failed");
