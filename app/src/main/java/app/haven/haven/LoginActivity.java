@@ -109,6 +109,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private boolean addLoginAttempt = false;
 
     private final boolean[] locked = new boolean[1];
+    private boolean noAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -475,99 +476,86 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (addLoginAttempt) {
                             firebaseID[0] = dataSnapshot.child("emailtouid").child(emailWithout).getValue(String.class);
-                            Log.w("String", firebaseID[0]);
+                            //Log.w("String", firebaseID[0]);
+                            mDataRef.child("users").child(firebaseID[0]).child("numLoginAttempts").setValue(0);
                         }
+                        addLoginAttempt = false;
                     }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
-
                 finish();
                 Intent i = new Intent(getApplicationContext(), SideBar.class);
                 startActivity(i);
             } else { //Tell them incorrect and put focus on password
-                //onLockedOut();
-                addLoginAttempt = true;
-                mDataRef = FirebaseDatabase.getInstance().getReference();
-                final String[] firebaseID = new String[1];
-                final User[] lockOutUser = new User[1];
-                final String emailWithout = mEmail.replace(".", "|");
-                mDataRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (addLoginAttempt) {
-                            firebaseID[0] = dataSnapshot.child("emailtouid").child(emailWithout).getValue(String.class);
-                            Log.w("String", firebaseID[0]);
+                if (!noAccount) {
+                    addLoginAttempt = true;
+                    mDataRef = FirebaseDatabase.getInstance().getReference();
+                    final String[] firebaseID = new String[1];
+                    final User[] lockOutUser = new User[1];
+                    final String emailWithout = mEmail.replace(".", "|");
+                    mDataRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (addLoginAttempt) {
+                                firebaseID[0] = dataSnapshot.child("emailtouid").child(emailWithout).getValue(String.class);
+                                Log.w("String", firebaseID[0]);
 
-                            lockOutUser[0] = dataSnapshot.child("users").child(firebaseID[0]).getValue(User.class);
+                                lockOutUser[0] = dataSnapshot.child("users").child(firebaseID[0]).getValue(User.class);
 
-                            lockOutUser[0].increaseNumLoginAttempts();
+                                lockOutUser[0].increaseNumLoginAttempts();
 
-                            mDataRef.child("users").child(firebaseID[0]).child("numLoginAttempts").setValue(lockOutUser[0].getNumLoginAttempts());
+                                mDataRef.child("users").child(firebaseID[0]).child("numLoginAttempts").setValue(lockOutUser[0].getNumLoginAttempts());
 
-                            if (lockOutUser[0].getNumLoginAttempts() >= 3) {
-                                addLoginAttempt = false;
-                                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                                builder.setTitle("Account Disabled")
-                                        .setMessage("Your account has been disabled, please email us to reset your account")
-                                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                // continue with delete
-                                                closeContextMenu();
-                                            }
-                                        })
-                                        .setIcon(android.R.drawable.ic_dialog_alert)
-                                        .show();
+                                if (lockOutUser[0].getNumLoginAttempts() >= 3) {
+                                    addLoginAttempt = false;
+                                    /*AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                                    builder.setTitle("Account Disabled")
+                                            .setMessage("Your account has been disabled, please email us to reset your account")
+                                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    // continue with delete
+                                                    closeContextMenu();
+                                                }
+                                            })
+                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                            .show();*/
+                                    Toast.makeText(LoginActivity.this, "Account Disabled",
+                                            Toast.LENGTH_LONG).show();
 
-                                mDataRef.child("users").child(firebaseID[0]).child("lockedOut").setValue(true);
+                                    mDataRef.child("users").child(firebaseID[0]).child("lockedOut").setValue(true);
 
-                            } else if(lockOutUser[0].getNumLoginAttempts() == 2) {
-                                addLoginAttempt = false;
+                                } else if (lockOutUser[0].getNumLoginAttempts() == 2) {
+                                    addLoginAttempt = false;
 
-                                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                                builder.setTitle("Reset Password")
-                                        .setMessage("One more incorrect password will disable your account, check your email and reset your password")
-                                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                // continue with delete
-                                                closeContextMenu();
-                                            }
-                                        })
-                                        .setIcon(android.R.drawable.ic_dialog_alert)
-                                        .show();
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                                    builder.setTitle("Reset Password")
+                                            .setMessage("One more incorrect password will disable your account, check your email and reset your password")
+                                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    // continue with delete
+                                                    closeContextMenu();
+                                                }
+                                            })
+                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                            .show();
 
-                                mAuth.sendPasswordResetEmail(lockOutUser[0].getEmail());
-                            }else {
-                                mPasswordView.setError("Invalid Email or Password");
-                                Log.w("FAIL", "SUC");
-                                addLoginAttempt = false;
+                                    mAuth.sendPasswordResetEmail(lockOutUser[0].getEmail());
+                                } else {
+                                    mPasswordView.setError("Invalid Email or Password");
+                                    Log.w("FAIL", "SUC");
+                                    addLoginAttempt = false;
+                                }
+                                lockOutUser[0] = null;
                             }
                         }
-
-//                FirebaseUser userRecord = getUserByEmail(mEmail);
-//
-//                String uID = userRecord.getUId();
-//                User tempUser = new User(uID);
-//                tempUser.increaseNumLoginAttempts();
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-//                mDataRef.child("emailToUid").child("SumOne@domain,com").addSingleValueEventListener(...
-                //check if they have an email associated with
-                // go into data base and get User ID
-                //make a new temp User
-                //go to user and make a new +1 method
-                //add 1 to lockedOut
-                //update user class in database
-                //Otherwise: set an error: incorrect password;
-
-
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
+                    });
+                }
+                //locked[0] = false;
                 //mPasswordView.setError("Incorrect email"); //or password
                 mPasswordView.requestFocus();
 
@@ -584,7 +572,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     //Sign into FireBase Authentication
-    private void signIn(String email, String password) {
+    private void signIn(final String email, String password) {
         Log.d(TAG, "signIn:" + email);
             /*if (!validateForm()) {
                 return;
@@ -593,6 +581,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         //showProgressDialog();
 
         // [START sign_in_with_email]
+        getLocked(mEmailView.getText().toString());
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -602,7 +591,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             signedIn = true;
-
                             //updateUI(user);
                         } else {
                             checkEmailUse();
@@ -640,8 +628,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInAnonymously:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                             //updateUI(null);
                         }
 
@@ -661,9 +648,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         if(!check) {
                             Toast.makeText(LoginActivity.this, "No account associated with this email.",
                                     Toast.LENGTH_SHORT).show();
+                            noAccount = true;
                         } else {
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            noAccount = false;
                         }
                     }
                 });
@@ -726,6 +714,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 });
     }
 
+
     private void getLocked(String mEmail){
         final DatabaseReference mDataRef;
         final String emailWithout = mEmail.replace(".", "|");
@@ -740,17 +729,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     firebaseID[0] = dataSnapshot.child("emailtouid").child(emailWithout).getValue(String.class);
                     Log.w("String", firebaseID[0]);
                     locked[0] = dataSnapshot.child("users").child(firebaseID[0]).child("lockedOut").getValue(Boolean.class);
-                    if (!locked[0]) {
+                    Log.w("Locked", "" + locked[0]);
+                    /*if (!locked[0]) {
                         lockOutUser[0] = dataSnapshot.child("users").child(firebaseID[0]).getValue(User.class);
                         mDataRef.child("users").child(firebaseID[0]).child("numLoginAttempts").setValue(0);
-                    }
+                    }*/
                 }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-        if (locked[0]) {
+        /*if (locked[0]) {
             AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
             builder.setTitle("Account Disabled")
                     .setMessage("Your account has been disabled, please email us to reset your account")
@@ -761,7 +751,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     })
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
-        }
+        }*/
     }
 }
 

@@ -67,6 +67,10 @@ public class User {
         numLoginAttempts++;
     }
 
+    public void setNumLoginAttempts(int numLoginAttempts) {
+        this.numLoginAttempts = numLoginAttempts;
+    }
+
     public int getNumLoginAttempts() {
         return numLoginAttempts;
     }
