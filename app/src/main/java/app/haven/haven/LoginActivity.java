@@ -43,11 +43,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.ProviderQueryResult;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 //import com.google.firebase.auth.UserRecord;
 //import com.google.firebase.auth.UserRecord.CreateRequest;
 //import com.google.firebase.auth.UserRecord.UpdateRequest;
@@ -87,6 +89,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private FirebaseUser mFireUser;
 
     FirebaseDatabase database;
+
+    private final String[] ID = new String[1];
+    private final User[] lockOutUser = new User[1];
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -454,6 +459,30 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
 
+            mDataRef = FirebaseDatabase.getInstance().getReference();
+            String emailWithout = mEmail.replace(".", "|");
+            mDataRef.child("emailtouid").child(emailWithout).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    ID[0] = dataSnapshot.getValue(String.class);
+                    Log.w("String", ID[0]);
+                    onLockedOut();
+//                FirebaseUser userRecord = getUserByEmail(mEmail);
+//
+//                String uID = userRecord.getUId();
+//                User tempUser = new User(uID);
+//                tempUser.increaseNumLoginAttempts();
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+
             if(canceledLogin) { //if login was canceled set focus to password and try again
                 mPasswordView.requestFocus();
                 canceledLogin = false;
@@ -462,20 +491,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Intent i = new Intent(getApplicationContext(), SideBar.class);
                 startActivity(i);
             } else { //Tell them incorrect and put focus on password
-//                mDataRef = FirebaseDatabase.getInstance().getReference();
-//                String ID = mDataRef.child("emailtouid").child(mEmail).getUid();
-//                User user = new User(ID);
-//
-//                FirebaseUser userRecord = getUserByEmail(mEmail);
-//
-//                String uID = userRecord.getUId();
-//                User tempUser = new User(uID);
-//                tempUser.increaseNumLoginAttempts();
-//                if (user.getNumLoginAttempts() == 3) {
-//                    onLockedOut();
-//                } else {
-//                    mPasswordView.setError("Invalid Email or Password");
-//                }
+                onLockedOut();
+
 
 
 //                mDataRef.child("emailToUid").child("SumOne@domain,com").addSingleValueEventListener(...
@@ -500,18 +517,44 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //            return FirebaseAuth.getInstance().getUserByEmailAsync(email).get();
 //        }
 
-        private boolean lockedOut() {
-            return numLoginAttempts == 3;
-        }
-
         protected void onLockedOut() {
-            // OR Send them a new password link thing
+            /*// OR Send them a new password link thing
             mPasswordView.setError("Too many login attempts. An admin must unlock your account to retry");
             sendResetEmail();
             mEmailView.setVisibility(View.INVISIBLE);
-            mPasswordView.setVisibility(View.INVISIBLE);
+            mPasswordView.setVisibility(View.INVISIBLE);*/
+
+            Log.w("Got here", "NUBMER");
+
+            mDataRef.child("users").child(ID[0]).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    lockOutUser[0] = dataSnapshot.getValue(User.class);
+
+                    lockOutUser[0].increaseNumLoginAttempts();
+
+                    if (lockOutUser[0].getNumLoginAttempts() == 3) {
+                        //onLockedOut();
+                        mDataRef.child("users").child(ID[0]).child("numLoginAttempts").setValue(lockOutUser[0].getNumLoginAttempts());
+
+                        Log.w("SUCCESS", "SUC");
+                    } else {
+                        mPasswordView.setError("Invalid Email or Password");
+                        Log.w("FAIL", "SUC");
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
 
+        private void updateEverything(){
+
+        }
         @Override
         protected void onCancelled() {
             mAuthTask = null;
