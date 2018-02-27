@@ -90,9 +90,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     FirebaseDatabase database;
 
-    private final String[] ID = new String[1];
-    private final User[] lockOutUser = new User[1];
-
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
@@ -108,6 +105,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     //private FirebaseAuth mAuth;
 
     private int numLoginAttempts; //tracks number of login attempts
+
+    private boolean addLoginAttempt = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +142,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                addLoginAttempt = true;
                 attemptLogin();
             }
         });
@@ -459,30 +459,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
 
-            mDataRef = FirebaseDatabase.getInstance().getReference();
-            String emailWithout = mEmail.replace(".", "|");
-            mDataRef.child("emailtouid").child(emailWithout).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    ID[0] = dataSnapshot.getValue(String.class);
-                    Log.w("String", ID[0]);
-                    onLockedOut();
-//                FirebaseUser userRecord = getUserByEmail(mEmail);
-//
-//                String uID = userRecord.getUId();
-//                User tempUser = new User(uID);
-//                tempUser.increaseNumLoginAttempts();
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-
-
             if(canceledLogin) { //if login was canceled set focus to password and try again
                 mPasswordView.requestFocus();
                 canceledLogin = false;
@@ -491,10 +467,55 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Intent i = new Intent(getApplicationContext(), SideBar.class);
                 startActivity(i);
             } else { //Tell them incorrect and put focus on password
-                onLockedOut();
+                //onLockedOut();
 
+                mDataRef = FirebaseDatabase.getInstance().getReference();
+                final String[] firebaseID = new String[1];
+                final User[] lockOutUser = new User[1];
+                final String emailWithout = mEmail.replace(".", "|");
+                mDataRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (addLoginAttempt) {
+                            firebaseID[0] = dataSnapshot.child("emailtouid").child(emailWithout).getValue(String.class);
+                            Log.w("String", firebaseID[0]);
 
+                            lockOutUser[0] = dataSnapshot.child("users").child(firebaseID[0]).getValue(User.class);
 
+                            lockOutUser[0].increaseNumLoginAttempts();
+
+                            mDataRef.child("users").child(firebaseID[0]).child("numLoginAttempts").setValue(lockOutUser[0].getNumLoginAttempts());
+
+                            if (lockOutUser[0].getNumLoginAttempts() == 3) {
+                                //onLockedOut();
+                                Log.w("SUCCESS", "SUC");
+                                Toast.makeText(LoginActivity.this, "Password Reset",
+                                        Toast.LENGTH_SHORT).show();
+                                
+                                addLoginAttempt = false;
+                            }else if(lockOutUser[0].getNumLoginAttempts() == 2) {
+                                Toast.makeText(LoginActivity.this, "One more incorrect and password will be reset",
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                mPasswordView.setError("Invalid Email or Password");
+                                Log.w("FAIL", "SUC");
+                                addLoginAttempt = false;
+                            }
+                        }
+
+//                FirebaseUser userRecord = getUserByEmail(mEmail);
+//
+//                String uID = userRecord.getUId();
+//                User tempUser = new User(uID);
+//                tempUser.increaseNumLoginAttempts();
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 //                mDataRef.child("emailToUid").child("SumOne@domain,com").addSingleValueEventListener(...
                 //check if they have an email associated with
                 // go into data base and get User ID
@@ -517,40 +538,40 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //            return FirebaseAuth.getInstance().getUserByEmailAsync(email).get();
 //        }
 
-        protected void onLockedOut() {
-            /*// OR Send them a new password link thing
-            mPasswordView.setError("Too many login attempts. An admin must unlock your account to retry");
-            sendResetEmail();
-            mEmailView.setVisibility(View.INVISIBLE);
-            mPasswordView.setVisibility(View.INVISIBLE);*/
-
-            Log.w("Got here", "NUBMER");
-
-            mDataRef.child("users").child(ID[0]).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    lockOutUser[0] = (User) dataSnapshot.getValue(User.class);
-
-                    lockOutUser[0].increaseNumLoginAttempts();
-
-                    if (lockOutUser[0].getNumLoginAttempts() == 3) {
-                        //onLockedOut();
-                        mDataRef.child("users").child(ID[0]).child("numLoginAttempts").setValue(lockOutUser[0].getNumLoginAttempts());
-
-                        Log.w("SUCCESS", "SUC");
-                    } else {
-                        mPasswordView.setError("Invalid Email or Password");
-                        Log.w("FAIL", "SUC");
-
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
+//        protected void onLockedOut() {
+//            /*// OR Send them a new password link thing
+//            mPasswordView.setError("Too many login attempts. An admin must unlock your account to retry");
+//            sendResetEmail();
+//            mEmailView.setVisibility(View.INVISIBLE);
+//            mPasswordView.setVisibility(View.INVISIBLE);*/
+//
+//            Log.w("Got here", "NUBMER");
+//
+//            mDataRef.child("users").child(ID[0]).addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    lockOutUser[0] = (User) dataSnapshot.getValue(User.class);
+//
+//                    lockOutUser[0].increaseNumLoginAttempts();
+//
+//                    if (lockOutUser[0].getNumLoginAttempts() == 3) {
+//                        //onLockedOut();
+//                        mDataRef.child("users").child(ID[0]).child("numLoginAttempts").setValue(lockOutUser[0].getNumLoginAttempts());
+//
+//                        Log.w("SUCCESS", "SUC");
+//                    } else {
+//                        mPasswordView.setError("Invalid Email or Password");
+//                        Log.w("FAIL", "SUC");
+//
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
+//        }
 
         private void updateEverything(){
 

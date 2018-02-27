@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Haven.iml" filepath="$PROJECT_DIR$/Haven.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CS2340.iml" filepath="$PROJECT_DIR$/CS2340.iml" />
+      <module fileurl="file://C:\Users\benar\Documents\CS2340\Haven.iml" filepath="C:\Users\benar\Documents\CS2340\Haven.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
