@@ -7,6 +7,7 @@ import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.opengl.Visibility;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -42,13 +43,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.ProviderQueryResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+//import com.google.firebase.auth.UserRecord;
+//import com.google.firebase.auth.UserRecord.CreateRequest;
+//import com.google.firebase.auth.UserRecord.UpdateRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -96,6 +102,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     //DatabaseReference myRef = database.getReference("message");
     //private FirebaseAuth mAuth;
 
+    private int numLoginAttempts; //tracks number of login attempts
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -289,7 +296,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
             showProgress(true);
-
         }
     }
 
@@ -406,6 +412,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
+        private DatabaseReference mDataRef;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -454,11 +461,55 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 finish();
                 Intent i = new Intent(getApplicationContext(), SideBar.class);
                 startActivity(i);
-            } else{ //Tell them incorrect and put focus on password
-                mPasswordView.setError("Incorrect email or Password");
+            } else { //Tell them incorrect and put focus on password
+//                mDataRef = FirebaseDatabase.getInstance().getReference();
+//                String ID = mDataRef.child("emailtouid").child(mEmail).getUid();
+//                User user = new User(ID);
+//
+//                FirebaseUser userRecord = getUserByEmail(mEmail);
+//
+//                String uID = userRecord.getUId();
+//                User tempUser = new User(uID);
+//                tempUser.increaseNumLoginAttempts();
+//                if (user.getNumLoginAttempts() == 3) {
+//                    onLockedOut();
+//                } else {
+//                    mPasswordView.setError("Invalid Email or Password");
+//                }
+
+
+//                mDataRef.child("emailToUid").child("SumOne@domain,com").addSingleValueEventListener(...
+                //check if they have an email associated with
+                // go into data base and get User ID
+                //make a new temp User
+                //go to user and make a new +1 method
+                //add 1 to lockedOut
+                //update user class in database
+                //Otherwise: set an error: incorrect password;
+                mPasswordView.setError("Incorrect email"); //or password
                 mPasswordView.requestFocus();
+
                 Log.v(TAG, "Failed");
+
             }
+        }
+
+        //UserRecord
+
+//        private FirebaseUser getUserByEmail(String email) throws InterruptedException, ExecutionException {
+//            return FirebaseAuth.getInstance().getUserByEmailAsync(email).get();
+//        }
+
+        private boolean lockedOut() {
+            return numLoginAttempts == 3;
+        }
+
+        protected void onLockedOut() {
+            // OR Send them a new password link thing
+            mPasswordView.setError("Too many login attempts. An admin must unlock your account to retry");
+            sendResetEmail();
+            mEmailView.setVisibility(View.INVISIBLE);
+            mPasswordView.setVisibility(View.INVISIBLE);
         }
 
         @Override
