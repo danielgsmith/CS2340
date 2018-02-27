@@ -529,7 +529,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mDataRef.child("users").child(ID[0]).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    lockOutUser[0] = dataSnapshot.getValue(User.class);
+                    lockOutUser[0] = (User) dataSnapshot.getValue(User.class);
 
                     lockOutUser[0].increaseNumLoginAttempts();
 

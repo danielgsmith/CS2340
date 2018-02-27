@@ -11,16 +11,17 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
+    private int numLoginAttempts;
     /**
      * -1 form null
      * 0 for user
      * 1 for admin
      */
     private long accountType;
-    //private String pushId;
 
     public User() {
         // Default constructor required for calls for database
+        this("test", "test", "test@email.com",12345);
     }
 
     public User(String firstName, String lastName, String email, long accountType){
@@ -33,6 +34,7 @@ public class User {
     /*public String getFullName(){
         return firstName + " " + lastName;
     }*/
+
     public String getFirstName() {
         return firstName;
     }
@@ -42,12 +44,9 @@ public class User {
     public String getEmail(){
         return email;
     }
-    public long getAccountType(){
+    public long getAccountType() {
         return accountType;
     }
-//    public String getPushId(){
-//        return pushId;
-//    }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -61,7 +60,12 @@ public class User {
     public void setAccountType(long accountType){
         this.accountType = accountType;
     }
-    /*public void setPushId(String pushId) {
-        this.pushId = pushId;
-    }*/
+
+    public void increaseNumLoginAttempts() {
+        numLoginAttempts++;
+    }
+
+    public int getNumLoginAttempts() {
+        return numLoginAttempts;
+    }
 }
