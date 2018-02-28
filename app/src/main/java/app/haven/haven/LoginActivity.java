@@ -488,7 +488,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 lockOutUser[0].increaseNumLoginAttempts();
 
                                 mDataRef.child("users").child(firebaseID[0]).child("numLoginAttempts").setValue(lockOutUser[0].getNumLoginAttempts());
-
+                                signIn("1@gmail.com", "null");
                                 if (lockOutUser[0].getAccountType() != 1) {
                                     if (lockOutUser[0].getNumLoginAttempts() >= 3) {
                                         addLoginAttempt = false;
@@ -567,34 +567,39 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         //showProgressDialog();
 
         // [START sign_in_with_email]
-        getLocked(mEmailView.getText().toString());
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            signedIn = true;
-                            //updateUI(user);
-                        } else {
-                            checkEmailUse();
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            //updateUI(null);
-                        }
+        checkEmailUse();
+        if (!noAccount) {
+            getLocked(mEmailView.getText().toString());
+            if (!locked[0]) {
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    Log.d(TAG, "signInWithEmail:success");
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    signedIn = true;
+                                    //updateUI(user);
+                                } else {
+                                    checkEmailUse();
+                                    // If sign in fails, display a message to the user.
+                                    Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                    //updateUI(null);
+                                }
 
-                        // [START_EXCLUDE]
+                                // [START_EXCLUDE]
                         /*if (!task.isSuccessful()) {
                             mStatusTextView.setText(R.string.auth_failed);
                         }
                         hideProgressDialog();*/
-                        // [END_EXCLUDE]
-                    }
-                });
-        // [END sign_in_with_email]
+                                // [END_EXCLUDE]
+                            }
+                        });
+                // [END sign_in_with_email]
 
+            }
+        }
     }
 
     //Signs in to FireBase Authentication Anonymously
@@ -713,13 +718,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (addLoginAttempt) {
                     firebaseID[0] = dataSnapshot.child("emailtouid").child(emailWithout).getValue(String.class);
-                    Log.w("String", firebaseID[0]);
-                    locked[0] = dataSnapshot.child("users").child(firebaseID[0]).child("lockedOut").getValue(Boolean.class);
-                    Log.w("Locked", "" + locked[0]);
+                    if (firebaseID[0] != null) {
+                        Log.w("String", firebaseID[0]);
+                        locked[0] = dataSnapshot.child("users").child(firebaseID[0]).child("lockedOut").getValue(Boolean.class);
+                        Log.w("Locked", "" + locked[0]);
                     /*if (!locked[0]) {
                         lockOutUser[0] = dataSnapshot.child("users").child(firebaseID[0]).getValue(User.class);
                         mDataRef.child("users").child(firebaseID[0]).child("numLoginAttempts").setValue(0);
                     }*/
+                    }
                 }
             }
             @Override
