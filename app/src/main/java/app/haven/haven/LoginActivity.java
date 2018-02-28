@@ -489,8 +489,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                                 mDataRef.child("users").child(firebaseID[0]).child("numLoginAttempts").setValue(lockOutUser[0].getNumLoginAttempts());
 
-                                if (lockOutUser[0].getNumLoginAttempts() >= 3) {
-                                    addLoginAttempt = false;
+                                if (lockOutUser[0].getAccountType() != 1) {
+                                    if (lockOutUser[0].getNumLoginAttempts() >= 3) {
+                                        addLoginAttempt = false;
                                     /*AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                                     builder.setTitle("Account Disabled")
                                             .setMessage("Your account has been disabled, please email us to reset your account")
@@ -502,32 +503,37 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                             })
                                             .setIcon(android.R.drawable.ic_dialog_alert)
                                             .show();*/
-                                    Toast.makeText(LoginActivity.this, "Account Disabled",
-                                            Toast.LENGTH_LONG).show();
+                                        Toast.makeText(LoginActivity.this, "Account Disabled",
+                                                Toast.LENGTH_LONG).show();
 
-                                    mDataRef.child("users").child(firebaseID[0]).child("lockedOut").setValue(true);
+                                        mDataRef.child("users").child(firebaseID[0]).child("lockedOut").setValue(true);
 
-                                } else if (lockOutUser[0].getNumLoginAttempts() == 2) {
-                                    addLoginAttempt = false;
+                                    } else if (lockOutUser[0].getNumLoginAttempts() == 2) {
+                                        addLoginAttempt = false;
 
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                                    builder.setTitle("Reset Password")
-                                            .setMessage("One more incorrect password will disable your account, check your email and reset your password")
-                                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    closeContextMenu();
-                                                }
-                                            })
-                                            .setIcon(android.R.drawable.ic_dialog_alert)
-                                            .show();
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                                        builder.setTitle("Reset Password")
+                                                .setMessage("One more incorrect password will disable your account, check your email and reset your password")
+                                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        closeContextMenu();
+                                                    }
+                                                })
+                                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                                .show();
 
-                                    mAuth.sendPasswordResetEmail(lockOutUser[0].getEmail());
+                                        mAuth.sendPasswordResetEmail(lockOutUser[0].getEmail());
+                                    } else {
+                                        mPasswordView.setError("Invalid Email or Password");
+                                        //Log.w("FAIL", "SUC");
+                                        addLoginAttempt = false;
+                                    }
+                                    lockOutUser[0] = null;
                                 } else {
                                     mPasswordView.setError("Invalid Email or Password");
-                                    Log.w("FAIL", "SUC");
+                                    //Log.w("FAIL", "SUC");
                                     addLoginAttempt = false;
                                 }
-                                lockOutUser[0] = null;
                             }
                         }
                         @Override
