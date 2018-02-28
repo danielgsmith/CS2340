@@ -1,11 +1,5 @@
 package app.haven.haven;
 
-import com.google.firebase.auth.FirebaseAuth;
-
-/**
- * Created by benar on 2/12/2018.
- */
-
 public class User {
 
     private String firstName;
@@ -13,6 +7,7 @@ public class User {
     private String email;
     private int numLoginAttempts;
     private boolean lockedOut;
+    private String currentShelterPushID;
     /**
      * -1 form null
      * 0 for user
@@ -49,7 +44,6 @@ public class User {
     public long getAccountType() {
         return accountType;
     }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -62,24 +56,25 @@ public class User {
     public void setAccountType(long accountType){
         this.accountType = accountType;
     }
-
     public void increaseNumLoginAttempts() {
         numLoginAttempts++;
     }
-
     public void setNumLoginAttempts(int numLoginAttempts) {
         this.numLoginAttempts = numLoginAttempts;
     }
-
     public int getNumLoginAttempts() {
         return numLoginAttempts;
     }
-
     public void setLockedOut(boolean lockedOut){
         this.lockedOut = lockedOut;
     }
-
     public boolean isLockedOut() {
         return lockedOut;
+    }
+    public String getCurrentShelterPushID() {
+        return currentShelterPushID;
+    }
+    public void setCurrentShelterPushID(String currentShelterPushID) {
+        this.currentShelterPushID = currentShelterPushID;
     }
 }
