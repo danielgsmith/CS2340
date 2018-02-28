@@ -230,7 +230,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         reference.child("users").child(mFireUser.getUid()).setValue(user);
         //mRef.child("users").child(mFireUser.getUid()).push().setValue(user);
-
+        String emailWithout = email.replace(".", "|");
+        reference.child("emailtouid").child(emailWithout).setValue(mFireUser.getUid());
 
     }
 

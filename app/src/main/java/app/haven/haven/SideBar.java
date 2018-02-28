@@ -80,16 +80,20 @@ public class SideBar extends AppCompatActivity
         mFireUser = FirebaseAuth.getInstance().getCurrentUser();
         mDataRef = FirebaseDatabase.getInstance().getReference();
         //Gets user out of the database
-        if (!mFireUser.isAnonymous() || mFireUser != null) {
+        if (!mFireUser.isAnonymous() && mFireUser != null) {
             mDataRef.child("users").child(mFireUser.getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     // Grabs saved user class from database
                     user = dataSnapshot.getValue(User.class);
+                    //user.setNumLoginAttempts(0);
                     //Log.w("test", "" + user.getLastName());
                     // Sets Welcome text have have their full name
                     //sTextView welcomeText = (TextView) findViewById(R.id.textView);
                     //welcomeText.setText("Welcome " + user.getFirstName() + " " + user.getLastName());
+
+
+
                     // Checks if user is an admin, if so sets admin menu to visible
                     if (!mFireUser.isAnonymous() && user.getAccountType() == 1)
                         unhiddenAdminMenu();
