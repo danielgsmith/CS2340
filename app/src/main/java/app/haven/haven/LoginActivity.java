@@ -73,13 +73,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final String TAG = "EmailPassword";
 
     /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "user:pass", "admin:admin"
-    };
-    /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
@@ -288,7 +281,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isemailValid(email)) {
+        } else if (!isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
@@ -308,14 +301,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     //Checks if Email is valid by having an @
-    private boolean isemailValid(String email) {
-        //TODO: Replace this with your own logic
+    private boolean isEmailValid(String email) {
         return email.contains("@");
     }
 
     //Checks if password is >= 6 characters long
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() >= 6;
     }
 
@@ -442,16 +433,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
 
-            /*for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }*/
-
-
-            // TODO: register the new account here.
             return false;
         }
 
@@ -466,7 +447,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 canceledLogin = false;
             } else if ((success || signedIn) && !locked[0]) { //if user is signed in, move to SideBar class
                 final String[] firebaseID = new String[1];
-                final User[] lockOutUser = new User[1];
+                //final User[] lockOutUser = new User[1];
                 final String emailWithout = mEmail.replace(".", "|");
 
                 addLoginAttempt = true;
@@ -500,7 +481,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if (addLoginAttempt) {
                                 firebaseID[0] = dataSnapshot.child("emailtouid").child(emailWithout).getValue(String.class);
-                                Log.w("String", firebaseID[0]);
+                                //Log.w("String", firebaseID[0]);
 
                                 lockOutUser[0] = dataSnapshot.child("users").child(firebaseID[0]).getValue(User.class);
 
@@ -534,7 +515,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                             .setMessage("One more incorrect password will disable your account, check your email and reset your password")
                                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog, int which) {
-                                                    // continue with delete
                                                     closeContextMenu();
                                                 }
                                             })
@@ -719,7 +699,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         final DatabaseReference mDataRef;
         final String emailWithout = mEmail.replace(".", "|");
         final String[] firebaseID = new String[1];
-        final User[] lockOutUser = new User[1];
+        //final User[] lockOutUser = new User[1];
         addLoginAttempt = true;
         mDataRef = FirebaseDatabase.getInstance().getReference();
         mDataRef.addValueEventListener(new ValueEventListener() {
