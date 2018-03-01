@@ -126,7 +126,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    //attemptLogin();
+                    attemptLogin();
                     return true;
                 }
                 return false;
@@ -498,8 +498,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 lockOutUser[0].increaseNumLoginAttempts();
 
                                 mDataRef.child("users").child(firebaseID[0]).child("numLoginAttempts").setValue(lockOutUser[0].getNumLoginAttempts());
-                                //signIn("1@gmail.com", "null");
-
+                                signIn("1@gmail.com", "nullll");
                                 if (lockOutUser[0].getAccountType() != 1) {
                                     if (lockOutUser[0].getNumLoginAttempts() >= 3) {
                                         addLoginAttempt = false;
@@ -518,10 +517,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                                 Toast.LENGTH_LONG).show();
 
                                         mDataRef.child("users").child(firebaseID[0]).child("lockedOut").setValue(true);
-
-                                        if (mAuth != null) {
-                                            mAuth.signOut();
-                                        }
 
                                     } else if (lockOutUser[0].getNumLoginAttempts() == 2) {
                                         addLoginAttempt = false;
@@ -543,7 +538,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                         //Log.w("FAIL", "SUC");
                                         addLoginAttempt = false;
                                     }
-                                    lockOutUser[0] = null;
+                                    //lockOutUser[0] = null;
                                 } else {
                                     mPasswordView.setError("Invalid Email or Password");
                                     //Log.w("FAIL", "SUC");
@@ -559,6 +554,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 //locked[0] = false;
                 //mPasswordView.setError("Incorrect email"); //or password
                 mPasswordView.requestFocus();
+                //mAuth.signOut();
 
                 Log.v(TAG, "Failed");
             }

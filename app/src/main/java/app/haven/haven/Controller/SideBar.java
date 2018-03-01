@@ -91,7 +91,13 @@ public class SideBar extends AppCompatActivity
                     // Sets Welcome text have have their full name
                     //sTextView welcomeText = (TextView) findViewById(R.id.textView);
                     //welcomeText.setText("Welcome " + user.getFirstName() + " " + user.getLastName());
-
+                    if (user.isLockedOut()) {
+                        FirebaseAuth.getInstance().signOut();
+                        finish();
+                        Toast.makeText(SideBar.this, "Error, please re-login", Toast.LENGTH_LONG).show();
+                        Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(i);
+                    }
 
 
                     // Checks if user is an admin, if so sets admin menu to visible
