@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="app.haven.haven.SearchedSheltersActivity"
+    tools:context="app.haven.haven.Controller.SearchedSheltersActivity"
     tools:showIn="@layout/activity_searched_shelters">
 
 </android.support.constraint.ConstraintLayout>

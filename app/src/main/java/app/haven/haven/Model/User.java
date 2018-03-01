@@ -1,4 +1,4 @@
-package app.haven.haven;
+package app.haven.haven.Model;
 
 public class User {
 

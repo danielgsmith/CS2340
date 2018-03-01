@@ -1,4 +1,4 @@
-package app.haven.haven;
+package app.haven.haven.Model;
 
 public class Shelter {
 
@@ -29,11 +29,11 @@ public class Shelter {
 
 
 
-    Shelter(){
+    public Shelter(){
         // Default constructor required for calls for database
     }
 
-    Shelter(String name, long capacityType, int capacity, int subCapacity, boolean acceptsMale, boolean acceptsFemale, boolean acceptsAdults, boolean acceptsNewBorns,
+    public Shelter(String name, long capacityType, int capacity, int subCapacity, boolean acceptsMale, boolean acceptsFemale, boolean acceptsAdults, boolean acceptsNewBorns,
             boolean acceptsChildUnder5, boolean acceptsFamilies, boolean acceptsChild, boolean acceptsVeterans, double longitude,
             double latitude, String phone, String address, int uniqueKey, String notes) {
         this.shelterName = name;

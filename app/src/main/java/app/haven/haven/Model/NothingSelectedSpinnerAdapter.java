@@ -1,4 +1,4 @@
-package app.haven.haven;
+package app.haven.haven.Model;
 
 /**
  * Created by Ben on 2/10/2018.

@@ -1,4 +1,4 @@
-package app.haven.haven;
+package app.haven.haven.Controller;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import app.haven.haven.R;
 
 
 /**

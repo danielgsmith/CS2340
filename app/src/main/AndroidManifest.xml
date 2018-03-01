@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/BlueGreen">
         <activity
-            android:name=".LoginActivity"
+            android:name=".Controller.LoginActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,22 +24,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegisterActivity"
+            android:name=".Controller.RegisterActivity"
             android:label="Register" />
         <activity
-            android:name=".SideBar"
+            android:name=".Controller.SideBar"
             android:label="@string/title_activity_side_bar"
             android:theme="@style/BlueGreen.NoActionBar" />
         <activity
-            android:name=".CreateNewShelterActivity"
+            android:name=".Controller.CreateNewShelterActivity"
             android:label="@string/title_activity_create_new_shelter"
             android:theme="@style/BlueGreen.NoActionBar" />
         <activity
-            android:name=".ShelterDetailsActivity"
+            android:name=".Controller.ShelterDetailsActivity"
             android:label="@string/title_activity_shelter_details"
             android:theme="@style/BlueGreen.NoActionBar" />
         <activity
-            android:name=".SearchedSheltersActivity"
+            android:name=".Controller.SearchedSheltersActivity"
             android:label="@string/title_activity_searched_shelters"
             android:theme="@style/BlueGreen.NoActionBar"></activity>
     </application>

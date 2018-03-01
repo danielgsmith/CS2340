@@ -1,13 +1,11 @@
-package app.haven.haven;
+package app.haven.haven.Controller;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.opengl.Visibility;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -56,7 +54,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
+
+import app.haven.haven.Model.User;
+import app.haven.haven.R;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -126,7 +126,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    //attemptLogin();
                     return true;
                 }
                 return false;
@@ -266,12 +266,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
+        if (!TextUtils.isEmpty(mEmailView.getText().toString()))
+            getLocked(email);
+        Log.d("Email" , email);
+
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
+            cancel = true;
+        } else if (TextUtils.isEmpty(password)) {
+            mPasswordView.setError("Required");
             focusView = mPasswordView;
             cancel = true;
         }
@@ -291,6 +299,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
+            //FirebaseAuth.getInstance().signOut();
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
@@ -446,10 +455,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 mPasswordView.requestFocus();
                 canceledLogin = false;
             } else if ((success || signedIn) && !locked[0]) { //if user is signed in, move to SideBar class
+                Log.d("About", "" + locked[0]);
                 final String[] firebaseID = new String[1];
                 //final User[] lockOutUser = new User[1];
                 final String emailWithout = mEmail.replace(".", "|");
-
+                signIn(mEmail, mPassword);
                 addLoginAttempt = true;
                 mDataRef = FirebaseDatabase.getInstance().getReference();
                 mDataRef.addValueEventListener(new ValueEventListener() {
@@ -488,7 +498,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 lockOutUser[0].increaseNumLoginAttempts();
 
                                 mDataRef.child("users").child(firebaseID[0]).child("numLoginAttempts").setValue(lockOutUser[0].getNumLoginAttempts());
-                                signIn("1@gmail.com", "null");
+                                //signIn("1@gmail.com", "null");
+
                                 if (lockOutUser[0].getAccountType() != 1) {
                                     if (lockOutUser[0].getNumLoginAttempts() >= 3) {
                                         addLoginAttempt = false;
@@ -507,6 +518,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                                 Toast.LENGTH_LONG).show();
 
                                         mDataRef.child("users").child(firebaseID[0]).child("lockedOut").setValue(true);
+
+                                        if (mAuth != null) {
+                                            mAuth.signOut();
+                                        }
 
                                     } else if (lockOutUser[0].getNumLoginAttempts() == 2) {
                                         addLoginAttempt = false;
@@ -546,7 +561,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 mPasswordView.requestFocus();
 
                 Log.v(TAG, "Failed");
-
             }
         }
 
@@ -560,6 +574,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     //Sign into FireBase Authentication
     private void signIn(final String email, String password) {
         Log.d(TAG, "signIn:" + email);
+        //getLocked(email);
+        Log.w(TAG, "Locked" + locked[0]);
             /*if (!validateForm()) {
                 return;
             }*/
@@ -569,7 +585,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // [START sign_in_with_email]
         checkEmailUse();
         if (!noAccount) {
-            getLocked(mEmailView.getText().toString());
             if (!locked[0]) {
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
@@ -580,6 +595,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                     Log.d(TAG, "signInWithEmail:success");
                                     FirebaseUser user = mAuth.getCurrentUser();
                                     signedIn = true;
+                                    Log.d("Locked", "" + locked[0]);
+//                                    if (locked[0]){
+//                                        mAuth.signOut();
+//                                        Log.d("Locked", "Signed Out");
+//                                    }
                                     //updateUI(user);
                                 } else {
                                     checkEmailUse();
@@ -721,7 +741,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     if (firebaseID[0] != null) {
                         Log.w("String", firebaseID[0]);
                         locked[0] = dataSnapshot.child("users").child(firebaseID[0]).child("lockedOut").getValue(Boolean.class);
-                        Log.w("Locked", "" + locked[0]);
+                        Log.w("Locked", emailWithout + locked[0]);
                     /*if (!locked[0]) {
                         lockOutUser[0] = dataSnapshot.child("users").child(firebaseID[0]).getValue(User.class);
                         mDataRef.child("users").child(firebaseID[0]).child("numLoginAttempts").setValue(0);

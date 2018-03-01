@@ -1,28 +1,26 @@
-package app.haven.haven;
+package app.haven.haven.Controller;
 
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import app.haven.haven.ShelterListFragment.OnListFragmentInteractionListener;
+import app.haven.haven.Model.Shelter;
+import app.haven.haven.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Shelter} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
+ * specified {@link ShelterListFragment.OnListFragmentInteractionListener}.
  */
 public class MyShelterRecyclerViewAdapter extends RecyclerView.Adapter<MyShelterRecyclerViewAdapter.ViewHolder> {
 
     private final ArrayList<Shelter> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final ShelterListFragment.OnListFragmentInteractionListener mListener;
 
-    public MyShelterRecyclerViewAdapter(ArrayList<Shelter> items, OnListFragmentInteractionListener listener) {
+    public MyShelterRecyclerViewAdapter(ArrayList<Shelter> items, ShelterListFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }

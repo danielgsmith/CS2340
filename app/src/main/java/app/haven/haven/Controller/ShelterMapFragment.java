@@ -1,4 +1,4 @@
-package app.haven.haven;
+package app.haven.haven.Controller;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import app.haven.haven.R;
 
 
 /**
