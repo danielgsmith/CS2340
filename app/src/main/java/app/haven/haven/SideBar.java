@@ -214,10 +214,12 @@ public class SideBar extends AppCompatActivity
                         Toast.LENGTH_SHORT).show();
             }
         } else if (id == R.id.nav_account) {
+
             if (mFireUser.isAnonymous() && mFireUser != null) {
                 Toast.makeText(this, "Must be logged in.",
                         Toast.LENGTH_SHORT).show();
             } else {
+                fragment = new UserAccoundEditingFragment();
                 setTitle("Account Settings");
                 Log.w("Logged in:", "Implement account page");
             }
