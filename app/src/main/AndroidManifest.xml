@@ -41,6 +41,10 @@
         <activity
             android:name=".Controller.SearchedSheltersActivity"
             android:label="@string/title_activity_searched_shelters"
+            android:theme="@style/BlueGreen.NoActionBar" />
+        <activity
+            android:name=".Controller.ShelterListDetailsActivity"
+            android:label="@string/title_activity_shelter_list_details"
             android:theme="@style/BlueGreen.NoActionBar"></activity>
     </application>
 

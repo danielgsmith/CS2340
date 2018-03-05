@@ -146,7 +146,7 @@ public class ShelterDetailsActivity extends AppCompatActivity {
             shelterGender.setText("Accepts only Females");
 
         shelterCapacity.setText(shelter.getCapacity().toDetailedString());
-        Log.e("Capcity", "" + shelter.getCapacity().getIndividualCapacity());
+        //Log.e("Capacity", "" + shelter.getCapacity().getIndividualCapacity());
 
 
     }

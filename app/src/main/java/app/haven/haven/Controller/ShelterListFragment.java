@@ -55,7 +55,6 @@ public class ShelterListFragment extends Fragment {
     public ShelterListFragment() {
     }
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static ShelterListFragment newInstance(int columnCount) {
         ShelterListFragment fragment = new ShelterListFragment();

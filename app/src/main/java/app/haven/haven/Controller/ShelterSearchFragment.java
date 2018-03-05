@@ -180,7 +180,6 @@ public class ShelterSearchFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onListFragmentInteraction(Shelter shelter);
     }
 }

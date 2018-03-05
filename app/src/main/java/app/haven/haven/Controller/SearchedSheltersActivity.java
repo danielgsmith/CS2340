@@ -1,5 +1,6 @@
 package app.haven.haven.Controller;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -12,6 +13,8 @@ import app.haven.haven.R;
 public class SearchedSheltersActivity extends AppCompatActivity
         implements
         ShelterSearchFragment.OnListFragmentInteractionListener {
+
+    public static Shelter selectedShelter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,12 @@ public class SearchedSheltersActivity extends AppCompatActivity
 
     @Override
     public void onListFragmentInteraction(Shelter shelter) {
+        Intent i = new Intent(getApplicationContext(), ShelterListDetailsActivity.class);
+        startActivity(i);
+        selectedShelter = shelter;
+    }
 
+    public static Shelter getSelectedShelter(){
+        return selectedShelter;
     }
 }

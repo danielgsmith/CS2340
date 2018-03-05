@@ -118,4 +118,5 @@
     </string>
     <string name="title_activity_shelter_details">ShelterDetailsActivity</string>
     <string name="title_activity_searched_shelters">SearchedSheltersActivity</string>
+    <string name="title_activity_shelter_list_details">ShelterListDetailsActivity</string>
 </resources>
