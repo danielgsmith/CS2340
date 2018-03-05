@@ -7,18 +7,31 @@ package app.haven.haven;
 public class Capacity {
 
     public enum CapacityType {
-        SPACES(true, false),
-        FAMILY_ROOMS(false, true),
-        FAMILY_AND_SINGLE_ROOMS(true, true),
-        APARTMENTS(false, true),
-        UNLISTED(false, false);
+        SPACES(true, false, " spaces", null),
+        FAMILY_ROOMS(false, true, null, " family rooms"),
+        FAMILY_AND_SINGLE_ROOMS(true, true, " single rooms", " family rooms"),
+        APARTMENTS(false, true, null, " apartments"),
+        UNLISTED(false, false, null, null);
 
         private static String[] stringValues;
         private boolean individualRooms;
         private boolean groupRooms;
-        private CapacityType(boolean individualRooms, boolean groupRooms) {
+        private String individualSuffix;
+        private String groupSuffix;
+
+        CapacityType(boolean individualRooms, boolean groupRooms, String individualSuffix, String groupSuffix) {
             this.individualRooms = individualRooms;
             this.groupRooms = groupRooms;
+            this.individualSuffix = individualSuffix;
+            this.groupSuffix = groupSuffix;
+        }
+
+        public String getIndividualSuffix() {
+            return individualSuffix;
+        }
+
+        public String getGroupSuffix() {
+            return groupSuffix;
         }
 
         public boolean hasIndividualRooms() {
@@ -43,13 +56,26 @@ public class Capacity {
     }
 
     private CapacityType capacityType;
-    int individualRoom;
-    int groupRoom;
+
+    public void setIndividualCapacity(int individualCapacity) {
+        this.individualCapacity = individualCapacity;
+    }
+
+    public void setGroupCapacity(int groupCapacity) {
+        this.groupCapacity = groupCapacity;
+    }
+
+    private int individualCapacity;
+    private int groupCapacity;
+
+    public Capacity(){
+//        this(CapacityType.SPACES, 0);
+    }
 
     public Capacity(CapacityType capacityType, int individualRoom, int groupRoom) {
         this.capacityType = capacityType;
-        this.individualRoom = individualRoom;
-        this.groupRoom = groupRoom;
+        this.individualCapacity = individualRoom;
+        this.groupCapacity = groupRoom;
     }
 
     public Capacity(CapacityType capacityType, int slots) {
@@ -68,44 +94,44 @@ public class Capacity {
         this.capacityType = capacityType;
     }
 
-    /***
-     *  Sets the correct capacity to slots
-     *  If the capacityType allows for individual and group slots
-     *  then it prioritizes individual slots
-     * @param slots the number to set
-     */
-    public void setCapacity(int slots) {
-        if (capacityType.individualRooms) {
-            setCapacity(individualRoom, slots);
-        } else if (capacityType.groupRooms) {
-            setCapacity(slots, groupRoom);
-        }
-    }
+//    /***
+//     *  Sets the correct capacity to slots
+//     *  If the capacityType allows for individual and group slots
+//     *  then it prioritizes individual slots
+//     * @param slots the number to set
+//     */
+//    public void setCapacity(int slots) {
+//        if (capacityType.individualRooms) {
+//            setCapacity(individualCapacity, slots);
+//        } else if (capacityType.groupRooms) {
+//            setCapacity(slots, groupCapacity);
+//        }
+//    }
 
-    /***
-     * Sets the capacity for individual and group slots
-     * @param individualSlots the individual slots to be set
-     * @param groupSlots the group slots to be set
-     */
-    public void setCapacity(int individualSlots, int groupSlots) {
-        this.individualRoom = individualSlots;
-        this.groupRoom = groupSlots;
-    }
+//    /***
+//     * Sets the capacity for individual and group slots
+//     * @param individualSlots the individual slots to be set
+//     * @param groupSlots the group slots to be set
+//     */
+//    public void setCapacity(int individualSlots, int groupSlots) {
+//        this.individualCapacity = individualSlots;
+//        this.groupCapacity = groupSlots;
+//    }
 
-    /***
-     * also prioritizes individual room if not specifying
-     * @return the capacity
-     */
-    public int getCapacity() {
-        return capacityType.individualRooms ? individualRoom : groupRoom;
-    }
+//    /***
+//     * also prioritizes individual room if not specifying
+//     * @return the capacity
+//     */
+//    public int getCapacity() {
+//        return capacityType.individualRooms ? individualCapacity : groupCapacity;
+//    }
 
     public int getIndividualCapacity() {
-        return individualRoom;
+        return individualCapacity;
     }
 
     public int getGroupCapacity() {
-        return groupRoom;
+        return groupCapacity;
     }
 
     public static Capacity parseFromString(String s) {
@@ -145,8 +171,15 @@ public class Capacity {
     public String toString() {
         return "Capacity{" +
                 "capacityType=" + capacityType +
-                (capacityType.individualRooms ? ", individualRoom=" + individualRoom : "") +
-                (capacityType.groupRooms ? ", groupRoom=" + groupRoom : "") +
+                (capacityType.individualRooms ? ", individualCapacity=" + individualCapacity : "") +
+                (capacityType.groupRooms ? ", groupCapacity=" + groupCapacity : "") +
                 '}';
     }
+
+    public String toDetailedString() {
+        return (capacityType.individualRooms ? individualCapacity + capacityType.individualSuffix : "") +
+                (capacityType.groupRooms && capacityType.individualRooms ? "\n" : "") +
+                (capacityType.groupRooms ? groupCapacity + capacityType.groupSuffix : "");
+    }
+
 }

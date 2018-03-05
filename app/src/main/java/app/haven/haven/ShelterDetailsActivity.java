@@ -2,20 +2,12 @@ package app.haven.haven;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 public class ShelterDetailsActivity extends AppCompatActivity {
 
@@ -79,7 +71,7 @@ public class ShelterDetailsActivity extends AppCompatActivity {
         shelterLat.setText(String.format("%s", shelter.getLatitude()));
         shelterLong.setText(String.format("%s", shelter.getLongitude()));
         shelterAddress.setText(shelter.getAddress());
-        //TODO: fix this stuff that broke
+
 //        if (shelter.getCapacityType() == Cap) {
 //            available = shelter.getCapacity() - shelter.getOccupancy();
 //            if (available == 1)
@@ -132,15 +124,27 @@ public class ShelterDetailsActivity extends AppCompatActivity {
 //                shelterCapacity.setText(String.format("%d apartments left", available));
 //        }
 
-        if (shelter.getAcceptsMale() && !shelter.getAcceptsFemale())
+        /*if (shelter.getAcceptsMale() && !shelter.getAcceptsFemale())
             shelterGender.setText("Accepts only Males");
         else if (!shelter.getAcceptsMale() && shelter.getAcceptsFemale())
             shelterGender.setText("Accepts only Females");
         else
-            shelterGender.setText("Accepts all genders");
+            shelterGender.setText("Accepts all genders");*/
 
         String phoneNumber = shelter.getPhone();
-        phoneNumber = "(" + phoneNumber.substring(0,3) + ")" + phoneNumber.substring(3,6) + "-" + phoneNumber.substring(6,10);
+        //phoneNumber = "(" + phoneNumber.substring(0,3) + ")" + phoneNumber.substring(3,6) + "-" + phoneNumber.substring(6,10);
         shelterPhone.setText(phoneNumber);
+
+        if (shelter.getRestrictions().isMen() && shelter.getRestrictions().isWomen()){
+            shelterGender.setText("Accepts all genders");
+        } else if (shelter.getRestrictions().isMen() && !shelter.getRestrictions().isWomen())
+            shelterGender.setText("Accepts only Males");
+        else if (!shelter.getRestrictions().isMen() && shelter.getRestrictions().isWomen())
+            shelterGender.setText("Accepts only Females");
+
+        shelterCapacity.setText(shelter.getCapacity().toDetailedString());
+        Log.e("Capcity", "" + shelter.getCapacity().getIndividualCapacity());
+
+
     }
 }

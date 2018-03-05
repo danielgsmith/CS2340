@@ -1,7 +1,5 @@
 package app.haven.haven;
 
-import android.graphics.Paint;
-
 public class Shelter {
 
     private String shelterName;
@@ -18,7 +16,7 @@ public class Shelter {
 
 
     Shelter(){
-        // Default constructor required for calls for database
+        // Default constructor required for calls from database
     }
 
     Shelter(String name, Capacity capacity, Restrictions restrictions, double longitude,
@@ -47,17 +45,17 @@ public class Shelter {
         return address;
     }
 
-    public Capacity getCapacityObject() { return capacity; }
+    public Capacity getCapacity() { return capacity; }
 
-    public Capacity.CapacityType getCapacityType() { return capacity.getCapacityType(); }
-
-    public int getCapacity(){
-        return capacity.getCapacity();
-    }
-
-    public int getIndividualCapacity() { return capacity.getIndividualCapacity(); }
-
-    public int getGroupCapacity() { return capacity.getGroupCapacity(); }
+//    public Capacity.CapacityType getCapacityType() { return capacity.getCapacityType(); }
+//
+//    public int getCapacity(){
+//        return capacity.getCapacity();
+//    }
+//
+//    public int getIndividualCapacity() { return capacity.getIndividualCapacity(); }
+//
+//    public int getGroupCapacity() { return capacity.getGroupCapacity(); }
 
     public String getPhone(){
         return phone;

@@ -93,6 +93,7 @@ public class ShelterListFragment extends Fragment {
                 for (DataSnapshot child : children) {
                     Shelter place = child.getValue(Shelter.class);
                     sheltersArray.add(place);
+                    //Log.e("Capacity", "" + place.getCapacity());
                     //Log.w("Item", ""+ sheltersArray.get(0));
                 }
                 //Log.w("Item", ""+ sheltersArray.get(0));

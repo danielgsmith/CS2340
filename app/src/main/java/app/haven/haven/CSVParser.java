@@ -1,9 +1,14 @@
 package app.haven.haven;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +21,8 @@ public class CSVParser {
     public CSVParser(File file) {
         shelterList = new ArrayList<>();
         try {
+            //InputStream is = getResources().openRawResource(R.raw.homeless);
+
             BufferedReader b = new BufferedReader(new FileReader(file));
             b.readLine();
             for (String line = ""; (line = b.readLine()) != null;) {
@@ -32,10 +39,12 @@ public class CSVParser {
                         Integer.parseInt(csLine[0]),
                         csLine[7]
                 ));
+                Log.d("SOmething", "here");
             }
+            b.close();
         } catch (IOException e) {
-            System.out.println("An error occured parsing file " + file);
-            e.printStackTrace();
+            Log.e("An error ", "" + file);
+            //e.printStackTrace();
         }
     }
 
