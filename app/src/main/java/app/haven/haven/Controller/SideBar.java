@@ -86,22 +86,18 @@ public class SideBar extends AppCompatActivity
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     // Grabs saved user class from database
                     user = dataSnapshot.getValue(User.class);
-                    //user.setNumLoginAttempts(0);
-                    //Log.w("test", "" + user.getLastName());
-                    // Sets Welcome text have have their full name
-                    //sTextView welcomeText = (TextView) findViewById(R.id.textView);
-                    //welcomeText.setText("Welcome " + user.getFirstName() + " " + user.getLastName());
-                    if (user.isLockedOut()) {
+                    if (user == null) {
+                        FirebaseAuth.getInstance().signOut();
+                        finish();
+                        Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(i);
+                    } else if (user.isLockedOut()) {
                         FirebaseAuth.getInstance().signOut();
                         finish();
                         Toast.makeText(SideBar.this, "Error, please re-login", Toast.LENGTH_LONG).show();
                         Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                         startActivity(i);
-                    }
-
-
-                    // Checks if user is an admin, if so sets admin menu to visible
-                    if (!mFireUser.isAnonymous() && user.getAccountType() == 1)
+                    }else if (!mFireUser.isAnonymous() && user.getAccountType() == 1)
                         unhiddenAdminMenu();
                 }
 

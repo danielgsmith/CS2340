@@ -21,12 +21,12 @@ public enum Restrictions {
     private boolean childrenUnder5Only;
     private boolean youngAdultsOnly;
     private boolean veteransOnly;
-    private boolean childrenOnly;
+    private boolean allowsChildren;
     private boolean adultsOnly;
 
     Restrictions(String parseFrom, boolean men, boolean women, boolean familyOnly,
                  boolean newbornsOnly, boolean childrenUnder5Only, boolean youngAdultsOnly,
-                 boolean veteransOnly, boolean childrenOnly, boolean adultsOnly) {
+                 boolean veteransOnly, boolean allowsChildren, boolean adultsOnly) {
         this.parseFrom = parseFrom;
         this.men = men;
         this.women = women;
@@ -35,7 +35,7 @@ public enum Restrictions {
         this.childrenUnder5Only = childrenUnder5Only;
         this.youngAdultsOnly = youngAdultsOnly;
         this.veteransOnly = veteransOnly;
-        this.childrenOnly = childrenOnly;
+        this.allowsChildren = allowsChildren;
         this.adultsOnly = adultsOnly;
     }
 
@@ -78,8 +78,8 @@ public enum Restrictions {
         return veteransOnly;
     }
 
-    public boolean isChildrenOnly() {
-        return childrenOnly;
+    public boolean isAllowsChildren() {
+        return allowsChildren;
     }
 
     public boolean isAdultsOnly() { return adultsOnly; }

@@ -113,7 +113,7 @@ public class ShelterSearchFragment extends Fragment {
                                 add = false;
                         }
                         else if (CriteriaFragment.rangeSelected == 1) {
-                            if (!place.getRestrictions().isChildrenOnly())
+                            if (!place.getRestrictions().isAllowsChildren())
                                 add = false;
                         }
                         else if (CriteriaFragment.rangeSelected == 2) {
