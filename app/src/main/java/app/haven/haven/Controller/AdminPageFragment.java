@@ -10,6 +10,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import app.haven.haven.R;
 
@@ -34,7 +47,9 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
 
     View view;
     Button createShelter;
-    Button remvoeShelter;
+    Button removeShelter;
+    Button parseFile;
+    FirebaseDatabase database;
 
     private OnFragmentInteractionListener mListener;
 
@@ -76,8 +91,11 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
         view = inflater.inflate(R.layout.fragment_admin_page, container, false);
         createShelter = (Button) view.findViewById(R.id.button_admin_create_shelter);
         createShelter.setOnClickListener(this);
-        remvoeShelter = (Button) view.findViewById(R.id.button_admin_remove_shelter);
-        remvoeShelter.setOnClickListener(this);
+        removeShelter = (Button) view.findViewById(R.id.button_admin_remove_shelter);
+        removeShelter.setOnClickListener(this);
+        parseFile = (Button) view.findViewById(R.id.parse_file);
+        parseFile.setOnClickListener(this);
+
         return view;
     }
 
@@ -116,6 +134,25 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
                 break;
             case R.id.button_admin_remove_shelter:
                 Log.w("RemoveShelter:", "Worked");
+                break;
+            case R.id.parse_file:
+                File file = new File("CS2340/app/src/main/res/raw/homeless");
+                //CSVParser parser = new CSVParser(file);
+                //List<Shelter> shelterList = parser.getShelterList();
+                //Log.d("Shelter", shelterList.get(0).getShelterName());
+                CSVParser(file);
+                //Log.d("Shelter", shelterList.get(0).getShelterName());
+                database = FirebaseDatabase.getInstance();
+                DatabaseReference reference = database.getReference();
+
+                for (int count = 0; count < shelterList.size(); count++) {
+                    reference.child("shelters").push().setValue(shelterList.get(count));
+                }
+
+                Toast.makeText(getActivity(), "Shelters added", Toast.LENGTH_SHORT).show();
+
+
+                break;
         }
     }
 
@@ -130,7 +167,65 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+
+
+
+    public static int DEFAULT_CAPACITY = -1; //this can be a number if we just want a default instead of allowing them not to specify
+
+    private List<Shelter> shelterList;
+
+    public void CSVParser(File file) {
+        shelterList = new ArrayList<>();
+        try {
+            InputStream is = getResources().openRawResource(R.raw.homeless);
+
+            BufferedReader b = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+            b.readLine();
+            for (String line = ""; (line = b.readLine()) != null;) {
+                line = parseLineForCommas(line.replaceAll("~", ""));
+                String[] csLine = line.split("~");
+                shelterList.add(new Shelter(
+                        csLine[1],
+                        Capacity.parseFromString(csLine[2]),
+                        Restrictions.parseFrom(csLine[3]),
+                        Double.parseDouble(csLine[4]),
+                        Double.parseDouble(csLine[5]),
+                        csLine[8],
+                        csLine[6],
+                        Integer.parseInt(csLine[0]),
+                        csLine[7]
+                ));
+                //Log.d("Shelter", shelterList.get(0).getShelterName());
+            }
+            b.close();
+        } catch (IOException e) {
+            Log.e("An error ", "" + file);
+            //e.printStackTrace();
+        }
+    }
+
+    public List<Shelter> getShelterList() {
+        return shelterList;
+    }
+
+    /***
+     * Current we do NOT have a way to use an escape character for quotation marks,
+     * so any shelter with quotation marks in one of its categories will get messed up
+     * @param line the line
+     * @return the line parsed to replace commas not in a text field with ~ characters
+     */
+    private String parseLineForCommas(String line) {
+        boolean ignore = false;
+        for (int i = 0; i < line.length(); i++) {
+            char c = line.charAt(i);
+            if (c == ',' && !ignore) {
+                line = line.substring(0,i) + "~" + line.substring(i + 1);
+            }
+            if (c == '"') ignore = !ignore;
+        }
+        return line;
     }
 }
