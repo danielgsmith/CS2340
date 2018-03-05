@@ -122,4 +122,21 @@ public class Shelter {
     public void setOccupancy(int occupancy) {
         this.occupancy = occupancy;
     }
+
+
+    @Override
+    public String toString() {
+        return "Shelter{" +
+                "shelterName='" + shelterName + '\'' +
+                ", capacity=" + capacity +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", uniqueKey=" + uniqueKey +
+                ", notes='" + notes + '\'' +
+                ", occupancy=" + occupancy +
+                ", restrictions=" + restrictions +
+                '}';
+    }
 }

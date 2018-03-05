@@ -13,6 +13,7 @@ public class Capacity {
         APARTMENTS(false, true),
         UNLISTED(false, false);
 
+        private static String[] stringValues;
         private boolean individualRooms;
         private boolean groupRooms;
         private CapacityType(boolean individualRooms, boolean groupRooms) {
@@ -26,6 +27,18 @@ public class Capacity {
 
         public boolean hasGroupRooms() {
             return groupRooms;
+        }
+
+        public static String[] stringValues() {
+            if (stringValues == null) {
+                stringValues = new String[values().length];
+                for (int i = 0; i < values().length; i++) {
+                    stringValues[i] = values()[i].toString().toLowerCase();
+                    stringValues[i] = Character.toUpperCase(stringValues[i].charAt(0))
+                            + stringValues[i].substring(1);
+                }
+            }
+            return stringValues;
         }
     }
 
@@ -96,21 +109,21 @@ public class Capacity {
     }
 
     public static Capacity parseFromString(String s) {
-        s = s.toLowerCase().replace("^[., ]*", "")
-                .replace("\n", "").replace("\"","");
+        s = s.toLowerCase().replaceAll("[., ]*", "")
+                .replaceAll("\n", "").replaceAll("\"","");
         if (s == null || s.isEmpty()) {
             return new Capacity(CapacityType.UNLISTED, -1, -1);
         }
         try {
-            int num = Integer.parseInt(s);
+            return new Capacity(CapacityType.SPACES, Integer.parseInt(s));
         } catch (NumberFormatException e) {
             if (s.contains("apartment")) {
-                s = s.replace("^[a-z_]*", "");
+                s = s.replaceAll("[a-z_]*", "");
                 return s.isEmpty() ? new Capacity(CapacityType.UNLISTED, -1, -1)
                         : new Capacity(CapacityType.APARTMENTS, Integer.parseInt(s));
             }
-            s = s.replace("^[a-z_]*fam[a-z_]*","f")
-                    .replace("^[a-z_]*sing[a-z_]*", "s");
+            s = s.replaceAll("[a-z_]*fam[a-z_]*","f")
+                    .replaceAll("[a-z_]*sing[a-z_]*", "s");
             if (s.contains("f") && s.contains("s")) {
                 //this could be smarter but im sick of this.
                 String[] split = s.replace("s", "").split("f");
@@ -126,6 +139,14 @@ public class Capacity {
                 return new Capacity(CapacityType.SPACES, Integer.parseInt(s));
             }
         }
-        return null;
+    }
+
+    @Override
+    public String toString() {
+        return "Capacity{" +
+                "capacityType=" + capacityType +
+                (capacityType.individualRooms ? ", individualRoom=" + individualRoom : "") +
+                (capacityType.groupRooms ? ", groupRoom=" + groupRoom : "") +
+                '}';
     }
 }

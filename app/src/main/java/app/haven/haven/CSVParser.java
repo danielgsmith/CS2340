@@ -17,22 +17,21 @@ public class CSVParser {
         shelterList = new ArrayList<>();
         try {
             BufferedReader b = new BufferedReader(new FileReader(file));
+            b.readLine();
             for (String line = ""; (line = b.readLine()) != null;) {
-                if (line.startsWith("^[0-9]")) {
-                    line = parseLineForCommas(line.replace("~", ""));
-                    String[] csLine = line.split("~");
-                    shelterList.add(new Shelter(
-                            csLine[1],
-                            Capacity.parseFromString(csLine[2]),
-                            Restrictions.parseFrom(csLine[3]),
-                            Double.parseDouble(csLine[4]),
-                            Double.parseDouble(csLine[5]),
-                            csLine[8],
-                            csLine[6],
-                            Integer.parseInt(csLine[0]),
-                            csLine[7]
-                    ));
-                }
+                line = parseLineForCommas(line.replaceAll("~", ""));
+                String[] csLine = line.split("~");
+                shelterList.add(new Shelter(
+                        csLine[1],
+                        Capacity.parseFromString(csLine[2]),
+                        Restrictions.parseFrom(csLine[3]),
+                        Double.parseDouble(csLine[4]),
+                        Double.parseDouble(csLine[5]),
+                        csLine[8],
+                        csLine[6],
+                        Integer.parseInt(csLine[0]),
+                        csLine[7]
+                ));
             }
         } catch (IOException e) {
             System.out.println("An error occured parsing file " + file);

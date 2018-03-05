@@ -44,25 +44,21 @@ public class CreateNewShelterActivity extends AppCompatActivity {
     private EditText textKey;
     private EditText textNotes;
     private Button addShelter;
-    private String shelterName;
-    private String address;
-    private String notes;
-    private String phone;
     private Spinner capacitySpinner;
     private EditText selectedCapacity;
     private int key;
-    private boolean male;
-    private boolean female;
-    private boolean child;
-    private boolean childUnder5;
-    private boolean newBorns;
-    private boolean adults;
-    private boolean families;
-    private boolean veterans;
-    private double latitude;
+
+    private String shelterName;
+    private Capacity capacity;
     private double longitude;
-    private int capacity;
-    private int subCapacity = 0;
+    private double latitude;
+    private String phone;
+    private String address;
+    private int uniqueKey;
+    private String notes;
+    private int occupancy;
+    private Restrictions restrictions;
+
     private TextView acceptedText;
     private long selected;
 
@@ -83,8 +79,8 @@ public class CreateNewShelterActivity extends AppCompatActivity {
             }
         });
 
-        String[] capacityTypes = new String[]{"Spaces", "Family Rooms", "Single Rooms", "Family and Single", "Apartments"};
-        capacitySpinner = findViewById(R.id.shelter_capacity_spinner);
+        String[] capacityTypes = Capacity.CapacityType.stringValues();
+        capacitySpinner = findViewById(R.id.shelter_capacity_spinner); //Keep solving errors starting here
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, capacityTypes);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         capacitySpinner.setPrompt("Choose Capacity Type: ");
@@ -96,7 +92,7 @@ public class CreateNewShelterActivity extends AppCompatActivity {
                         this));
 
         textShelterName = findViewById(R.id.shelter_name);
-        textShelterCapacity = findViewById(R.id.shelter_capacity);
+//        textShelterCapacity = findViewById(R.id.shelter_capacity);
         checkMale = findViewById(R.id.check_male);
         checkFemale = findViewById(R.id.check_female);
         textLongitude = findViewById(R.id.shelter_longitude);
@@ -131,42 +127,43 @@ public class CreateNewShelterActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selected = capacitySpinner.getSelectedItemId();
                 Log.w("Spinner ID:", "" + selected);
-                if (selected != -1) {
-                    findViewById(R.id.text_shelter_holder_capacity).setVisibility(View.VISIBLE);
-                    findViewById(R.id.space_spinner).setVisibility(View.VISIBLE);
-                }
 
-                if(selected == 0) {
-                    findViewById(R.id.holer_spaces).setVisibility(View.VISIBLE);
-                    findViewById(R.id.holder_family_rooms).setVisibility(View.GONE);
-                    findViewById(R.id.holder_single_rooms).setVisibility(View.GONE);
-                    findViewById(R.id.holder_apartments).setVisibility(View.GONE);
-                    selectedCapacity = findViewById(R.id.shelter_capacity);
-                } else if(selected == 1) {
-                    findViewById(R.id.holer_spaces).setVisibility(View.GONE);
-                    findViewById(R.id.holder_family_rooms).setVisibility(View.VISIBLE);
-                    findViewById(R.id.holder_single_rooms).setVisibility(View.GONE);
-                    findViewById(R.id.holder_apartments).setVisibility(View.GONE);
-                    selectedCapacity = findViewById(R.id.shelter_capacity_family_rooms);
-                } else if(selected == 2){
-                    findViewById(R.id.holer_spaces).setVisibility(View.GONE);
-                    findViewById(R.id.holder_family_rooms).setVisibility(View.GONE);
-                    findViewById(R.id.holder_single_rooms).setVisibility(View.VISIBLE);
-                    findViewById(R.id.holder_apartments).setVisibility(View.GONE);
-                    selectedCapacity = findViewById(R.id.shelter_capacity_single_rooms);
-                } else if(selected == 3){
-                    findViewById(R.id.holer_spaces).setVisibility(View.GONE);
-                    findViewById(R.id.holder_family_rooms).setVisibility(View.VISIBLE);
-                    findViewById(R.id.holder_single_rooms).setVisibility(View.VISIBLE);
-                    findViewById(R.id.holder_apartments).setVisibility(View.GONE);
-                    selectedCapacity = findViewById(R.id.shelter_capacity_family_rooms);
-                } else if(selected == 4) {
-                    findViewById(R.id.holer_spaces).setVisibility(View.GONE);
-                    findViewById(R.id.holder_family_rooms).setVisibility(View.GONE);
-                    findViewById(R.id.holder_single_rooms).setVisibility(View.GONE);
-                    findViewById(R.id.holder_apartments).setVisibility(View.VISIBLE);
-                    selectedCapacity = findViewById(R.id.shelter_capacity_apartments);
-                }
+//                if (selected != -1) {
+//                    findViewById(R.id.text_shelter_holder_capacity).setVisibility(View.VISIBLE);
+//                    findViewById(R.id.space_spinner).setVisibility(View.VISIBLE);
+//                }
+//
+//                if(selected == 0) {
+//                    findViewById(R.id.holer_spaces).setVisibility(View.VISIBLE);
+//                    findViewById(R.id.holder_family_rooms).setVisibility(View.GONE);
+//                    findViewById(R.id.holder_single_rooms).setVisibility(View.GONE);
+//                    findViewById(R.id.holder_apartments).setVisibility(View.GONE);
+//                    selectedCapacity = findViewById(R.id.shelter_capacity);
+//                } else if(selected == 1) {
+//                    findViewById(R.id.holer_spaces).setVisibility(View.GONE);
+//                    findViewById(R.id.holder_family_rooms).setVisibility(View.VISIBLE);
+//                    findViewById(R.id.holder_single_rooms).setVisibility(View.GONE);
+//                    findViewById(R.id.holder_apartments).setVisibility(View.GONE);
+//                    selectedCapacity = findViewById(R.id.shelter_capacity_family_rooms);
+//                } else if(selected == 2){
+//                    findViewById(R.id.holer_spaces).setVisibility(View.GONE);
+//                    findViewById(R.id.holder_family_rooms).setVisibility(View.GONE);
+//                    findViewById(R.id.holder_single_rooms).setVisibility(View.VISIBLE);
+//                    findViewById(R.id.holder_apartments).setVisibility(View.GONE);
+//                    selectedCapacity = findViewById(R.id.shelter_capacity_single_rooms);
+//                } else if(selected == 3){
+//                    findViewById(R.id.holer_spaces).setVisibility(View.GONE);
+//                    findViewById(R.id.holder_family_rooms).setVisibility(View.VISIBLE);
+//                    findViewById(R.id.holder_single_rooms).setVisibility(View.VISIBLE);
+//                    findViewById(R.id.holder_apartments).setVisibility(View.GONE);
+//                    selectedCapacity = findViewById(R.id.shelter_capacity_family_rooms);
+//                } else if(selected == 4) {
+//                    findViewById(R.id.holer_spaces).setVisibility(View.GONE);
+//                    findViewById(R.id.holder_family_rooms).setVisibility(View.GONE);
+//                    findViewById(R.id.holder_single_rooms).setVisibility(View.GONE);
+//                    findViewById(R.id.holder_apartments).setVisibility(View.VISIBLE);
+//                    selectedCapacity = findViewById(R.id.shelter_capacity_apartments);
+//                }
             }
 
             @Override
@@ -193,27 +190,17 @@ public class CreateNewShelterActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(textPhone.getText()))
             phone =textPhone.getText().toString().replaceAll("-", "").replaceAll("\\(", "")
                     .replaceAll("\\)", "").replaceAll(" ", "");
-
-
-        male = checkMale.isSelected();
-        female = checkFemale.isChecked();
-        adults = checkAdult.isChecked();
-        newBorns = checkNew.isChecked();
-        childUnder5 = checkYoung.isChecked();
-        families = checkFamily.isChecked();
-        child = checkChildren.isChecked();
-        veterans = checkVeteran.isChecked();
         if (!TextUtils.isEmpty(textLatitude.getText().toString()))
             latitude = Double.parseDouble(textLatitude.getText().toString());
         if (!TextUtils.isEmpty(textLongitude.getText().toString()))
             longitude = Double.parseDouble(textLongitude.getText().toString());
         if (selected != -1) {
             if(!TextUtils.isEmpty(selectedCapacity.getText().toString()))
-                capacity = Integer.parseInt(selectedCapacity.getText().toString());
+                capacity = new Capacity(Capacity.CapacityType.SPACES, Integer.parseInt(selectedCapacity.getText().toString())); //TODO: capacity
         }
         if(selected == 3){
-            EditText sub = findViewById(R.id.shelter_capacity_single_rooms);
-            subCapacity = Integer.parseInt(sub.getText().toString());
+//            EditText sub = findViewById(R.id.shelter_capacity_single_rooms);
+            //subCapacity = Integer.parseInt(sub.getText().toString()); NO LONGER USING SUBCAPACITY
         }
         if(!TextUtils.isEmpty(textKey.getText().toString()))
             key = Integer.parseInt(textKey.getText().toString());
@@ -227,9 +214,16 @@ public class CreateNewShelterActivity extends AppCompatActivity {
         if(valid) {
             database = FirebaseDatabase.getInstance();
             DatabaseReference reference = database.getReference();
+//            Shelter(String name, Capacity capacity, Restrictions restrictions, double longitude,
+//            double latitude, String phone, String address, int uniqueKey, String notes) {
 
-            Shelter shelter = new Shelter(shelterName, selected, capacity, subCapacity, male, female, adults, newBorns, childUnder5,
-                    families, child, veterans, longitude, latitude, phone, address, key, notes);
+
+            //TODO: This is the biggest error currently
+            Shelter shelter = new Shelter(shelterName, capacity, restrictions, longitude, latitude, phone, address, key, notes);
+
+
+
+
 
             reference.child("shelters").push().setValue(shelter);
 
@@ -268,12 +262,12 @@ public class CreateNewShelterActivity extends AppCompatActivity {
             textPhone.setError(null);
         }
 
-        if ((!male && !female && !adults && !newBorns && !childUnder5 && !families && !child && !veterans)) {
-            acceptedText.setError("At least one must be selected");
-            valid = false;
-        } else {
-            acceptedText.setError(null);
-        }
+//        if ((!male && !female && !adults && !newBorns && !childUnder5 && !families && !child && !veterans)) {
+//            acceptedText.setError("At least one must be selected");
+//            valid = false;
+//        } else {
+//            acceptedText.setError(null);
+//        }
 
         if (TextUtils.isEmpty(textLatitude.getText().toString())){
             textLatitude.setError("Required");

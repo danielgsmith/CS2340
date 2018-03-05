@@ -79,58 +79,58 @@ public class ShelterDetailsActivity extends AppCompatActivity {
         shelterLat.setText(String.format("%s", shelter.getLatitude()));
         shelterLong.setText(String.format("%s", shelter.getLongitude()));
         shelterAddress.setText(shelter.getAddress());
-
-        if (shelter.getCapacityType() == 0) {
-            available = shelter.getCapacity() - shelter.getOccupancy();
-            if (available == 1)
-                shelterCapacity.setText(String.format("%d space left", available));
-            else if (available == 0)
-                shelterCapacity.setText("No spaces left");
-            else
-                shelterCapacity.setText(String.format("%d spaces left", available));
-        } else if (shelter.getCapacityType() == 1) {
-            available = shelter.getCapacity() - shelter.getOccupancy();
-            if (available == 1)
-                shelterCapacity.setText(String.format("%d family room left", available));
-            else if (available == 0)
-                shelterCapacity.setText("No spaces left");
-            else
-                shelterCapacity.setText(String.format("%d family rooms left", available));
-        } else if (shelter.getCapacityType() == 2) {
-            available = shelter.getCapacity() - shelter.getOccupancy();
-            if (available == 1)
-                shelterCapacity.setText(String.format("%d single room left", available));
-            else if (available == 0)
-                shelterCapacity.setText("No spaces left");
-            else
-                shelterCapacity.setText(String.format("%d single rooms left", available));
-        } else if (shelter.getCapacityType() == 3) {
-            LinearLayout cap = findViewById(R.id.holder_subCapacity);
-            cap.setVisibility(View.VISIBLE);
-            int sub = shelter.getSubCapacity();
-            available = shelter.getCapacity() - shelter.getOccupancy();
-            if (available == 1)
-                shelterCapacity.setText(String.format("%d single room left", available));
-            else if (available == 0)
-                shelterCapacity.setText("No single rooms left");
-            else
-                shelterCapacity.setText(String.format("%d single rooms left", available));
-
-            if (sub == 1)
-                shelterSubCapacity.setText(String.format("%d family room left", sub));
-            else if (sub == 0)
-                shelterSubCapacity.setText("No family rooms left");
-            else
-                shelterSubCapacity.setText(String.format("%d family rooms left", sub));
-        } else if (shelter.getCapacityType() == 4) {
-            available = shelter.getCapacity() - shelter.getOccupancy();
-            if (available == 1)
-                shelterCapacity.setText(String.format("%d apartment left", available));
-            else if (available == 0)
-                shelterCapacity.setText("No apartments left");
-            else
-                shelterCapacity.setText(String.format("%d apartments left", available));
-        }
+        //TODO: fix this stuff that broke
+//        if (shelter.getCapacityType() == Cap) {
+//            available = shelter.getCapacity() - shelter.getOccupancy();
+//            if (available == 1)
+//                shelterCapacity.setText(String.format("%d space left", available));
+//            else if (available == 0)
+//                shelterCapacity.setText("No spaces left");
+//            else
+//                shelterCapacity.setText(String.format("%d spaces left", available));
+//        } else if (shelter.getCapacityType() == 1) {
+//            available = shelter.getCapacity() - shelter.getOccupancy();
+//            if (available == 1)
+//                shelterCapacity.setText(String.format("%d family room left", available));
+//            else if (available == 0)
+//                shelterCapacity.setText("No spaces left");
+//            else
+//                shelterCapacity.setText(String.format("%d family rooms left", available));
+//        } else if (shelter.getCapacityType() == 2) {
+//            available = shelter.getCapacity() - shelter.getOccupancy();
+//            if (available == 1)
+//                shelterCapacity.setText(String.format("%d single room left", available));
+//            else if (available == 0)
+//                shelterCapacity.setText("No spaces left");
+//            else
+//                shelterCapacity.setText(String.format("%d single rooms left", available));
+//        } else if (shelter.getCapacityType() == 3) {
+//            LinearLayout cap = findViewById(R.id.holder_subCapacity);
+//            cap.setVisibility(View.VISIBLE);
+//            int sub = shelter.getSubCapacity();
+//            available = shelter.getCapacity() - shelter.getOccupancy();
+//            if (available == 1)
+//                shelterCapacity.setText(String.format("%d single room left", available));
+//            else if (available == 0)
+//                shelterCapacity.setText("No single rooms left");
+//            else
+//                shelterCapacity.setText(String.format("%d single rooms left", available));
+//
+//            if (sub == 1)
+//                shelterSubCapacity.setText(String.format("%d family room left", sub));
+//            else if (sub == 0)
+//                shelterSubCapacity.setText("No family rooms left");
+//            else
+//                shelterSubCapacity.setText(String.format("%d family rooms left", sub));
+//        } else if (shelter.getCapacityType() == 4) {
+//            available = shelter.getCapacity() - shelter.getOccupancy();
+//            if (available == 1)
+//                shelterCapacity.setText(String.format("%d apartment left", available));
+//            else if (available == 0)
+//                shelterCapacity.setText("No apartments left");
+//            else
+//                shelterCapacity.setText(String.format("%d apartments left", available));
+//        }
 
         if (shelter.getAcceptsMale() && !shelter.getAcceptsFemale())
             shelterGender.setText("Accepts only Males");
