@@ -1,11 +1,11 @@
-package app.haven.haven;
+package app.haven.haven.Model;
 
 public enum Restrictions {
 
-    WOMEN_CHILDREN("women/children", false, true, false, false, false, false, false, false, false),
+    WOMEN_CHILDREN("women/children", false, true, false, false, false, false, false, true, false),
     MEN("men", true, false, false, false, false, false, false, false, true),
     FAMILIES("families", true, true, true, false, false, false, false, false, false),
-    FAMILIES_CHILDREN_UNDER_5("familiesw/childrenunder5", true, true, true, false, true, false, false, false, false),
+    FAMILIES_CHILDREN_UNDER_5("familiesw/childrenunder5", true, true, true, false, true, false, false, true, false),
     FAMILIES_NEWBORNS("familiesw/newborns", true, true, true, true, false, false, false, false, false),
     CHILDRENS_YOUNG_ADULTS("childrens/youngadults", true, true, false, false, false, true, false, true, false),
     ANYONE("anyone", true, true, false, false, false, false, false, false, false),
@@ -36,6 +36,7 @@ public enum Restrictions {
         this.youngAdultsOnly = youngAdultsOnly;
         this.veteransOnly = veteransOnly;
         this.childrenOnly = childrenOnly;
+        this.adultsOnly = adultsOnly;
     }
 
     public static Restrictions parseFrom(String text) {

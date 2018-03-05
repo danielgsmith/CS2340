@@ -23,7 +23,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.lang.ref.WeakReference;
 
+import app.haven.haven.Model.Capacity;
 import app.haven.haven.Model.NothingSelectedSpinnerAdapter;
+import app.haven.haven.Model.Restrictions;
 import app.haven.haven.Model.Shelter;
 import app.haven.haven.Model.UsPhoneNumberFormatter;
 import app.haven.haven.R;

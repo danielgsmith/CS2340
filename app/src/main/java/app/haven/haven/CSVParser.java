@@ -6,11 +6,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+
+import app.haven.haven.Model.Capacity;
+import app.haven.haven.Model.Restrictions;
+import app.haven.haven.Model.Shelter;
 
 public class CSVParser {
 
@@ -39,7 +40,6 @@ public class CSVParser {
                         Integer.parseInt(csLine[0]),
                         csLine[7]
                 ));
-                Log.d("SOmething", "here");
             }
             b.close();
         } catch (IOException e) {

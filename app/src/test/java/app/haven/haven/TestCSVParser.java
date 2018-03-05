@@ -1,13 +1,11 @@
 package app.haven.haven;
 
-import android.content.ContextWrapper;
-
 import org.junit.Test;
 
 import java.io.File;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import app.haven.haven.Model.Shelter;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

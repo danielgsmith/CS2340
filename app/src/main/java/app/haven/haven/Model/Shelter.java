@@ -1,4 +1,7 @@
-package app.haven.haven;
+package app.haven.haven.Model;
+
+import app.haven.haven.Model.Capacity;
+import app.haven.haven.Model.Restrictions;
 
 public class Shelter {
 
@@ -15,11 +18,11 @@ public class Shelter {
 
 
 
-    Shelter(){
+    public Shelter(){
         // Default constructor required for calls from database
     }
 
-    Shelter(String name, Capacity capacity, Restrictions restrictions, double longitude,
+    public Shelter(String name, Capacity capacity, Restrictions restrictions, double longitude,
             double latitude, String phone, String address, int uniqueKey, String notes) {
         this.shelterName = name;
         this.capacity = capacity;

@@ -99,23 +99,27 @@ public class ShelterSearchFragment extends Fragment {
                     String name = CriteriaFragment.searchedName;
                     //Log.w("Name", name);
 
-                    if (name.length() == 0) {
-                        if (CriteriaFragment.genderselected == 0)
+                    if (name.length() == 0 || name.isEmpty()) {
+                        if (CriteriaFragment.genderselected == 0) {
                             if (!place.getAcceptsMale())
                                 add = false;
                             else if (CriteriaFragment.genderselected == 1)
                                 if (!place.getAcceptsFemale())
                                     add = false;
+                        }
 
-                        if (CriteriaFragment.rangeSelected == 0)
-                            if (!place.isAcceptsChildUnder5())
+                        if (CriteriaFragment.rangeSelected == 0) {
+                            if (place.getRestrictions().isAdultsOnly())
                                 add = false;
-                            else if (CriteriaFragment.rangeSelected == 1)
-                                if (!place.isAcceptsChild())
-                                    add = false;
-                                else if (CriteriaFragment.rangeSelected == 2)
-                                    if (!place.getAcceptsAdults())
-                                        add = false;
+                        }
+                        else if (CriteriaFragment.rangeSelected == 1) {
+                            if (!place.getRestrictions().isChildrenOnly())
+                                add = false;
+                        }
+                        else if (CriteriaFragment.rangeSelected == 2) {
+                            if (!place.getRestrictions().isYoungAdultsOnly())
+                                add = false;
+                        }
                     } else if (!place.getShelterName().equals(name))
                         add = false;
 

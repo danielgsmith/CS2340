@@ -24,7 +24,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.haven.haven.Model.Capacity;
+import app.haven.haven.Model.Restrictions;
 import app.haven.haven.R;
+import app.haven.haven.Model.Shelter;
 
 
 /**
