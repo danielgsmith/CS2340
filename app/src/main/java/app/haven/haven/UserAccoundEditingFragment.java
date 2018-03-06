@@ -94,7 +94,6 @@ public class UserAccoundEditingFragment extends Fragment {
                 updateInfo();
 
 //              searchedName = textName.getText().toString();
-//              searchShelters();
             }
         });
 
@@ -110,13 +109,13 @@ public class UserAccoundEditingFragment extends Fragment {
 
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.button_admin_create_shelter:
-                Log.w("CreateShelter:", "Worked");
-                Intent i = new Intent(getActivity(), CreateNewShelterActivity.class);
-                startActivity(i);
+            case R.id.update_button:
+                Log.w("Update :", "Worked");
+//                Intent i = new Intent(getActivity(), ShowUserAccountActivity.class);
+//                startActivity(i);
                 break;
-            case R.id.button_admin_remove_shelter:
-                Log.w("RemoveShelter:", "Worked");
+//            case R.id.button_admin_remove_shelter:
+//                Log.w("RemoveShelter:", "Worked");
         }
     }
 
@@ -160,9 +159,21 @@ public class UserAccoundEditingFragment extends Fragment {
 //                mUser.setAccountType(newAccountType);
 //                //same for fireuser?
 ////                update the screen!
-//        EditTextUserName.setSelection(newName);
+
+        /**
+         * TODO:is this needed? what if they only edit one thing
+         * TODO:have these as private variables at the top and update when the user actually changes them
+         */
+
+        String updatedName = EditTextUserName.getText().toString();
+        String updatedEmail = EditTextUserEmail.getText().toString();
+        String updatedPassword = EditTextUserPassword.getText().toString();
+        String updatedAccountType = EditTextUserAccountType.getText().toString();
+//        EditTextUserName.setSelection(updatedName);
+
 //        EditTextUserEmail.setSelection(newEmail);
 //        EditTextUserPassword.setSelection(newPassword);
 //        EditTextUserAccountType.setSelection(newAccountType);
+
     }
 }
