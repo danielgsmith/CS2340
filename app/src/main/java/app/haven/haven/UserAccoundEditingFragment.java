@@ -40,9 +40,13 @@ public class UserAccoundEditingFragment extends Fragment {
 
     private View view;
     private EditText EditTextUserName;
+    private String updatedName;
     private EditText EditTextUserEmail;
+    private String updatedEmail;
     private EditText EditTextUserPassword;
+    private String updatedPassword;
     private EditText EditTextUserAccountType;
+    private String updatedAccountType;
     private Button updateUserInfoButton;
 
 
