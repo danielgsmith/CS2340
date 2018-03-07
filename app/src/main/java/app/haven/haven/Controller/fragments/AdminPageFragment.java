@@ -159,7 +159,9 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
                                 DatabaseReference reference = database.getReference();
 
                                 for (int count = 0; count < shelterList.size(); count++) {
-                                    reference.child("shelters").push().setValue(shelterList.get(count));
+                                    String pushID = reference.child("shelters").push().getKey();
+                                    shelterList.get(count).setPushKey(pushID);
+                                    reference.child("shelters").child(pushID).setValue(shelterList.get(count));
                                 }
 
                                 Toast.makeText(getActivity(), "Shelters added", Toast.LENGTH_SHORT).show();
@@ -175,9 +177,6 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-
-
-
 
                 break;
         }

@@ -1,8 +1,5 @@
 package app.haven.haven.Model.shelters;
 
-import app.haven.haven.Model.shelters.Capacity;
-import app.haven.haven.Model.shelters.Restrictions;
-
 public class Shelter {
 
     private String shelterName;
@@ -12,8 +9,10 @@ public class Shelter {
     private String phone;
     private String address;
     private int uniqueKey;
+    private String pushKey;
     private String notes;
-    private int occupancy;
+    private int singleOccupancy;
+    private int groupOccupancy;
     private Restrictions restrictions;
 
 
@@ -32,7 +31,6 @@ public class Shelter {
         this.address = address;
         this.uniqueKey = uniqueKey;
         this.notes = notes;
-        this.occupancy = 0;
         this.restrictions = restrictions;
     }
 
@@ -116,12 +114,12 @@ public class Shelter {
         this.notes = notes;
     }
 
-    public int getOccupancy() {
-        return occupancy;
+    public int getSingleOccupancy() {
+        return singleOccupancy;
     }
 
-    public void setOccupancy(int occupancy) {
-        this.occupancy = occupancy;
+    public void setSingleOccupancy(int singleOccupancy) {
+        this.singleOccupancy = singleOccupancy;
     }
 
 
@@ -136,8 +134,16 @@ public class Shelter {
                 ", address='" + address + '\'' +
                 ", uniqueKey=" + uniqueKey +
                 ", notes='" + notes + '\'' +
-                ", occupancy=" + occupancy +
+                ", singleOccupancy=" + singleOccupancy +
                 ", restrictions=" + restrictions +
                 '}';
+    }
+
+    public String getPushKey() {
+        return pushKey;
+    }
+
+    public void setPushKey(String pushKey) {
+        this.pushKey = pushKey;
     }
 }

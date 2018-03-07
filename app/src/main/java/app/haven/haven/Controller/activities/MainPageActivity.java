@@ -47,7 +47,7 @@ public class MainPageActivity extends AppCompatActivity
     private ValueEventListener mUserlistener;
     private FirebaseUser mFireUser;
     private FirebaseDatabase database;
-    private User user = new User();
+    private static User user = new User();
     private DatabaseReference mDataRef;
     private NavigationView navigationView;
     public static Shelter selectedShelter;
@@ -261,5 +261,9 @@ public class MainPageActivity extends AppCompatActivity
 
     public static Shelter getSelectedShelter(){
         return selectedShelter;
+    }
+
+    public static User getUser() {
+        return user;
     }
 }
