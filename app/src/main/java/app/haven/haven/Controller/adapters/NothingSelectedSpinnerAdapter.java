@@ -1,4 +1,4 @@
-package app.haven.haven.Model;
+package app.haven.haven.Controller.adapters;
 
 /**
  * Created by Ben on 2/10/2018.

@@ -1,4 +1,4 @@
-package app.haven.haven.Controller;
+package app.haven.haven.Controller.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +15,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import app.haven.haven.Model.NothingSelectedSpinnerAdapter;
+import app.haven.haven.Controller.activities.SearchedSheltersActivity;
+import app.haven.haven.Controller.adapters.NothingSelectedSpinnerAdapter;
 import app.haven.haven.R;
 
 

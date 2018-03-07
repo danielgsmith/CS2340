@@ -1,4 +1,4 @@
-package app.haven.haven.Controller;
+package app.haven.haven.Controller.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         //Checks if device is still logged into Firebase, if so skip login page and go to Sidebar
         if(FirebaseAuth.getInstance().getCurrentUser() != null && !FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
             finish();
-            Intent i = new Intent(getApplicationContext(), SideBar.class);
+            Intent i = new Intent(getApplicationContext(), MainPageActivity.class);
             startActivity(i);
         }
 
@@ -454,7 +454,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if(canceledLogin) { //if login was canceled set focus to password and try again
                 mPasswordView.requestFocus();
                 canceledLogin = false;
-            } else if ((success || signedIn) && !locked[0]) { //if user is signed in, move to SideBar class
+            } else if ((success || signedIn) && !locked[0]) { //if user is signed in, move to MainPageActivity class
                 Log.d("About", "" + locked[0]);
                 final String[] firebaseID = new String[1];
                 //final User[] lockOutUser = new User[1];
@@ -477,7 +477,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     }
                 });
                 finish();
-                Intent i = new Intent(getApplicationContext(), SideBar.class);
+                Intent i = new Intent(getApplicationContext(), MainPageActivity.class);
                 startActivity(i);
             } else { //Tell them incorrect and put focus on password
                 if (!noAccount) {
@@ -629,7 +629,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             Log.d(TAG, "signInAnonymously:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             finish();
-                            Intent i = new Intent(getApplicationContext(), SideBar.class);
+                            Intent i = new Intent(getApplicationContext(), MainPageActivity.class);
                             startActivity(i);
                             //updateUI(user);
                         } else {

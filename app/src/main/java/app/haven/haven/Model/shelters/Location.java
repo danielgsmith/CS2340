@@ -1,4 +1,4 @@
-package app.haven.haven.Model;
+package app.haven.haven.Model.shelters;
 
 /******************************************************************************
  *  Taken from some Princeton class, it's open source and will be useful

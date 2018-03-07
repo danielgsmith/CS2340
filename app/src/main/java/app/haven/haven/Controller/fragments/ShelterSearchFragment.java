@@ -1,4 +1,4 @@
-package app.haven.haven.Controller;
+package app.haven.haven.Controller.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -22,7 +22,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import app.haven.haven.Model.Shelter;
+import app.haven.haven.Controller.adapters.MyShelterSearchRecyclerViewAdapter;
+import app.haven.haven.Model.shelters.Shelter;
 import app.haven.haven.R;
 
 /**

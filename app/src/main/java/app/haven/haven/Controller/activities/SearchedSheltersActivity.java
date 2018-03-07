@@ -1,4 +1,4 @@
-package app.haven.haven.Controller;
+package app.haven.haven.Controller.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +7,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import app.haven.haven.Model.Shelter;
+import app.haven.haven.Controller.fragments.ShelterSearchFragment;
+import app.haven.haven.Model.shelters.Shelter;
 import app.haven.haven.R;
 
 public class SearchedSheltersActivity extends AppCompatActivity

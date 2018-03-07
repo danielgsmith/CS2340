@@ -1,10 +1,9 @@
-package app.haven.haven.Controller;
+package app.haven.haven.Controller.fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -15,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -28,10 +26,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import app.haven.haven.Model.Capacity;
-import app.haven.haven.Model.Restrictions;
+import app.haven.haven.Controller.activities.CreateNewShelterActivity;
+import app.haven.haven.Model.shelters.Capacity;
+import app.haven.haven.Model.shelters.Restrictions;
 import app.haven.haven.R;
-import app.haven.haven.Model.Shelter;
+import app.haven.haven.Model.shelters.Shelter;
 
 
 /**

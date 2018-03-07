@@ -1,4 +1,4 @@
-package app.haven.haven.Model;
+package app.haven.haven.Model.shelters;
 
 /**
  * Created by Matt on 2/26/2018.

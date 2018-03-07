@@ -1,7 +1,7 @@
-package app.haven.haven.Model;
+package app.haven.haven.Model.shelters;
 
-import app.haven.haven.Model.Capacity;
-import app.haven.haven.Model.Restrictions;
+import app.haven.haven.Model.shelters.Capacity;
+import app.haven.haven.Model.shelters.Restrictions;
 
 public class Shelter {
 

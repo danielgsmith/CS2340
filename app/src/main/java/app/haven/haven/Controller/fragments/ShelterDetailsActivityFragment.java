@@ -1,4 +1,4 @@
-package app.haven.haven.Controller;
+package app.haven.haven.Controller.fragments;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
