@@ -1,17 +1,14 @@
-package app.haven.haven;
+package app.haven.haven.Controller.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,7 +17,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,8 +27,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import app.haven.haven.Controller.fragments.AdminPageFragment;
+import app.haven.haven.Controller.fragments.CriteriaFragment;
+import app.haven.haven.Controller.fragments.ShelterListFragment;
+import app.haven.haven.Controller.fragments.ShelterMapFragment;
+import app.haven.haven.Model.shelters.Shelter;
+import app.haven.haven.Model.User;
+import app.haven.haven.R;
 
-public class SideBar extends AppCompatActivity
+
+public class MainPageActivity extends AppCompatActivity
         implements
         ShelterMapFragment.OnFragmentInteractionListener,
         AdminPageFragment.OnFragmentInteractionListener,
@@ -43,7 +47,7 @@ public class SideBar extends AppCompatActivity
     private ValueEventListener mUserlistener;
     private FirebaseUser mFireUser;
     private FirebaseDatabase database;
-    private User user = new User();
+    private static User user = new User();
     private DatabaseReference mDataRef;
     private NavigationView navigationView;
     public static Shelter selectedShelter;
@@ -80,18 +84,24 @@ public class SideBar extends AppCompatActivity
         mFireUser = FirebaseAuth.getInstance().getCurrentUser();
         mDataRef = FirebaseDatabase.getInstance().getReference();
         //Gets user out of the database
-        if (!mFireUser.isAnonymous() || mFireUser != null) {
+        if (!mFireUser.isAnonymous() && mFireUser != null) {
             mDataRef.child("users").child(mFireUser.getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     // Grabs saved user class from database
                     user = dataSnapshot.getValue(User.class);
-                    //Log.w("test", "" + user.getLastName());
-                    // Sets Welcome text have have their full name
-                    //sTextView welcomeText = (TextView) findViewById(R.id.textView);
-                    //welcomeText.setText("Welcome " + user.getFirstName() + " " + user.getLastName());
-                    // Checks if user is an admin, if so sets admin menu to visible
-                    if (!mFireUser.isAnonymous() && user.getAccountType() == 1)
+                    if (user == null) {
+                        FirebaseAuth.getInstance().signOut();
+                        finish();
+                        Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(i);
+                    } else if (user.isLockedOut()) {
+                        FirebaseAuth.getInstance().signOut();
+                        finish();
+                        Toast.makeText(MainPageActivity.this, "Error, please re-login", Toast.LENGTH_LONG).show();
+                        Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(i);
+                    }else if (!mFireUser.isAnonymous() && user.getAccountType() == 1)
                         unhiddenAdminMenu();
                 }
 
@@ -253,5 +263,9 @@ public class SideBar extends AppCompatActivity
 
     public static Shelter getSelectedShelter(){
         return selectedShelter;
+    }
+
+    public static User getUser() {
+        return user;
     }
 }

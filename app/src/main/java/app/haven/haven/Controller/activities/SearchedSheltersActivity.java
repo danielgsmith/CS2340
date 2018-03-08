@@ -1,19 +1,21 @@
-package app.haven.haven;
+package app.haven.haven.Controller.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
+
+import app.haven.haven.Controller.fragments.ShelterSearchFragment;
+import app.haven.haven.Model.shelters.Shelter;
+import app.haven.haven.R;
 
 public class SearchedSheltersActivity extends AppCompatActivity
         implements
         ShelterSearchFragment.OnListFragmentInteractionListener {
+
+    public static Shelter selectedShelter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,12 @@ public class SearchedSheltersActivity extends AppCompatActivity
 
     @Override
     public void onListFragmentInteraction(Shelter shelter) {
+        Intent i = new Intent(getApplicationContext(), ShelterListDetailsActivity.class);
+        startActivity(i);
+        selectedShelter = shelter;
+    }
 
+    public static Shelter getSelectedShelter(){
+        return selectedShelter;
     }
 }

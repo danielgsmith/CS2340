@@ -1,26 +1,25 @@
-package app.haven.haven;
+package app.haven.haven.Controller.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+
+import app.haven.haven.R;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AdminPageFragment.OnFragmentInteractionListener} interface
+ * {@link ShelterMapFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link AdminPageFragment#newInstance} factory method to
+ * Use the {@link ShelterMapFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AdminPageFragment extends Fragment implements View.OnClickListener {
+public class ShelterMapFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -30,13 +29,9 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
     private String mParam1;
     private String mParam2;
 
-    View view;
-    Button createShelter;
-    Button remvoeShelter;
-
     private OnFragmentInteractionListener mListener;
 
-    public AdminPageFragment() {
+    public ShelterMapFragment() {
         // Required empty public constructor
     }
 
@@ -46,11 +41,11 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AdminPageFragment.
+     * @return A new instance of fragment ShelterMapFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AdminPageFragment newInstance(String param1, String param2) {
-        AdminPageFragment fragment = new AdminPageFragment();
+    public static ShelterMapFragment newInstance(String param1, String param2) {
+        ShelterMapFragment fragment = new ShelterMapFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -71,12 +66,7 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_admin_page, container, false);
-        createShelter = (Button) view.findViewById(R.id.button_admin_create_shelter);
-        createShelter.setOnClickListener(this);
-        remvoeShelter = (Button) view.findViewById(R.id.button_admin_remove_shelter);
-        remvoeShelter.setOnClickListener(this);
-        return view;
+        return inflater.inflate(R.layout.fragment_shelter_map, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -95,26 +85,12 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.button_admin_create_shelter:
-                Log.w("CreateShelter:", "Worked");
-                Intent i = new Intent(getActivity(), CreateNewShelterActivity.class);
-                startActivity(i);
-                break;
-            case R.id.button_admin_remove_shelter:
-                Log.w("RemoveShelter:", "Worked");
-        }
     }
 
     /**

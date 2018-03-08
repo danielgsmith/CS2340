@@ -1,4 +1,4 @@
-package app.haven.haven;
+package app.haven.haven.Controller.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,21 +6,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import app.haven.haven.ShelterSearchFragment.OnListFragmentInteractionListener;
+import app.haven.haven.Controller.fragments.ShelterListFragment;
+import app.haven.haven.Model.shelters.Shelter;
+import app.haven.haven.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Shelter} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
+ * specified {@link ShelterListFragment.OnListFragmentInteractionListener}.
  */
-public class MyShelterSearchRecyclerViewAdapter extends RecyclerView.Adapter<MyShelterSearchRecyclerViewAdapter.ViewHolder> {
+public class MyShelterRecyclerViewAdapter extends RecyclerView.Adapter<MyShelterRecyclerViewAdapter.ViewHolder> {
 
     private final ArrayList<Shelter> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final ShelterListFragment.OnListFragmentInteractionListener mListener;
 
-    public MyShelterSearchRecyclerViewAdapter(ArrayList<Shelter> items, OnListFragmentInteractionListener listener) {
+    public MyShelterRecyclerViewAdapter(ArrayList<Shelter> items, ShelterListFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -28,7 +29,7 @@ public class MyShelterSearchRecyclerViewAdapter extends RecyclerView.Adapter<MyS
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_shelter_search, parent, false);
+                .inflate(R.layout.fragment_shelter, parent, false);
         return new ViewHolder(view);
     }
 

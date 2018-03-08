@@ -1,10 +1,4 @@
-package app.haven.haven;
-
-import com.google.firebase.auth.FirebaseAuth;
-
-/**
- * Created by benar on 2/12/2018.
- */
+package app.haven.haven.Model;
 
 public class User {
 
@@ -13,6 +7,9 @@ public class User {
     private String email;
     private int numLoginAttempts;
     private boolean lockedOut;
+    private String currentShelterPushID;
+    private int takenSpaces;
+    private int takenRooms;
     /**
      * -1 form null
      * 0 for user
@@ -40,12 +37,15 @@ public class User {
     public String getFirstName() {
         return firstName;
     }
+
     public String getLastName(){
         return lastName;
     }
+
     public String getEmail(){
         return email;
     }
+
     public long getAccountType() {
         return accountType;
     }
@@ -53,12 +53,15 @@ public class User {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
     public void setLastName(String lastName){
         this.lastName = lastName;
     }
+
     public void setEmail(String email){
         this.email = email;
     }
+
     public void setAccountType(long accountType){
         this.accountType = accountType;
     }
@@ -67,6 +70,9 @@ public class User {
         numLoginAttempts++;
     }
 
+    public void setNumLoginAttempts(int numLoginAttempts) {
+        this.numLoginAttempts = numLoginAttempts;
+    }
     public int getNumLoginAttempts() {
         return numLoginAttempts;
     }
@@ -77,5 +83,29 @@ public class User {
 
     public boolean isLockedOut() {
         return lockedOut;
+    }
+
+    public String getCurrentShelterPushID() {
+        return currentShelterPushID;
+    }
+
+    public void setCurrentShelterPushID(String currentShelterPushID) {
+        this.currentShelterPushID = currentShelterPushID;
+    }
+
+    public int getTakenSpace() {
+        return takenSpaces;
+    }
+
+    public void setTakenSpaces(int takenSpaces) {
+        this.takenSpaces = takenSpaces;
+    }
+
+    public int getTakenRooms() {
+        return takenRooms;
+    }
+
+    public void setTakenRooms(int takenRooms) {
+        this.takenRooms = takenRooms;
     }
 }

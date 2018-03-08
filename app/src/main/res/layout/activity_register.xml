@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="app.haven.haven.RegisterActivity">
+    tools:context="app.haven.haven.Controller.activities.RegisterActivity">
 
 
 

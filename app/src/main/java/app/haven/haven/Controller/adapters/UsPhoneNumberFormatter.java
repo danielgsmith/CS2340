@@ -1,4 +1,4 @@
-package app.haven.haven;
+package app.haven.haven.Controller.adapters;
 
 import android.text.Editable;
 import android.text.TextWatcher;
