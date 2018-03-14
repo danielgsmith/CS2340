@@ -198,4 +198,10 @@ public class Capacity {
                 (capacityType.groupRooms ? groupCapacity - groupOccupancy + capacityType.groupSuffix : "");
     }
 
+    public String subtractDetailedString(int space, int room) {
+        return (capacityType.individualRooms ? individualCapacity - individualOccupancy - space + capacityType.individualSuffix : "") +
+                (capacityType.groupRooms && capacityType.individualRooms ? "\n" : "") +
+                (capacityType.groupRooms ? groupCapacity - groupOccupancy - room + capacityType.groupSuffix : "");
+    }
+
 }
