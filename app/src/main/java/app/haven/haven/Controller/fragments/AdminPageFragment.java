@@ -1,10 +1,12 @@
-package app.haven.haven.Controller;
+package app.haven.haven.Controller.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,10 +26,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import app.haven.haven.Model.Capacity;
-import app.haven.haven.Model.Restrictions;
+import app.haven.haven.Controller.activities.CreateNewShelterActivity;
+import app.haven.haven.Model.shelters.Capacity;
+import app.haven.haven.Model.shelters.Restrictions;
 import app.haven.haven.R;
-import app.haven.haven.Model.Shelter;
+import app.haven.haven.Model.shelters.Shelter;
 
 
 /**
@@ -139,21 +142,41 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
                 Log.w("RemoveShelter:", "Worked");
                 break;
             case R.id.parse_file:
-                File file = new File("CS2340/app/src/main/res/raw/homeless");
-                //CSVParser parser = new CSVParser(file);
-                //List<Shelter> shelterList = parser.getShelterList();
-                //Log.d("Shelter", shelterList.get(0).getShelterName());
-                CSVParser(file);
-                //Log.d("Shelter", shelterList.get(0).getShelterName());
-                database = FirebaseDatabase.getInstance();
-                DatabaseReference reference = database.getReference();
+                AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(getActivity());
+                // Adds Alert when logging out to make sure you want to
+                builder.setTitle("Parse File?")
+                        .setMessage("Are you sure you want to parse the file?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                File file = new File("CS2340/app/src/main/res/raw/homeless");
+                                //CSVParser parser = new CSVParser(file);
+                                //List<Shelter> shelterList = parser.getShelterList();
+                                //Log.d("Shelter", shelterList.get(0).getShelterName());
+                                CSVParser(file);
+                                //Log.d("Shelter", shelterList.get(0).getShelterName());
+                                database = FirebaseDatabase.getInstance();
+                                DatabaseReference reference = database.getReference();
 
-                for (int count = 0; count < shelterList.size(); count++) {
-                    reference.child("shelters").push().setValue(shelterList.get(count));
-                }
+                                for (int count = 0; count < shelterList.size(); count++) {
+                                    String pushID = reference.child("shelters").push().getKey();
+                                    shelterList.get(count).setPushKey(pushID);
+                                    reference.child("shelters").child(pushID).setValue(shelterList.get(count));
+                                }
 
-                Toast.makeText(getActivity(), "Shelters added", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Shelters added", Toast.LENGTH_SHORT).show();
+                            }
+                        })
 
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                                //closeContextMenu();
+
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
 
                 break;
         }

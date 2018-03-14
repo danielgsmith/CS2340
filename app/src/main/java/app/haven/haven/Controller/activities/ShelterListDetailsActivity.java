@@ -1,15 +1,16 @@
-package app.haven.haven.Controller;
+package app.haven.haven.Controller.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import app.haven.haven.Model.Shelter;
+import app.haven.haven.Model.shelters.Shelter;
 import app.haven.haven.R;
 
 public class ShelterListDetailsActivity extends AppCompatActivity {
@@ -23,6 +24,7 @@ public class ShelterListDetailsActivity extends AppCompatActivity {
     private TextView shelterAddress;
     private TextView shelterPhone;
     private TextView shelterSubCapacity;
+    private Button claimBedButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +59,16 @@ public class ShelterListDetailsActivity extends AppCompatActivity {
         shelterAddress = findViewById(R.id.info_shelter_address);
         shelterPhone = findViewById(R.id.info_shelter_phone);
         shelterSubCapacity = findViewById(R.id.info_shelter_subcapacity);
+        claimBedButton = findViewById(R.id.button_claim_bed);
 
         setText();
+
+        claimBedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Test", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

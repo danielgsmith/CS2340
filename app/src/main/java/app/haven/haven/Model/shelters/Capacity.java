@@ -1,11 +1,10 @@
-package app.haven.haven.Model;
+package app.haven.haven.Model.shelters;
 
 /**
  * Created by Matt on 2/26/2018.
  */
 
 public class Capacity {
-
     public enum CapacityType {
         SPACES(true, false, " spaces", null),
         FAMILY_ROOMS(false, true, null, " family rooms"),
@@ -56,6 +55,26 @@ public class Capacity {
     }
 
     private CapacityType capacityType;
+    private int individualCapacity;
+    private int groupCapacity;
+    private int individualOccupancy;
+    private int groupOccupancy;
+
+    public int getIndividualOccupancy() {
+        return individualOccupancy;
+    }
+
+    public void setIndividualOccupancy(int individualOccupancy) {
+        this.individualOccupancy = individualOccupancy;
+    }
+
+    public int getGroupOccupancy() {
+        return groupOccupancy;
+    }
+
+    public void setGroupOccupancy(int groupOccupancy) {
+        this.groupOccupancy = groupOccupancy;
+    }
 
     public void setIndividualCapacity(int individualCapacity) {
         this.individualCapacity = individualCapacity;
@@ -64,9 +83,6 @@ public class Capacity {
     public void setGroupCapacity(int groupCapacity) {
         this.groupCapacity = groupCapacity;
     }
-
-    private int individualCapacity;
-    private int groupCapacity;
 
     public Capacity(){
 //        this(CapacityType.SPACES, 0);
@@ -177,9 +193,9 @@ public class Capacity {
     }
 
     public String toDetailedString() {
-        return (capacityType.individualRooms ? individualCapacity + capacityType.individualSuffix : "") +
+        return (capacityType.individualRooms ? individualCapacity - individualOccupancy + capacityType.individualSuffix : "") +
                 (capacityType.groupRooms && capacityType.individualRooms ? "\n" : "") +
-                (capacityType.groupRooms ? groupCapacity + capacityType.groupSuffix : "");
+                (capacityType.groupRooms ? groupCapacity - groupOccupancy + capacityType.groupSuffix : "");
     }
 
 }

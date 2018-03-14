@@ -1,4 +1,4 @@
-package app.haven.haven.Model;
+package app.haven.haven.Model.shelters;
 
 public enum Restrictions {
 

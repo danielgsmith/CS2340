@@ -1,4 +1,4 @@
-package app.haven.haven.Controller;
+package app.haven.haven.Controller.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,11 +23,11 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.lang.ref.WeakReference;
 
-import app.haven.haven.Model.Capacity;
-import app.haven.haven.Model.NothingSelectedSpinnerAdapter;
-import app.haven.haven.Model.Restrictions;
-import app.haven.haven.Model.Shelter;
-import app.haven.haven.Model.UsPhoneNumberFormatter;
+import app.haven.haven.Model.shelters.Capacity;
+import app.haven.haven.Controller.adapters.NothingSelectedSpinnerAdapter;
+import app.haven.haven.Model.shelters.Restrictions;
+import app.haven.haven.Model.shelters.Shelter;
+import app.haven.haven.Controller.adapters.UsPhoneNumberFormatter;
 import app.haven.haven.R;
 
 public class CreateNewShelterActivity extends AppCompatActivity {
@@ -236,7 +236,7 @@ public class CreateNewShelterActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Shelter added", Toast.LENGTH_SHORT).show();
             finish();
-            Intent i = new Intent(getApplicationContext(), SideBar.class);
+            Intent i = new Intent(getApplicationContext(), MainPageActivity.class);
             startActivity(i);
         }
     }

@@ -1,4 +1,4 @@
-package app.haven.haven.Controller;
+package app.haven.haven.Controller.fragments;
 
 import android.content.Context;
 import android.net.Uri;

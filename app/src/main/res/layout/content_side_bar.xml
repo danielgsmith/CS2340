@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="app.haven.haven.Controller.SideBar"
+    tools:context="app.haven.haven.Controller.activities.MainPageActivity"
     tools:showIn="@layout/app_bar_side_bar">
 
     <!-- Note : This is the container Frame Layout for all the fragments-->

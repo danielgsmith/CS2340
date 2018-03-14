@@ -1,4 +1,4 @@
-package app.haven.haven.Controller;
+package app.haven.haven.Controller.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,12 +27,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import app.haven.haven.Model.Shelter;
+import app.haven.haven.Controller.fragments.AdminPageFragment;
+import app.haven.haven.Controller.fragments.CriteriaFragment;
+import app.haven.haven.Controller.fragments.ShelterListFragment;
+import app.haven.haven.Controller.fragments.ShelterMapFragment;
+import app.haven.haven.Model.shelters.Shelter;
 import app.haven.haven.Model.User;
 import app.haven.haven.R;
 
 
-public class SideBar extends AppCompatActivity
+public class MainPageActivity extends AppCompatActivity
         implements
         ShelterMapFragment.OnFragmentInteractionListener,
         AdminPageFragment.OnFragmentInteractionListener,
@@ -43,7 +47,7 @@ public class SideBar extends AppCompatActivity
     private ValueEventListener mUserlistener;
     private FirebaseUser mFireUser;
     private FirebaseDatabase database;
-    private User user = new User();
+    private static User user = new User();
     private DatabaseReference mDataRef;
     private NavigationView navigationView;
     public static Shelter selectedShelter;
@@ -94,7 +98,7 @@ public class SideBar extends AppCompatActivity
                     } else if (user.isLockedOut()) {
                         FirebaseAuth.getInstance().signOut();
                         finish();
-                        Toast.makeText(SideBar.this, "Error, please re-login", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainPageActivity.this, "Error, please re-login", Toast.LENGTH_LONG).show();
                         Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                         startActivity(i);
                     }else if (!mFireUser.isAnonymous() && user.getAccountType() == 1)
@@ -257,5 +261,9 @@ public class SideBar extends AppCompatActivity
 
     public static Shelter getSelectedShelter(){
         return selectedShelter;
+    }
+
+    public static User getUser() {
+        return user;
     }
 }

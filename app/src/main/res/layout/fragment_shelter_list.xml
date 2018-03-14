@@ -9,7 +9,7 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="app.haven.haven.Controller.ShelterListFragment"
+    tools:context="app.haven.haven.Controller.fragments.ShelterListFragment"
     tools:listitem="@layout/fragment_shelter" >
 
 </android.support.v7.widget.RecyclerView>

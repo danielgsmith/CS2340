@@ -1,4 +1,4 @@
-package app.haven.haven.Controller;
+package app.haven.haven.Controller.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,7 +24,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import app.haven.haven.Model.NothingSelectedSpinnerAdapter;
+import app.haven.haven.Controller.adapters.NothingSelectedSpinnerAdapter;
 import app.haven.haven.Model.User;
 import app.haven.haven.R;
 
@@ -156,7 +156,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 signIn(email, password);
                                 createUser();
                                 finish();
-                                Intent i = new Intent(getApplicationContext(), SideBar.class);
+                                Intent i = new Intent(getApplicationContext(), MainPageActivity.class);
                                 startActivity(i);
                                 //updateUI(user);
                             } else {
