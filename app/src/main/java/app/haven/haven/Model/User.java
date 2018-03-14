@@ -10,6 +10,8 @@ public class User {
     private String currentShelterPushID;
     private int takenSpaces;
     private int takenRooms;
+    private String telephoneNumber;
+
     /**
      * -1 form null
      * 0 for user
@@ -107,5 +109,10 @@ public class User {
 
     public void setTakenRooms(int takenRooms) {
         this.takenRooms = takenRooms;
+    }
+
+    public String getTelephoneNumber() { return telephoneNumber;}
+    public void setTelephoneNumber(String tNum) {
+        telephoneNumber = tNum;
     }
 }
