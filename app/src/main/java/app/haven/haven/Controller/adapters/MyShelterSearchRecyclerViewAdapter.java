@@ -11,6 +11,7 @@ import app.haven.haven.Model.shelters.Shelter;
 import app.haven.haven.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Shelter} and makes a call to the
@@ -18,10 +19,10 @@ import java.util.ArrayList;
  */
 public class MyShelterSearchRecyclerViewAdapter extends RecyclerView.Adapter<MyShelterSearchRecyclerViewAdapter.ViewHolder> {
 
-    private final ArrayList<Shelter> mValues;
+    private final List<Shelter> mValues;
     private final ShelterSearchFragment.OnListFragmentInteractionListener mListener;
 
-    public MyShelterSearchRecyclerViewAdapter(ArrayList<Shelter> items, ShelterSearchFragment.OnListFragmentInteractionListener listener) {
+    public MyShelterSearchRecyclerViewAdapter(List<Shelter> items, ShelterSearchFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }

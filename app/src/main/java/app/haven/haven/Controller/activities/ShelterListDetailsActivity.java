@@ -23,8 +23,6 @@ public class ShelterListDetailsActivity extends AppCompatActivity {
     private TextView shelterLat;
     private TextView shelterAddress;
     private TextView shelterPhone;
-    private TextView shelterSubCapacity;
-    private Button claimBedButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +44,8 @@ public class ShelterListDetailsActivity extends AppCompatActivity {
 
         shelter = SearchedSheltersActivity.getSelectedShelter();
 
-        if (shelter.getShelterName().length() < 20)
+        int MAX_NAME_LENGTH = 20;
+        if (shelter.getShelterName().length() < MAX_NAME_LENGTH)
             setTitle(shelter.getShelterName() + "'s info");
         else
             setTitle("Shelter's info");
@@ -58,8 +57,8 @@ public class ShelterListDetailsActivity extends AppCompatActivity {
         shelterLat = findViewById(R.id.info_shelter_latitude);
         shelterAddress = findViewById(R.id.info_shelter_address);
         shelterPhone = findViewById(R.id.info_shelter_phone);
-        shelterSubCapacity = findViewById(R.id.info_shelter_subcapacity);
-        claimBedButton = findViewById(R.id.button_claim_bed);
+        TextView shelterSubCapacity = findViewById(R.id.info_shelter_subcapacity);
+        Button claimBedButton = findViewById(R.id.button_claim_bed);
 
         setText();
 

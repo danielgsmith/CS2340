@@ -89,7 +89,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private View mCancelButtonView;
-    private View mRegisterButtonView;
     private boolean canceledLogin;
     private boolean signedIn;
     private String emailAddress = "";
@@ -157,7 +156,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
         //Button that moves to create account screen
-        mRegisterButtonView = (Button) findViewById(R.id.create_account_button);
+        View mRegisterButtonView = (Button) findViewById(R.id.create_account_button);
         mRegisterButtonView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -315,7 +314,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     //Checks if password is >= 6 characters long
-    private boolean isPasswordValid(String password) {
+    private boolean isPasswordValid(CharSequence password) {
         return password.length() >= 6;
     }
 
@@ -664,7 +663,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 });
     }
 
-    public void resetPassword(){
+    private void resetPassword(){
 
         Log.w("Forgot Button:", "Clicked");
 

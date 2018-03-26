@@ -1,9 +1,5 @@
 package app.haven.haven.Controller.adapters;
 
-/**
- * Created by Ben on 2/10/2018.
- */
-
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.view.LayoutInflater;
@@ -18,12 +14,12 @@ import android.widget.SpinnerAdapter;
  */
 public class NothingSelectedSpinnerAdapter implements SpinnerAdapter, ListAdapter {
 
-    protected static final int EXTRA = 1;
-    protected SpinnerAdapter adapter;
-    protected Context context;
-    protected int nothingSelectedLayout;
-    protected int nothingSelectedDropdownLayout;
-    protected LayoutInflater layoutInflater;
+    private static final int EXTRA = 1;
+    private SpinnerAdapter adapter;
+    private Context context;
+    private int nothingSelectedLayout;
+    private int nothingSelectedDropdownLayout;
+    private LayoutInflater layoutInflater;
 
     /**
      * Use this constructor to have NO 'Select One...' item, instead use
@@ -52,8 +48,8 @@ public class NothingSelectedSpinnerAdapter implements SpinnerAdapter, ListAdapte
      * the dropdown.
      * @param context
      */
-    public NothingSelectedSpinnerAdapter(SpinnerAdapter spinnerAdapter,
-                                         int nothingSelectedLayout, int nothingSelectedDropdownLayout, Context context) {
+    private NothingSelectedSpinnerAdapter(SpinnerAdapter spinnerAdapter,
+                                          int nothingSelectedLayout, int nothingSelectedDropdownLayout, Context context) {
         this.adapter = spinnerAdapter;
         this.context = context;
         this.nothingSelectedLayout = nothingSelectedLayout;
@@ -78,7 +74,7 @@ public class NothingSelectedSpinnerAdapter implements SpinnerAdapter, ListAdapte
      * @param parent
      * @return
      */
-    protected View getNothingSelectedView(ViewGroup parent) {
+    private View getNothingSelectedView(ViewGroup parent) {
         return layoutInflater.inflate(nothingSelectedLayout, parent, false);
     }
 
@@ -102,7 +98,7 @@ public class NothingSelectedSpinnerAdapter implements SpinnerAdapter, ListAdapte
      * @param parent
      * @return
      */
-    protected View getNothingSelectedDropdownView(ViewGroup parent) {
+    private View getNothingSelectedDropdownView(ViewGroup parent) {
         return layoutInflater.inflate(nothingSelectedDropdownLayout, parent, false);
     }
 

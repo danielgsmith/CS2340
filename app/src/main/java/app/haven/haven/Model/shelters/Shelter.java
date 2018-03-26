@@ -42,7 +42,7 @@ public class Shelter {
         return shelterName;
     }
 
-    public String getAddress(){
+    public CharSequence getAddress(){
         return address;
     }
 

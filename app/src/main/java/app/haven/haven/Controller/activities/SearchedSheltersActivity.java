@@ -15,7 +15,7 @@ public class SearchedSheltersActivity extends AppCompatActivity
         implements
         ShelterSearchFragment.OnListFragmentInteractionListener {
 
-    public static Shelter selectedShelter;
+    private static Shelter selectedShelter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

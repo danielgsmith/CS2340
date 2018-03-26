@@ -47,15 +47,11 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    View view;
-    Button createShelter;
-    Button removeShelter;
-    Button parseFile;
-    FirebaseDatabase database;
+    private View view;
+    private Button createShelter;
+    private Button removeShelter;
+    private Button parseFile;
+    private FirebaseDatabase database;
 
     private OnFragmentInteractionListener mListener;
 
@@ -85,8 +81,8 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            String mParam1 = getArguments().getString(ARG_PARAM1);
+            String mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -203,7 +199,7 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
 
     private List<Shelter> shelterList;
 
-    public void CSVParser(File file) {
+    private void CSVParser(File file) {
         shelterList = new ArrayList<>();
         try {
             InputStream is = getResources().openRawResource(R.raw.homeless);
