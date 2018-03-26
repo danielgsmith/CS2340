@@ -1,5 +1,7 @@
 package app.haven.haven.Model.shelters;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class Shelter {
 
     private String shelterName;
@@ -97,6 +99,8 @@ public class Shelter {
     public void setLatitude(double latitude){
         this.latitude = latitude;
     }
+
+    public LatLng getLatLng() {return new LatLng(latitude, longitude); }
 
     public int getUniqueKey() {
         return uniqueKey;

@@ -39,7 +39,8 @@ import app.haven.haven.R;
 
 public class MainPageActivity extends AppCompatActivity
         implements
-        ShelterMapFragment.OnFragmentInteractionListener,
+
+
         AdminPageFragment.OnFragmentInteractionListener,
         ShelterListFragment.OnListFragmentInteractionListener,
         CriteriaFragment.OnFragmentInteractionListener,
