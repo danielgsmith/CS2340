@@ -106,7 +106,7 @@
             android:visibility="gone">
 
             <!--<TextView-->
-                <!--android:id="@+id/text_shelter_capacity_appartments"-->
+                <!--android:id="@+id/text_shelter_capacity_apartments"-->
                 <!--android:layout_width="214dp"-->
                 <!--android:layout_height="wrap_content"-->
                 <!--android:layout_weight="1"-->
@@ -185,7 +185,7 @@
         <!--</LinearLayout>-->
 
         <!--<LinearLayout-->
-            <!--android:id="@+id/holer_spaces"-->
+            <!--android:id="@+id/holder_spaces"-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="match_parent"-->
             <!--android:layout_weight="1"-->

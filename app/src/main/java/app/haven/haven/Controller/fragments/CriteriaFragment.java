@@ -34,18 +34,12 @@ public class CriteriaFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
-    private View view;
     private Spinner genderSpinner;
     public static long genderselected;
     private Spinner rangeSpinner;
     public static long rangeSelected;
-    private Button searchButton;
     public static String searchedName;
     private EditText textName;
 
@@ -75,15 +69,15 @@ public class CriteriaFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            String mParam1 = getArguments().getString(ARG_PARAM1);
+            String mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_criteria, container, false);
+        View view = inflater.inflate(R.layout.fragment_criteria, container, false);
 
         textName = view.findViewById(R.id.input_shelter_name);
 
@@ -142,7 +136,7 @@ public class CriteriaFragment extends Fragment {
         });
 
 
-        searchButton = (Button) view.findViewById(R.id.search_shelters);
+        Button searchButton = (Button) view.findViewById(R.id.search_shelters);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

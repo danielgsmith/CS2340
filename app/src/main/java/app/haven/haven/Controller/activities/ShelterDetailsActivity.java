@@ -35,7 +35,6 @@ public class ShelterDetailsActivity extends AppCompatActivity {
     private TextView shelterLat;
     private TextView shelterAddress;
     private TextView shelterPhone;
-    private TextView shelterSubCapacity;
     private Button claimBedButton;
     private Spinner numberSpinner;
     private Button claimRoomButton;
@@ -47,7 +46,6 @@ public class ShelterDetailsActivity extends AppCompatActivity {
     private FirebaseUser mFireUser;
     private FirebaseDatabase database;
     private boolean guest;
-    private boolean bothButtons;
     private boolean notEnoughSpace;
 
     @Override
@@ -72,7 +70,8 @@ public class ShelterDetailsActivity extends AppCompatActivity {
         mFireUser = FirebaseAuth.getInstance().getCurrentUser();
         user = MainPageActivity.getUser();
 
-        if (shelter.getShelterName().length() < 20)
+        int MAX_NAME_LENGTH = 20;
+        if (shelter.getShelterName().length() < MAX_NAME_LENGTH)
             setTitle(shelter.getShelterName() + "'s info");
         else
             setTitle("Shelter's info");
@@ -434,7 +433,7 @@ public class ShelterDetailsActivity extends AppCompatActivity {
                 claimBedButton.setVisibility(View.VISIBLE);
                 releaseSpacesButton.setVisibility(View.GONE);
                 releaseRoomsButton.setVisibility(View.GONE);
-                bothButtons = true;
+                boolean bothButtons = true;
                 if (claimed) {
                     claimRoomButton.setVisibility(View.GONE);
                     claimBedButton.setVisibility(View.GONE);
@@ -465,7 +464,7 @@ public class ShelterDetailsActivity extends AppCompatActivity {
         shelterLat = findViewById(R.id.info_shelter_latitude);
         shelterAddress = findViewById(R.id.info_shelter_address);
         shelterPhone = findViewById(R.id.info_shelter_phone);
-        shelterSubCapacity = findViewById(R.id.info_shelter_subcapacity);
+        TextView shelterSubCapacity = findViewById(R.id.info_shelter_subcapacity);
         claimBedButton = findViewById(R.id.button_claim_bed);
         claimRoomButton = findViewById(R.id.button_claim_room);
         roomSpinner = findViewById(R.id.number_spinner_room);

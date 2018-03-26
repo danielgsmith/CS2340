@@ -28,7 +28,7 @@
 
     <item
         android:id="@+id/admin_menu"
-        android:title="Admininstrator"
+        android:title="Administrator"
         android:visible="false">
         <menu>
             <item

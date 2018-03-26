@@ -4,7 +4,7 @@ package app.haven.haven.Model.shelters;
  *  Taken from some Princeton class, it's open source and will be useful
  ******************************************************************************/
 
-public class Location { 
+class Location {
     private double longitude;
     private double latitude;   
 

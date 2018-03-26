@@ -1,9 +1,5 @@
 package app.haven.haven.Model.shelters;
 
-/**
- * Created by Matt on 2/26/2018.
- */
-
 public class Capacity {
     public enum CapacityType {
         SPACES(true, false, " spaces", null),
@@ -88,7 +84,7 @@ public class Capacity {
 //        this(CapacityType.SPACES, 0);
     }
 
-    public Capacity(CapacityType capacityType, int individualRoom, int groupRoom) {
+    private Capacity(CapacityType capacityType, int individualRoom, int groupRoom) {
         this.capacityType = capacityType;
         this.individualCapacity = individualRoom;
         this.groupCapacity = groupRoom;
@@ -192,7 +188,7 @@ public class Capacity {
                 '}';
     }
 
-    public String toDetailedString() {
+    public CharSequence toDetailedString() {
         return (capacityType.individualRooms ? individualCapacity - individualOccupancy + capacityType.individualSuffix : "") +
                 (capacityType.groupRooms && capacityType.individualRooms ? "\n" : "") +
                 (capacityType.groupRooms ? groupCapacity - groupOccupancy + capacityType.groupSuffix : "");

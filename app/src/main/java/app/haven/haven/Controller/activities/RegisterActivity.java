@@ -34,7 +34,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     //Makes Firebase parts
     private FirebaseAuth mAuth;
-    private FirebaseDatabase database;
     private DatabaseReference mRef;
 
     private EditText mFirstName;
@@ -201,7 +200,7 @@ public class RegisterActivity extends AppCompatActivity {
         //final String email =
         final long type = userSpinner.getSelectedItemId();
 
-        database = FirebaseDatabase.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference();
 
         FirebaseUser mFireUser = mAuth.getCurrentUser();
@@ -228,7 +227,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private boolean isPasswordValid(String password) {
+    private boolean isPasswordValid(CharSequence password) {
         return password.length() >= 6;
     }
 

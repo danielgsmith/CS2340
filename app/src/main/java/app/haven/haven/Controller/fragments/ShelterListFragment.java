@@ -36,18 +36,11 @@ public class ShelterListFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-
-    private FirebaseUser mFireUser;
-    private DatabaseReference mDataRef;
 
 
     private ArrayList<Shelter> sheltersArray;
-    private RecyclerView recyclerView;
     private RecyclerView.Adapter rvAdapter;
-    private RecyclerView.LayoutManager rvLayoutManager;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -70,7 +63,7 @@ public class ShelterListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            int mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
     }
 
@@ -79,8 +72,8 @@ public class ShelterListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shelter_list, container, false);
 
-        mFireUser = FirebaseAuth.getInstance().getCurrentUser();
-        mDataRef = FirebaseDatabase.getInstance().getReference();
+        FirebaseUser mFireUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference mDataRef = FirebaseDatabase.getInstance().getReference();
 
 
         sheltersArray = new ArrayList<>();
@@ -119,8 +112,8 @@ public class ShelterListFragment extends Fragment {
             }
             recyclerView.setAdapter(new MyShelterRecyclerViewAdapter(sheltersArray, mListener));
         }*/
-        recyclerView = (RecyclerView) view.findViewById(R.id.list);
-        rvLayoutManager = new LinearLayoutManager(view.getContext());
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        RecyclerView.LayoutManager rvLayoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(rvLayoutManager);
 
         rvAdapter = new MyShelterRecyclerViewAdapter(sheltersArray, mListener);
