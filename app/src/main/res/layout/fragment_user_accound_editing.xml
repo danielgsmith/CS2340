@@ -12,6 +12,35 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="213dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="First Name:" />
+
+            <EditText
+                android:id="@+id/input_user_first_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+
+            <TextView
+                android:id="@+id/updated_first_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TextView"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="440dp"
             android:layout_height="62dp"
             android:orientation="horizontal">
@@ -24,7 +53,7 @@
                 android:text="Name:" />
 
             <EditText
-                android:id="@+id/input_user_name"
+                android:id="@+id/input_user_last_name"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -33,7 +62,7 @@
                 android:text="Name" />
 
             <TextView
-                android:id="@+id/BIGBUTT"
+                android:id="@+id/updated_last_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -67,6 +96,14 @@
                 android:inputType="textPersonName"
                 android:text="Email" />
 
+            <TextView
+                android:id="@+id/updated_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TextView"
+                android:visibility="gone" />
+
         </LinearLayout>
 
         <Space
@@ -93,6 +130,14 @@
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:text="Telephone Number" />
+
+            <TextView
+                android:id="@+id/updated_telephone_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TextView"
+                android:visibility="gone" />
         </LinearLayout>
 
         <Space
@@ -135,7 +180,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Save Info"
-                android:visibility="visible" />
+                android:visibility="gone" />
         </LinearLayout>
 
     </LinearLayout>

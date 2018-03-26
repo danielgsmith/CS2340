@@ -61,10 +61,15 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
     private String oldEmail;
     private String updatedEmail;
 
-    private TextView textUserName;
-    private EditText editTextUserName;
-    private String oldName;
-    private String updatedName;
+    private TextView textUserFirstName;
+    private EditText editTextUserFirstName;
+    private String oldFirstName;
+    private String updatedFirstName;
+
+    private TextView textUserLastName;
+    private EditText editTextUserLastName;
+    private String oldLastName;
+    private String updatedLastName;
 
     private TextView textTelephoneNumber;
     private EditText editTextUserTelephoneNumber;
@@ -119,10 +124,16 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_user_accound_editing, container, false);
-        editTextUserName = view.findViewById(R.id.input_user_name);
+
+        editTextUserFirstName = view.findViewById(R.id.input_user_first_name);
+        editTextUserLastName = view.findViewById(R.id.input_user_last_name);
         editTextUserEmail = view.findViewById(R.id.input_user_email);
         editTextUserTelephoneNumber = view.findViewById(R.id.input_user_telephone_number);
-        textUserName = view.findViewById(R.id.BIGBUTT);
+
+        textUserFirstName = view.findViewById(R.id.updated_first_name);
+        textUserLastName = view.findViewById(R.id.updated_last_name);
+        textEmail = view.findViewById(R.id.updated_email);
+        textTelephoneNumber = view.findViewById(R.id.updated_telephone_number);
 
         editInfoButton = (Button) view.findViewById(R.id.edit_Info_Button);
         saveInfoButton = (Button) view.findViewById(R.id.save_Info_Button);
@@ -133,8 +144,11 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 
                 editing = true;
 
-                textUserName.setVisibility((View.GONE));
-                editTextUserName.setVisibility(View.VISIBLE);
+                textUserFirstName.setVisibility((View.GONE));
+                editTextUserFirstName.setVisibility(View.VISIBLE);
+
+                textUserLastName.setVisibility((View.GONE));
+                editTextUserLastName.setVisibility(View.VISIBLE);
 
                 textEmail.setVisibility((View.GONE));
                 editTextUserEmail.setVisibility((View.VISIBLE));
@@ -150,20 +164,26 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
                 if (editing == true) {
 //                    update everything and switch back to textView
 
-                    updatedName = editTextUserName.getText().toString();
+                    updatedFirstName = editTextUserFirstName.getText().toString();
+                    updatedLastName = editTextUserLastName.getText().toString();
                     updatedEmail = editTextUserEmail.getText().toString();
                     updatedTelephoneNumber = editTextUserTelephoneNumber.getText().toString();
 
                     editing = false;
 
-                    editTextUserName.setVisibility(View.GONE);
-                    textUserName.setVisibility((View.VISIBLE));
+                    editTextUserFirstName.setVisibility(View.GONE);
+                    textUserFirstName.setVisibility((View.VISIBLE));
+
+                    editTextUserLastName.setVisibility(View.GONE);
+                    textUserLastName.setVisibility(View.VISIBLE);
 
                     editTextUserEmail.setVisibility((View.GONE));
                     textEmail.setVisibility((View.VISIBLE));
 
                     editTextUserTelephoneNumber.setVisibility((View.GONE));
                     textTelephoneNumber.setVisibility((View.VISIBLE));
+
+                    saveInfoButton.setVisibility(View.GONE);
 
                     updateInfo();
 
@@ -180,10 +200,15 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) { //data snapchot is where in the database you are
                 mUser = dataSnapshot.getValue(User.class);
-                textUserName.setText(mUser.getFirstName() + " " + mUser.getLastName());
-                oldName = mUser.getFirstName() + " " + mUser.getLastName();
+                textUserFirstName.setText(mUser.getFirstName());
+                oldFirstName = mUser.getFirstName();
+
+                textUserLastName.setText(mUser.getLastName());
+                oldLastName = mUser.getLastName();
+
                 textEmail.setText(mUser.getEmail());
                 oldEmail = mUser.getEmail();
+
                 String tNum = mUser.getTelephoneNumber();
                 if (tNum == null) {
                     textTelephoneNumber.setText("No telephone added yet");
@@ -212,18 +237,6 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
-    }
-
-    public void onClick(View view) {
-//        switch (view.getId()) {
-//            case R.id.update_button:
-//                Log.w("Update :", "Worked");
-////                Intent i = new Intent(getActivity(), ShowUserAccountActivity.class);
-////                startActivity(i);
-//                break;
-////            case R.id.button_admin_remove_shelter:
-////                Log.w("RemoveShelter:", "Worked");
-//        }
     }
 
     @Override
@@ -260,8 +273,8 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 
     public void updateInfo() {
 
-        if (!oldName.equals(updatedName)) {
-            textUserName.setText(updatedName);
+        if (!oldFirstName.equals(updatedFirstName)) {
+            textUserFirstName.setText(updatedFirstName);
             mUser.setFirstName("JOE"); //TODO fix this first and last Name
         }
 
@@ -296,20 +309,20 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 
     }
 
-//    private void sendResetEmail(){
-//        mAuth.sendPasswordResetEmail(emailAddress)
-//                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        if (task.isSuccessful()) {
-//                            Toast.makeText(LoginActivity.this, "Reset Email sent.",
-//                                    Toast.LENGTH_SHORT).show();
-//                            Log.d(TAG, "Email sent.");
-//                        } else {
-//                            Toast.makeText(LoginActivity.this, "Reset Failed.",
-//                                    Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//    }
+    private void sendResetEmail(){
+        mAuth.sendPasswordResetEmail(mUser.getEmail())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Reset Email sent.",
+                                    Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "Email sent.");
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Reset Failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
 }
