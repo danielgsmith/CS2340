@@ -1,6 +1,7 @@
 package app.haven.haven.Controller.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.app.AlertDialog;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,7 +26,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 
 import app.haven.haven.Controller.activities.LoginActivity;
@@ -78,6 +79,7 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 
 
     //buttons:
+    private Button sendPasswordResetButton;
     private Button saveInfoButton;
     private Button editInfoButton;
 
@@ -117,6 +119,7 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
         mFireUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mDataRef = database.getReference();
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -135,12 +138,22 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
         textEmail = view.findViewById(R.id.updated_email);
         textTelephoneNumber = view.findViewById(R.id.updated_telephone_number);
 
+        sendPasswordResetButton = (Button) view.findViewById(R.id.change_Password_Button);
         editInfoButton = (Button) view.findViewById(R.id.edit_Info_Button);
         saveInfoButton = (Button) view.findViewById(R.id.save_Info_Button);
+
+        sendPasswordResetButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                sendResetEmail();
+                // TODO: make a pop up box
+            }
+        });
 
         editInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Log.d("Edit Info Button", "Clicked");
 
                 editing = true;
 
@@ -256,6 +269,11 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
         mListener = null;
     }
 
+    @Override
+    public void onClick(View view) {
+
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -310,19 +328,16 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
     }
 
     private void sendResetEmail(){
-        mAuth.sendPasswordResetEmail(mUser.getEmail())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "Reset Email sent.",
-                                    Toast.LENGTH_SHORT).show();
-                            Log.d(TAG, "Email sent.");
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Reset Failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+        mAuth.sendPasswordResetEmail(mUser.getEmail());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        builder.setTitle("Password Reset Email Sent!")
+                .setMessage("Follow the instructions in your email to reset your password")
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert).show();
+
     }
 }
