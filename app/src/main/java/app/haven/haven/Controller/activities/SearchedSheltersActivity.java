@@ -50,4 +50,8 @@ public class SearchedSheltersActivity extends AppCompatActivity
     public static Shelter getSelectedShelter(){
         return selectedShelter;
     }
+
+    public static void setSelectedShelter(Shelter shelter) {
+        selectedShelter = shelter;
+    }
 }

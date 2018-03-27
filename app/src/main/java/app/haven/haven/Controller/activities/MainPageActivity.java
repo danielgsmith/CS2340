@@ -265,6 +265,10 @@ public class MainPageActivity extends AppCompatActivity
         return selectedShelter;
     }
 
+    public static void setSelectedShelter(Shelter shelter) {
+        selectedShelter = shelter;
+    }
+
     public static User getUser() {
         return user;
     }

@@ -67,6 +67,7 @@ public class ShelterDetailsActivity extends AppCompatActivity {
         });
 
         shelter = MainPageActivity.getSelectedShelter();
+        Log.w("Shelter Details", shelter.getShelterName());
         mFireUser = FirebaseAuth.getInstance().getCurrentUser();
         user = MainPageActivity.getUser();
 
@@ -294,6 +295,10 @@ public class ShelterDetailsActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference();
         String pushKey = shelter.getPushKey();
+        if (pushKey == null) {
+            Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show();
+            return;
+        }
         int spaces = 0;
         int rooms = 0;
         switch (shelter.getCapacity().getCapacityType()) {
@@ -365,7 +370,9 @@ public class ShelterDetailsActivity extends AppCompatActivity {
 
     private void hideInfo(){
         boolean claimed = false;
-        if (shelter.getPushKey().equals(user.getCurrentShelterPushID())) {
+        if (shelter.getPushKey() == null) {
+
+        } else if (shelter.getPushKey().equals(user.getCurrentShelterPushID())) {
             claimed = true;
             Log.w("Claimed", "TRUE");
         }

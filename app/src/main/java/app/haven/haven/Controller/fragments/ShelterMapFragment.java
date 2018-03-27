@@ -3,6 +3,7 @@ package app.haven.haven.Controller.fragments;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -35,6 +36,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import app.haven.haven.Controller.activities.MainPageActivity;
+import app.haven.haven.Controller.activities.SearchedSheltersActivity;
+import app.haven.haven.Controller.activities.ShelterDetailsActivity;
+import app.haven.haven.Controller.activities.ShelterListDetailsActivity;
 import app.haven.haven.Model.shelters.Shelter;
 import app.haven.haven.R;
 
@@ -113,6 +118,13 @@ public class ShelterMapFragment extends Fragment {
                                  * list of shelters, find one with a name equal to
                                  * the label of the marker and then go to the page
                                  */
+                                String name = m.getTitle();
+                                for (int count = 0; count < sheltersArray.size(); count++) {
+                                    if (sheltersArray.get(count).getShelterName().equals(name))
+                                        MainPageActivity.setSelectedShelter(sheltersArray.get(count));
+                                }
+                                Intent i = new Intent(getActivity(), ShelterDetailsActivity.class);
+                                startActivity(i);
                             }
                         });
                     }
