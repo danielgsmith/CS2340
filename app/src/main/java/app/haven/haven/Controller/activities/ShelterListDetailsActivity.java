@@ -67,6 +67,8 @@ public class ShelterListDetailsActivity extends AppCompatActivity {
         });
 
         shelter = MainPageActivity.getSelectedShelter();
+        if (shelter == null)
+            return;
         Log.w("Shelter Details", shelter.getShelterName());
         mFireUser = FirebaseAuth.getInstance().getCurrentUser();
         user = MainPageActivity.getUser();

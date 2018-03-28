@@ -12,10 +12,12 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -49,12 +51,25 @@ public class ShelterMapFragment extends Fragment {
 
     MapView mMapView;
     private GoogleMap googleMap;
+    private Button editCriteria;
 
     private ArrayList<Shelter> sheltersArray;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_shelter_map, container, false);
+
+        editCriteria = rootView.findViewById(R.id.button_edit);
+        editCriteria.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = new CriteriaFragment();
+                getActivity().setTitle("Criteria");
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.mainFrame, fragment);
+                ft.commit();
+            }
+        });
 
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
@@ -93,47 +108,76 @@ public class ShelterMapFragment extends Fragment {
                 DatabaseReference mDataRef = FirebaseDatabase.getInstance().getReference();
 
 
-                sheltersArray = new ArrayList<>();
+                sheltersArray = ShelterSearchFragment.getSheltersArray();
 
-                mDataRef.child("shelters").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        sheltersArray.clear();
-                        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                        for (DataSnapshot child : children) {
-                            Shelter place = child.getValue(Shelter.class);
-                            sheltersArray.add(place);
-                        }
-                        for (Shelter shelter : sheltersArray) {
-                            googleMap.addMarker(new MarkerOptions()
-                                    .position(shelter.getLatLng())
-                                    .title(shelter.getShelterName())
-                                    .snippet("Click for details"));
-                        }
-                        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-                            @Override
-                            public void onInfoWindowClick(Marker m) {
-                                /* TODO: implement this
-                                 * Basically, we are going to search through the
-                                 * list of shelters, find one with a name equal to
-                                 * the label of the marker and then go to the page
-                                 */
-                                String name = m.getTitle();
-                                for (int count = 0; count < sheltersArray.size(); count++) {
-                                    if (sheltersArray.get(count).getShelterName().equals(name))
-                                        MainPageActivity.setSelectedShelter(sheltersArray.get(count));
-                                }
-                                Intent i = new Intent(getActivity(), ShelterDetailsActivity.class);
-                                startActivity(i);
+                if (sheltersArray.isEmpty()) {
+                    mDataRef.child("shelters").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            sheltersArray.clear();
+                            Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                            for (DataSnapshot child : children) {
+                                Shelter place = child.getValue(Shelter.class);
+                                sheltersArray.add(place);
                             }
-                        });
-                    }
+                            for (Shelter shelter : sheltersArray) {
+                                googleMap.addMarker(new MarkerOptions()
+                                        .position(shelter.getLatLng())
+                                        .title(shelter.getShelterName())
+                                        .snippet(shelter.getPhone()));
+                            }
+                            googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                                @Override
+                                public void onInfoWindowClick(Marker m) {
+                                    /* TODO: implement this
+                                     * Basically, we are going to search through the
+                                     * list of shelters, find one with a name equal to
+                                     * the label of the marker and then go to the page
+                                     */
+                                    String name = m.getTitle();
+                                    for (int count = 0; count < sheltersArray.size(); count++) {
+                                        if (sheltersArray.get(count).getShelterName().equals(name))
+                                            MainPageActivity.setSelectedShelter(sheltersArray.get(count));
+                                    }
+                                    Intent i = new Intent(getActivity(), ShelterDetailsActivity.class);
+                                    startActivity(i);
+                                }
+                            });
+                        }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.w("LogFragment", "loadLog:onCancelled", databaseError.toException());
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.w("LogFragment", "loadLog:onCancelled", databaseError.toException());
+                        }
+                    });
+                } else {
+
+                    for (Shelter shelter : sheltersArray) {
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(shelter.getLatLng())
+                                .title(shelter.getShelterName())
+                                .snippet(shelter.getPhone())
+                                .snippet("Click for details"));
                     }
-                });
+                    googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                        @Override
+                        public void onInfoWindowClick(Marker m) {
+                            /* TODO: implement this
+                             * Basically, we are going to search through the
+                             * list of shelters, find one with a name equal to
+                             * the label of the marker and then go to the page
+                             */
+                            String name = m.getTitle();
+                            for (int count = 0; count < sheltersArray.size(); count++) {
+                                if (sheltersArray.get(count).getShelterName().equals(name))
+                                    MainPageActivity.setSelectedShelter(sheltersArray.get(count));
+                            }
+                            Intent i = new Intent(getActivity(), ShelterDetailsActivity.class);
+                            startActivity(i);
+                        }
+                    });
+                }
+
 
                 // For zooming automatically to the location of the marker
                 LocationManager lm = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -144,6 +188,7 @@ public class ShelterMapFragment extends Fragment {
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
         });
+
         return rootView;
     }
 
