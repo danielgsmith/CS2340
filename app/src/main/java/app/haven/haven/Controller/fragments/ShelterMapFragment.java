@@ -51,7 +51,6 @@ public class ShelterMapFragment extends Fragment {
 
     MapView mMapView;
     private GoogleMap googleMap;
-    private Button editCriteria;
 
     private ArrayList<Shelter> sheltersArray;
 
@@ -59,7 +58,7 @@ public class ShelterMapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_shelter_map, container, false);
 
-        editCriteria = rootView.findViewById(R.id.button_edit);
+        Button editCriteria = rootView.findViewById(R.id.button_edit);
         editCriteria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,6 +69,49 @@ public class ShelterMapFragment extends Fragment {
                 ft.commit();
             }
         });
+
+        Button clearSearch = rootView.findViewById(R.id.button_clear_search);
+        clearSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatabaseReference mDataRef = FirebaseDatabase.getInstance().getReference();
+                mDataRef.child("shelters").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        sheltersArray.clear();
+                        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                        for (DataSnapshot child : children) {
+                            Shelter place = child.getValue(Shelter.class);
+                            sheltersArray.add(place);
+                        }
+                        for (Shelter shelter : sheltersArray) {
+                            googleMap.addMarker(new MarkerOptions()
+                                    .position(shelter.getLatLng())
+                                    .title(shelter.getShelterName())
+                                    .snippet(shelter.getPhone()));
+                        }
+                        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                            @Override
+                            public void onInfoWindowClick(Marker m) {
+                                String name = m.getTitle();
+                                for (int count = 0; count < sheltersArray.size(); count++) {
+                                    if (sheltersArray.get(count).getShelterName().equals(name))
+                                        MainPageActivity.setSelectedShelter(sheltersArray.get(count));
+                                }
+                                Intent i = new Intent(getActivity(), ShelterDetailsActivity.class);
+                                startActivity(i);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
+
 
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
@@ -129,11 +171,6 @@ public class ShelterMapFragment extends Fragment {
                             googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                                 @Override
                                 public void onInfoWindowClick(Marker m) {
-                                    /* TODO: implement this
-                                     * Basically, we are going to search through the
-                                     * list of shelters, find one with a name equal to
-                                     * the label of the marker and then go to the page
-                                     */
                                     String name = m.getTitle();
                                     for (int count = 0; count < sheltersArray.size(); count++) {
                                         if (sheltersArray.get(count).getShelterName().equals(name))
@@ -162,11 +199,6 @@ public class ShelterMapFragment extends Fragment {
                     googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                         @Override
                         public void onInfoWindowClick(Marker m) {
-                            /* TODO: implement this
-                             * Basically, we are going to search through the
-                             * list of shelters, find one with a name equal to
-                             * the label of the marker and then go to the page
-                             */
                             String name = m.getTitle();
                             for (int count = 0; count < sheltersArray.size(); count++) {
                                 if (sheltersArray.get(count).getShelterName().equals(name))
