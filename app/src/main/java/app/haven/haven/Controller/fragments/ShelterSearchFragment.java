@@ -183,7 +183,7 @@ public class ShelterSearchFragment extends Fragment {
         void onListFragmentInteraction(Shelter shelter);
     }
 
-    static ArrayList<Shelter> getSheltersArray() {
+    public static ArrayList<Shelter> getSheltersArray() {
         if (sheltersArray == null || sheltersArray.isEmpty()) {
             sheltersArray = new ArrayList<>();
             DatabaseReference mDataRef = FirebaseDatabase.getInstance().getReference();
@@ -207,7 +207,7 @@ public class ShelterSearchFragment extends Fragment {
         return sheltersArray;
     }
 
-    static void setShelterArray(ArrayList<Shelter> array) {
+    public static void setShelterArray(ArrayList<Shelter> array) {
         sheltersArray = array;
     }
 }

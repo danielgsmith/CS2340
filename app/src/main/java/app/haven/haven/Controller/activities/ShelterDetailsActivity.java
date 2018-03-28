@@ -1,6 +1,7 @@
 package app.haven.haven.Controller.activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,6 +21,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
+import app.haven.haven.Controller.fragments.ShelterSearchFragment;
 import app.haven.haven.Model.User;
 import app.haven.haven.Model.shelters.Capacity;
 import app.haven.haven.Model.shelters.Shelter;
@@ -41,6 +45,7 @@ public class ShelterDetailsActivity extends AppCompatActivity {
     private Spinner roomSpinner;
     private Button releaseSpacesButton;
     private Button releaseRoomsButton;
+    private Button showOnMapButton;
 
     private User user;
     private FirebaseUser mFireUser;
@@ -233,6 +238,19 @@ public class ShelterDetailsActivity extends AppCompatActivity {
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
+            }
+        });
+
+        showOnMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<Shelter> list = new ArrayList<>();
+                list.add(shelter);
+                ShelterSearchFragment.setShelterArray(list);
+
+                finish();
+                Intent i = new Intent(getApplicationContext(), MainPageActivity.class);
+                startActivity(i);
             }
         });
     }
@@ -478,6 +496,7 @@ public class ShelterDetailsActivity extends AppCompatActivity {
         numberSpinner = findViewById(R.id.number_spinner_space);
         releaseSpacesButton = findViewById(R.id.button_release_bed);
         releaseRoomsButton = findViewById(R.id.button_release_room);
+        showOnMapButton = findViewById(R.id.button_show_on_map);
     }
 
     private void setSpinners() {
