@@ -17,7 +17,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="213dp"
+                android:layout_width="218dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="First Name:" />
@@ -28,8 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Name" />
+                android:inputType="textPersonName" />
 
             <TextView
                 android:id="@+id/updated_first_name"
@@ -42,7 +41,7 @@
 
         <LinearLayout
             android:layout_width="440dp"
-            android:layout_height="62dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
@@ -58,8 +57,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Name" />
+                android:inputType="textPersonName" />
 
             <TextView
                 android:id="@+id/updated_last_name"
@@ -93,8 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Email" />
+                android:inputType="textPersonName" />
 
             <TextView
                 android:id="@+id/updated_email"
@@ -128,8 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Telephone Number" />
+                android:inputType="textPersonName" />
 
             <TextView
                 android:id="@+id/updated_telephone_number"
