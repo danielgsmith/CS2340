@@ -63,6 +63,7 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
     private String updatedEmail;
 
     private TextView textUserFirstName;
+    private TextView firstNameText;
     private EditText editTextUserFirstName;
     private String oldFirstName;
     private String updatedFirstName;
@@ -116,6 +117,7 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 //            mParam1 = getArguments().getString(ARG_PARAM1);
 //            mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        mUser = new User();
         mFireUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mDataRef = database.getReference();
@@ -128,15 +130,25 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_user_accound_editing, container, false);
 
-        editTextUserFirstName = view.findViewById(R.id.input_user_first_name);
-        editTextUserLastName = view.findViewById(R.id.input_user_last_name);
-        editTextUserEmail = view.findViewById(R.id.input_user_email);
-        editTextUserTelephoneNumber = view.findViewById(R.id.input_user_telephone_number);
-
+        //establish View:
         textUserFirstName = view.findViewById(R.id.updated_first_name);
         textUserLastName = view.findViewById(R.id.updated_last_name);
         textEmail = view.findViewById(R.id.updated_email);
         textTelephoneNumber = view.findViewById(R.id.updated_telephone_number);
+
+        firstNameText = view.findViewById(R.id.first_Name_Text);
+
+
+        //Initialize the editing screen, but still on the view screen
+        editTextUserFirstName = view.findViewById(R.id.input_user_first_name);
+        editTextUserFirstName.setText(mUser.getFirstName());
+
+        editTextUserLastName = view.findViewById(R.id.input_user_last_name);
+        editTextUserLastName.setText(mUser.getLastName());
+
+
+        editTextUserEmail = view.findViewById(R.id.input_user_email);
+        editTextUserTelephoneNumber = view.findViewById(R.id.input_user_telephone_number);
 
         sendPasswordResetButton = (Button) view.findViewById(R.id.change_Password_Button);
         editInfoButton = (Button) view.findViewById(R.id.edit_Info_Button);
@@ -157,8 +169,13 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 
                 editing = true;
 
+                editInfoButton.setVisibility(View.GONE);
+                saveInfoButton.setVisibility(View.VISIBLE);
+
                 textUserFirstName.setVisibility((View.GONE));
                 editTextUserFirstName.setVisibility(View.VISIBLE);
+                firstNameText.setGravity(10); //TODO FIX THIS!
+
 
                 textUserLastName.setVisibility((View.GONE));
                 editTextUserLastName.setVisibility(View.VISIBLE);
@@ -174,8 +191,14 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
         saveInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Log.d("Save Info Button", "Clicked");
+
                 if (editing == true) {
 //                    update everything and switch back to textView
+
+                    saveInfoButton.setVisibility(View.GONE);
+                    editInfoButton.setVisibility(View.VISIBLE);
 
                     updatedFirstName = editTextUserFirstName.getText().toString();
                     updatedLastName = editTextUserLastName.getText().toString();
@@ -186,20 +209,28 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 
                     editTextUserFirstName.setVisibility(View.GONE);
                     textUserFirstName.setVisibility((View.VISIBLE));
+                    editTextUserFirstName.setText(updatedFirstName);
+                    textUserFirstName.setText(updatedFirstName);
+                    mUser.setFirstName(updatedFirstName);
+//                    mDataRef.child("users").child(mFireUser.getUid());
+                    System.out.println(updatedFirstName);
 
                     editTextUserLastName.setVisibility(View.GONE);
                     textUserLastName.setVisibility(View.VISIBLE);
+                    editTextUserLastName.setText(updatedLastName);
+                    textUserLastName.setText(updatedLastName);
 
                     editTextUserEmail.setVisibility((View.GONE));
                     textEmail.setVisibility((View.VISIBLE));
 
+                    mFireUser.updateEmail(updatedEmail);
+                    mUser.setEmail(updatedEmail);
+
                     editTextUserTelephoneNumber.setVisibility((View.GONE));
                     textTelephoneNumber.setVisibility((View.VISIBLE));
 
-                    saveInfoButton.setVisibility(View.GONE);
 
-                    updateInfo();
-
+//                    updateInfo();
                 } else {
                     //throw an exception TOAST?
                 }
@@ -211,29 +242,20 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
         mDataRef.child("users").child(mFireUser.getUid()).addValueEventListener(new ValueEventListener() {
 
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) { //data snapchot is where in the database you are
-                mUser = dataSnapshot.getValue(User.class);
-                textUserFirstName.setText(mUser.getFirstName());
-                oldFirstName = mUser.getFirstName();
+            public void onDataChange(DataSnapshot dataSnapshot) { //data snapshot is where in the database you are
 
-                textUserLastName.setText(mUser.getLastName());
-                oldLastName = mUser.getLastName();
+                mUser = (User) dataSnapshot.child("users").getValue(User.class); // does this override the file?
 
-                textEmail.setText(mUser.getEmail());
-                oldEmail = mUser.getEmail();
+//                firebaseID[0] = dataSnapshot.child("users").child(emailWithout).getValue(String.class);
+                //Log.w("String", firebaseID[0]);
 
-                String tNum = mUser.getTelephoneNumber();
-                if (tNum == null) {
-                    textTelephoneNumber.setText("No telephone added yet");
-                } else {
-                    textTelephoneNumber.setText(mUser.getTelephoneNumber());
-                }
-                oldTelephoneNumber = textTelephoneNumber.getText().toString();
+//                User currentUser = dataSnapshot.child("users").child(mFireUser.getUid()).getValue(User.class);
 
+//                updatedFirstName = editTextUserFirstName.getText().toString();
+                mUser.setFirstName(updatedFirstName);
 
-                //update Info
-                //anything that uses the updated info
-                //set text boxes to equal current info
+                mDataRef.child("users").child(mFireUser.getUid()).child("firstName").setValue(mUser.getFirstName());
+                updateInfo();
             }
 
             @Override
@@ -289,41 +311,58 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
         void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     * checks if individual fields were actually altered and then changes the view
+     */
     public void updateInfo() {
-
-        if (!oldFirstName.equals(updatedFirstName)) {
+        updatedFirstName = mUser.getFirstName();
+        if (oldFirstName != updatedFirstName) {
             textUserFirstName.setText(updatedFirstName);
-            mUser.setFirstName("JOE"); //TODO fix this first and last Name
+            editTextUserFirstName.setText(updatedFirstName);
+            mUser.setFirstName(updatedFirstName);
+            oldFirstName = mUser.getFirstName();
         }
 
-        if (!oldEmail.equals(updatedEmail)) {
+        updatedLastName = mUser.getLastName();
+        if (oldLastName != updatedLastName) {
+            textUserLastName.setText(updatedLastName);
+            editTextUserLastName.setText(updatedLastName);
+            mUser.setLastName(updatedLastName);
+            oldLastName = updatedLastName;
+        }
+
+        updatedEmail = mUser.getEmail();
+        if (updatedEmail != null && !updatedEmail.contains("@")) {
+            //TODO: Make this a toast, not an alert
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Incorrect Email Format")
+                    .setMessage("Please Re-enter a correct email")
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert).show();
+
+
+        } else if (oldEmail != updatedEmail) {
+            textEmail.setText(updatedEmail);
             editTextUserEmail.setText(updatedEmail);
             mUser.setEmail(updatedEmail);
+            oldEmail = updatedEmail;
         }
-        //if old is not equal to the new, then update User and setText
-//
-//        mUser.setFirstName(newName);
-//                mUser.setLastName(newLastName);
-//                mUser.setEmail(newEmail);
-//                mUser.setPassword(newPasswod);
-//                mUser.setAccountType(newAccountType);
-////                //same for fireuser?
-//////                update the screen!
 
-        /**
-         * TODO:is this needed? what if they only edit one thing
-         * TODO:have these as private variables at the top and update when the user actually changes them
-         */
+        updatedTelephoneNumber = mUser.getTelephoneNumber();
 
-//        String updatedName = EditTextUserName.getText().toString();
-//        String updatedEmail = EditTextUserEmail.getText().toString();
-//        String updatedPassword = EditTextUserPassword.getText().toString();
-//        String updatedAccountType = EditTextUserAccountType.getText().toString();
-////        EditTextUserName.setSelection(updatedName);
-
-//        EditTextUserEmail.setSelection(newEmail);
-//        EditTextUserPassword.setSelection(newPassword);
-//        EditTextUserAccountType.setSelection(newAccountType);
+        if (updatedTelephoneNumber == null) {
+            textTelephoneNumber.setText("No telephone added yet");
+            editTextUserTelephoneNumber.setText("No telephone added yet");
+            oldTelephoneNumber = "No telephone added yet";
+        } else {
+            textTelephoneNumber.setText(updatedTelephoneNumber);
+            editTextUserTelephoneNumber.setText(updatedTelephoneNumber);
+            oldTelephoneNumber = updatedTelephoneNumber;
+        }
+//                oldTelephoneNumber = textTelephoneNumber.getText().toString();
 
     }
 
