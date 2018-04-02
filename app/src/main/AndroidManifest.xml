@@ -3,9 +3,12 @@
     package="app.haven.haven">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -46,6 +49,9 @@
             android:name=".Controller.activities.ShelterListDetailsActivity"
             android:label="@string/title_activity_shelter_list_details"
             android:theme="@style/BlueGreen.NoActionBar"></activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBIKVhjjakdi59ecWHXAB4B-y8o9yXOIaY"/>
     </application>
 
 </manifest>

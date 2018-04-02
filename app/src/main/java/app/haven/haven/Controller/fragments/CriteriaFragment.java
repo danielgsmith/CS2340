@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +16,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 import app.haven.haven.Controller.activities.SearchedSheltersActivity;
+import app.haven.haven.Controller.activities.ShelterDetailsActivity;
 import app.haven.haven.Controller.adapters.NothingSelectedSpinnerAdapter;
+import app.haven.haven.Model.shelters.Shelter;
 import app.haven.haven.R;
 
 
@@ -42,6 +55,7 @@ public class CriteriaFragment extends Fragment {
     public static long rangeSelected;
     public static String searchedName;
     private EditText textName;
+    private Button seeMap;
 
     public CriteriaFragment() {
         // Required empty public constructor
@@ -80,6 +94,7 @@ public class CriteriaFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_criteria, container, false);
 
         textName = view.findViewById(R.id.input_shelter_name);
+
 
         final TextView text = (TextView) view.findViewById(R.id.textView_gender);
         String[] genders = new String[]{"Male", "Female", "Either"};
@@ -145,6 +160,16 @@ public class CriteriaFragment extends Fragment {
             }
         });
 
+        seeMap = view.findViewById(R.id.button_see_on_map);
+        seeMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchedName = textName.getText().toString();
+                //searchShelters();
+                getLocations();
+            }
+        });
+
 
         // Inflate the layout for this fragment
         return view;
@@ -193,5 +218,71 @@ public class CriteriaFragment extends Fragment {
         //Toast.makeText(this.getActivity(), "No Shelters Found", Toast.LENGTH_SHORT).show();
         Intent i = new Intent(getActivity(), SearchedSheltersActivity.class);
         startActivity(i);
+    }
+
+    private void getLocations(){
+        final ArrayList<Shelter> sheltersArray = new ArrayList<>();
+        DatabaseReference mDataRef = FirebaseDatabase.getInstance().getReference();
+        mDataRef.child("shelters").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //sheltersArray.clear();
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot child : children) {
+
+                    Shelter place = child.getValue(Shelter.class);
+                    //Log.w("String", "" + place.getAcceptsFemale());
+                    //Log.w("String", "" + CriteriaFragment.genderselected);
+                    boolean add = true;
+                    String name = CriteriaFragment.searchedName;
+                    //Log.w("Name", name);
+
+                    if (name.length() == 0 || name.isEmpty()) {
+                        if (CriteriaFragment.genderselected == 0) {
+                            if (!place.getAcceptsMale())
+                                add = false;
+                            else if (CriteriaFragment.genderselected == 1)
+                                if (!place.getAcceptsFemale())
+                                    add = false;
+                        }
+
+                        if (CriteriaFragment.rangeSelected == 0) {
+                            if (place.getRestrictions().isAdultsOnly())
+                                add = false;
+                        }
+                        else if (CriteriaFragment.rangeSelected == 1) {
+                            if (!place.getRestrictions().isAllowsChildren())
+                                add = false;
+                        }
+                        else if (CriteriaFragment.rangeSelected == 2) {
+                            if (!place.getRestrictions().isYoungAdultsOnly())
+                                add = false;
+                        }
+                    } else if (!place.getShelterName().equals(name))
+                        add = false;
+
+
+                    if (add)
+                        sheltersArray.add(place);
+                    //Log.w("Item", ""+ sheltersArray.get(0));
+                }
+                if (sheltersArray.isEmpty()) {
+                    Toast.makeText(getActivity(), "No results found", Toast.LENGTH_SHORT).show();
+                }
+
+                ShelterSearchFragment.setShelterArray(sheltersArray);
+                //Log.w("Item", ""+ sheltersArray.get(0));
+                Fragment fragment = new ShelterMapFragment();
+                getActivity().setTitle("Map");
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.mainFrame, fragment);
+                ft.commit();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("LogFragment", "loadLog:onCancelled", databaseError.toException());
+            }
+        });
     }
 }

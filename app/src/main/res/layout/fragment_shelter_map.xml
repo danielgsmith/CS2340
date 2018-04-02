@@ -1,14 +1,36 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="app.haven.haven.Controller.fragments.ShelterMapFragment">
+    android:layout_height="match_parent" >
 
-    <!-- TODO: Update blank fragment layout -->
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
 
-    <Button
-        android:id="@+id/map_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="MAP" />
-</FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_edit"
+            android:layout_width="107dp"
+            android:layout_height="31dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:text="Edit Search Criteria" />
+
+        <Button
+            android:id="@+id/button_clear_search"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:text="Clear search" />
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -1,6 +1,7 @@
 package app.haven.haven.Controller.activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,6 +21,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
+import app.haven.haven.Controller.fragments.ShelterSearchFragment;
 import app.haven.haven.Model.User;
 import app.haven.haven.Model.shelters.Capacity;
 import app.haven.haven.Model.shelters.Shelter;
@@ -41,6 +45,7 @@ public class ShelterDetailsActivity extends AppCompatActivity {
     private Spinner roomSpinner;
     private Button releaseSpacesButton;
     private Button releaseRoomsButton;
+    private Button showOnMapButton;
 
     private User user;
     private FirebaseUser mFireUser;
@@ -67,6 +72,7 @@ public class ShelterDetailsActivity extends AppCompatActivity {
         });
 
         shelter = MainPageActivity.getSelectedShelter();
+        Log.w("Shelter Details", shelter.getShelterName());
         mFireUser = FirebaseAuth.getInstance().getCurrentUser();
         user = MainPageActivity.getUser();
 
@@ -234,6 +240,19 @@ public class ShelterDetailsActivity extends AppCompatActivity {
                         .show();
             }
         });
+
+        showOnMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<Shelter> list = new ArrayList<>();
+                list.add(shelter);
+                ShelterSearchFragment.setShelterArray(list);
+
+                finish();
+                Intent i = new Intent(getApplicationContext(), MainPageActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     private void removeOccupancy(){
@@ -294,6 +313,10 @@ public class ShelterDetailsActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference();
         String pushKey = shelter.getPushKey();
+        if (pushKey == null) {
+            Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show();
+            return;
+        }
         int spaces = 0;
         int rooms = 0;
         switch (shelter.getCapacity().getCapacityType()) {
@@ -365,7 +388,9 @@ public class ShelterDetailsActivity extends AppCompatActivity {
 
     private void hideInfo(){
         boolean claimed = false;
-        if (shelter.getPushKey().equals(user.getCurrentShelterPushID())) {
+        if (shelter.getPushKey() == null) {
+
+        } else if (shelter.getPushKey().equals(user.getCurrentShelterPushID())) {
             claimed = true;
             Log.w("Claimed", "TRUE");
         }
@@ -471,6 +496,7 @@ public class ShelterDetailsActivity extends AppCompatActivity {
         numberSpinner = findViewById(R.id.number_spinner_space);
         releaseSpacesButton = findViewById(R.id.button_release_bed);
         releaseRoomsButton = findViewById(R.id.button_release_room);
+        showOnMapButton = findViewById(R.id.button_show_on_map);
     }
 
     private void setSpinners() {

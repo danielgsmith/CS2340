@@ -1,5 +1,6 @@
 package app.haven.haven.Controller.activities;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -58,6 +59,7 @@ import java.util.List;
 import app.haven.haven.Model.User;
 import app.haven.haven.R;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
@@ -218,17 +220,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
             return true;
         }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
+        if (shouldShowRequestPermissionRationale(READ_CONTACTS) || shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) {
             Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
                         public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+                            requestPermissions(new String[]{READ_CONTACTS, ACCESS_FINE_LOCATION}, REQUEST_READ_CONTACTS);
                         }
                     });
         } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+            requestPermissions(new String[]{READ_CONTACTS, ACCESS_FINE_LOCATION}, REQUEST_READ_CONTACTS);
         }
         return false;
     }

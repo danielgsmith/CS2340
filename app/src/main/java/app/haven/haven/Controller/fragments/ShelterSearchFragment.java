@@ -1,6 +1,7 @@
 package app.haven.haven.Controller.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -12,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import app.haven.haven.Controller.activities.MainPageActivity;
+import app.haven.haven.Controller.activities.ShelterDetailsActivity;
 import app.haven.haven.Controller.adapters.MyShelterSearchRecyclerViewAdapter;
 import app.haven.haven.Model.shelters.Shelter;
 import app.haven.haven.R;
@@ -39,7 +45,7 @@ public class ShelterSearchFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
 
 
-    private ArrayList<Shelter> sheltersArray;
+    private static ArrayList<Shelter> sheltersArray;
     private RecyclerView.Adapter rvAdapter;
 
     /**
@@ -175,5 +181,33 @@ public class ShelterSearchFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(Shelter shelter);
+    }
+
+    public static ArrayList<Shelter> getSheltersArray() {
+        if (sheltersArray == null || sheltersArray.isEmpty()) {
+            sheltersArray = new ArrayList<>();
+            DatabaseReference mDataRef = FirebaseDatabase.getInstance().getReference();
+            mDataRef.child("shelters").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    //sheltersArray.clear();
+                    Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                    for (DataSnapshot child : children) {
+                        Shelter place = child.getValue(Shelter.class);
+                        sheltersArray.add(place);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+        return sheltersArray;
+    }
+
+    public static void setShelterArray(ArrayList<Shelter> array) {
+        sheltersArray = array;
     }
 }
