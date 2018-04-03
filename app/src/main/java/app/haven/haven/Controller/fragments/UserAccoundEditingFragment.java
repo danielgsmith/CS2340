@@ -86,6 +86,7 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
     private Button editInfoButton;
 
     private boolean editing;
+    private boolean readyToSwitsch;
 
     public UserAccoundEditingFragment() {
         // Required empty public constructor
@@ -210,7 +211,7 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 
                 Log.d("Save Info Button", "Clicked");
 
-                if (editing == true) {
+                if (editing == true && readyToSwitsch) {
 //                    update everything and switch back to textView
 
                     saveInfoButton.setVisibility(View.GONE);
@@ -243,12 +244,13 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
                     textTelephoneNumber.setVisibility((View.VISIBLE));
 
                     updateInfo();
-                    editing = false;
+                    if (readyToSwitsch) {
+                        editing = false;
+                    }
 
                 } else {
-                    Toast.makeText(getActivity(), "Not Currently Editing", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Invalid Field Entered", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
@@ -370,18 +372,12 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 
         }
 
-        if (updatedEmail != null && !updatedEmail.contains("@") && !updatedEmail.contains(".")) {
+        if (!updatedEmail.contains("@") && !updatedEmail.contains(".")) {
             Toast.makeText(getActivity(), "Invalid Email", Toast.LENGTH_SHORT).show();
-//            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-//            builder.setTitle("Incorrect Email Format")
-//                    .setMessage("Please Re-enter a correct email")
-//                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialog, int which) {
-//                        }
-//                    })
-//                    .setIcon(android.R.drawable.ic_dialog_alert).show();
-
-
+            textEmail.setText(oldEmail);
+            editTextUserEmail.setText(oldEmail);
+            mUser.setEmail(oldEmail);
+            readyToSwitsch = false;
         } else if (!oldEmail.equals((updatedEmail))) {
             textEmail.setText(updatedEmail);
             editTextUserEmail.setText(updatedEmail);
