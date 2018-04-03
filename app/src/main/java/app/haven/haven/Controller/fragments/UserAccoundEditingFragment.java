@@ -130,45 +130,53 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
         view = inflater.inflate(R.layout.fragment_user_accound_editing, container, false);
 
         //establish View:
+        oldFirstName = mUser.getFirstName();
         textUserFirstName = view.findViewById(R.id.updated_first_name);
-        textUserFirstName.setText(mUser.getFirstName());
+        textUserFirstName.setText(oldFirstName);
 
+        oldLastName = mUser.getLastName();
         textUserLastName = view.findViewById(R.id.updated_last_name);
-        textUserLastName.setText(mUser.getLastName());
+        textUserLastName.setText(oldLastName);
 
+        oldEmail = mUser.getEmail();
         textEmail = view.findViewById(R.id.updated_email);
-        textEmail.setText(mUser.getEmail());
+        textEmail.setText(oldEmail);
 
+        oldTelephoneNumber = mUser.getTelephoneNumber();
         textTelephoneNumber = view.findViewById(R.id.updated_telephone_number);
-        textTelephoneNumber.setText("No telephone added yet");
-
-//        firstNameText = view.findViewById(R.id.first_Name_Text);
+        if (oldTelephoneNumber == null) {
+            textTelephoneNumber.setText("No telephone added yet");
+        } else {
+            textTelephoneNumber.setText(oldTelephoneNumber);
+        }
 
 
         //Initialize the editing screen, but still on the view screen
         editTextUserFirstName = view.findViewById(R.id.input_user_first_name);
-        editTextUserFirstName.setText(mUser.getFirstName());
+        editTextUserFirstName.setText(oldFirstName);
 
         editTextUserLastName = view.findViewById(R.id.input_user_last_name);
-        editTextUserLastName.setText(mUser.getLastName());
+        editTextUserLastName.setText(oldLastName);
 
         editTextUserEmail = view.findViewById(R.id.input_user_email);
-        editTextUserEmail.setText(mUser.getEmail());
+        editTextUserEmail.setText(oldEmail);
 
         editTextUserTelephoneNumber = view.findViewById(R.id.input_user_telephone_number);
-        editTextUserTelephoneNumber.setText(mUser.getTelephoneNumber());
+        editTextUserTelephoneNumber.setText("No telephone added yet");
 
         sendPasswordResetButton = (Button) view.findViewById(R.id.change_Password_Button);
         editInfoButton = (Button) view.findViewById(R.id.edit_Info_Button);
         saveInfoButton = (Button) view.findViewById(R.id.save_Info_Button);
 
+
+        //BUTTON: SEND PASSWORD RESET EMAIL //////////////////////////////////
         sendPasswordResetButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 sendResetEmail();
-                // TODO: make a pop up box
             }
         });
 
+        //BUTTON: EDIT ///////////////////////////////////////////////
         editInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -218,15 +226,10 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
                     mUser.setEmail(updatedEmail);
                     mUser.setTelephoneNumber(updatedTelephoneNumber);
 
-                    editing = false;
-
                     editTextUserFirstName.setVisibility(View.GONE);
                     textUserFirstName.setVisibility((View.VISIBLE));
                     editTextUserFirstName.setText(updatedFirstName);
                     textUserFirstName.setText(updatedFirstName);
-//                    mUser.setFirstName(updatedFirstName);
-//                    mDataRef.child("users").child(mFireUser.getUid());
-//                    System.out.println(updatedFirstName);
 
                     editTextUserLastName.setVisibility(View.GONE);
                     textUserLastName.setVisibility(View.VISIBLE);
@@ -239,10 +242,11 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
                     editTextUserTelephoneNumber.setVisibility((View.GONE));
                     textTelephoneNumber.setVisibility((View.VISIBLE));
 
-
                     updateInfo();
+                    editing = false;
+
                 } else {
-                    //throw an exception TOAST?
+                    Toast.makeText(getActivity(), "Not Currently Editing", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -349,8 +353,7 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
      * checks if individual fields were actually altered and then changes the view
      */
     public void updateInfo() {
-//        updatedFirstName = mUser.getFirstName();
-        if (oldFirstName != updatedFirstName) {
+        if (!oldFirstName.equals(updatedFirstName)) {
             textUserFirstName.setText(updatedFirstName);
             editTextUserFirstName.setText(updatedFirstName);
             mUser.setFirstName(updatedFirstName);
@@ -358,8 +361,7 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
             mDataRef.child("users").child(mFireUser.getUid()).child("firstName").setValue(updatedFirstName);
         }
 
-//        updatedLastName = mUser.getLastName();
-        if (oldLastName != updatedLastName) {
+        if (!oldLastName.equals(updatedLastName)) {
             textUserLastName.setText(updatedLastName);
             editTextUserLastName.setText(updatedLastName);
             mUser.setLastName(updatedLastName);
@@ -368,20 +370,19 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 
         }
 
-//        updatedEmail = mUser.getEmail();
-        if (updatedEmail != null && !updatedEmail.contains("@")) {
-            //TODO: Make this a toast, not an alert
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("Incorrect Email Format")
-                    .setMessage("Please Re-enter a correct email")
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    })
-                    .setIcon(android.R.drawable.ic_dialog_alert).show();
+        if (updatedEmail != null && !updatedEmail.contains("@") && !updatedEmail.contains(".")) {
+            Toast.makeText(getActivity(), "Invalid Email", Toast.LENGTH_SHORT).show();
+//            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//            builder.setTitle("Incorrect Email Format")
+//                    .setMessage("Please Re-enter a correct email")
+//                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int which) {
+//                        }
+//                    })
+//                    .setIcon(android.R.drawable.ic_dialog_alert).show();
 
 
-        } else if (oldEmail != (updatedEmail)) {
+        } else if (!oldEmail.equals((updatedEmail))) {
             textEmail.setText(updatedEmail);
             editTextUserEmail.setText(updatedEmail);
             mUser.setEmail(updatedEmail);
@@ -390,13 +391,11 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 
         }
 
-//        updatedTelephoneNumber = mUser.getTelephoneNumber();
 
         if (updatedTelephoneNumber == null) {
             textTelephoneNumber.setText("No telephone added yet");
             editTextUserTelephoneNumber.setText("No telephone added yet");
             oldTelephoneNumber = "No telephone added yet";
-//            mDataRef.child("users").child(mFireUser.getUid()).child("").setValue(updatedFirstName);
 
         } else {
             textTelephoneNumber.setText(updatedTelephoneNumber);
