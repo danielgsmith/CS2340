@@ -86,7 +86,7 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
     private Button editInfoButton;
 
     private boolean editing;
-    private boolean readyToSwitsch;
+//    private boolean readyToSwitsch;
 
     public UserAccoundEditingFragment() {
         // Required empty public constructor
@@ -211,7 +211,7 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 
                 Log.d("Save Info Button", "Clicked");
 
-                if (editing == true && readyToSwitsch) {
+                if (editing == true) {
 //                    update everything and switch back to textView
 
                     saveInfoButton.setVisibility(View.GONE);
@@ -229,13 +229,13 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 
                     editTextUserFirstName.setVisibility(View.GONE);
                     textUserFirstName.setVisibility((View.VISIBLE));
-                    editTextUserFirstName.setText(updatedFirstName);
-                    textUserFirstName.setText(updatedFirstName);
+//                    editTextUserFirstName.setText(updatedFirstName);
+//                    textUserFirstName.setText(updatedFirstName);
 
                     editTextUserLastName.setVisibility(View.GONE);
                     textUserLastName.setVisibility(View.VISIBLE);
-                    editTextUserLastName.setText(updatedLastName);
-                    textUserLastName.setText(updatedLastName);
+//                    editTextUserLastName.setText(updatedLastName);
+//                    textUserLastName.setText(updatedLastName);
 
                     editTextUserEmail.setVisibility((View.GONE));
                     textEmail.setVisibility((View.VISIBLE));
@@ -244,12 +244,12 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
                     textTelephoneNumber.setVisibility((View.VISIBLE));
 
                     updateInfo();
-                    if (readyToSwitsch) {
-                        editing = false;
-                    }
+//                    editing = false;
 
                 } else {
                     Toast.makeText(getActivity(), "Invalid Field Entered", Toast.LENGTH_SHORT).show();
+//                    Log.w("TRUEORFALSE", editing + " " + readyToSwitsch);
+//                    System.out.println(editing + " " + readyToSwitsch);
                 }
             }
         });
@@ -361,6 +361,7 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
             mUser.setFirstName(updatedFirstName);
             oldFirstName = mUser.getFirstName();
             mDataRef.child("users").child(mFireUser.getUid()).child("firstName").setValue(updatedFirstName);
+//            readyToSwitsch = true;
         }
 
         if (!oldLastName.equals(updatedLastName)) {
@@ -369,7 +370,7 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
             mUser.setLastName(updatedLastName);
             oldLastName = updatedLastName;
             mDataRef.child("users").child(mFireUser.getUid()).child("lastName").setValue(updatedLastName);
-
+//            readyToSwitsch = true;
         }
 
         if (!updatedEmail.contains("@") && !updatedEmail.contains(".")) {
@@ -377,14 +378,14 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
             textEmail.setText(oldEmail);
             editTextUserEmail.setText(oldEmail);
             mUser.setEmail(oldEmail);
-            readyToSwitsch = false;
+            editing = true;
         } else if (!oldEmail.equals((updatedEmail))) {
             textEmail.setText(updatedEmail);
             editTextUserEmail.setText(updatedEmail);
             mUser.setEmail(updatedEmail);
             oldEmail = updatedEmail;
             mDataRef.child("users").child(mFireUser.getUid()).child("email").setValue(updatedEmail);
-
+            editing = false;
         }
 
 
@@ -392,11 +393,13 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
             textTelephoneNumber.setText("No telephone added yet");
             editTextUserTelephoneNumber.setText("No telephone added yet");
             oldTelephoneNumber = "No telephone added yet";
+//            readyToSwitsch = true;
 
         } else {
             textTelephoneNumber.setText(updatedTelephoneNumber);
             editTextUserTelephoneNumber.setText(updatedTelephoneNumber);
             oldTelephoneNumber = updatedTelephoneNumber;
+//            readyToSwitsch = true;
         }
 
     }
