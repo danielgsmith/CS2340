@@ -108,4 +108,5 @@ public class User {
     public void setTakenRooms(int takenRooms) {
         this.takenRooms = takenRooms;
     }
+
 }
