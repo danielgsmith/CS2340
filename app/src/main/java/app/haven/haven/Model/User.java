@@ -112,7 +112,7 @@ public class User {
 
     /**
      * Getter for currentShelterPushID
-     * @return currentShelterPushID
+     * @return  currentShelterPushID
      */
     public String getCurrentShelterPushID() {
         return currentShelterPushID;
