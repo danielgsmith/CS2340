@@ -17,10 +17,20 @@ public class User {
      */
     private long accountType;
 
+    /**
+     * default constructor
+     */
     public User() {
         // Default constructor required for calls for database
     }
 
+    /**
+     * Constructor for user
+     * @param firstName the first name
+     * @param lastName the last name
+     * @param email the email
+     * @param accountType the account type
+     */
     public User(String firstName, String lastName, String email, long accountType){
         this.firstName = firstName;
         this.lastName = lastName;
