@@ -66,26 +66,49 @@ public class User {
         return accountType;
     }
 
+    /**
+     * Setter for firstname
+     * @param firstName the first name
+     */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
+    /**
+     * Setter for lastname
+     * @param lastName the last name
+     */
     public void setLastName(String lastName){
         this.lastName = lastName;
     }
 
+    /**
+     * Setter for email
+     * @param email the new email
+     */
     public void setEmail(String email){
         this.email = email;
     }
 
+    /**
+     * Setter for accountType
+     * @param accountType the accountType
+     */
     public void setAccountType(long accountType){
         this.accountType = accountType;
     }
 
+    /**
+     * incrases numLoginAttemps by 1
+     */
     public void increaseNumLoginAttempts() {
         numLoginAttempts++;
     }
 
+    /**
+     * Setter for numLoginAttampts
+     * @param numLoginAttempts the number of login attempts
+     */
     public void setNumLoginAttempts(int numLoginAttempts) {
         this.numLoginAttempts = numLoginAttempts;
     }
@@ -98,6 +121,10 @@ public class User {
         return numLoginAttempts;
     }
 
+    /**
+     * Setter for locked out
+     * @param lockedOut the boolean describing locked out
+     */
     public void setLockedOut(boolean lockedOut){
         this.lockedOut = lockedOut;
     }
@@ -118,6 +145,10 @@ public class User {
         return currentShelterPushID;
     }
 
+    /**
+     * Setter for curentShelterPushID
+     * @param currentShelterPushID the new ID
+     */
     public void setCurrentShelterPushID(String currentShelterPushID) {
         this.currentShelterPushID = currentShelterPushID;
     }
@@ -130,6 +161,10 @@ public class User {
         return takenSpaces;
     }
 
+    /**
+     * Setter for taken spaces
+     * @param takenSpaces the number of taken spaces
+     */
     public void setTakenSpaces(int takenSpaces) {
         this.takenSpaces = takenSpaces;
     }
@@ -142,6 +177,10 @@ public class User {
         return takenRooms;
     }
 
+    /**
+     * Setter for taken rooms
+     * @param takenRooms the number of taken rooms
+     */
     public void setTakenRooms(int takenRooms) {
         this.takenRooms = takenRooms;
     }
