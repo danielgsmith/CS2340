@@ -33,8 +33,6 @@ import app.haven.haven.R;
 
 public class CreateNewShelterActivity extends AppCompatActivity {
 
-    private FirebaseDatabase database;
-
     private EditText textShelterName;
     private EditText textShelterCapacity;
     private EditText textLongitude;
@@ -56,7 +54,6 @@ public class CreateNewShelterActivity extends AppCompatActivity {
     private int uniqueKey;
     private int occupancy;
     private Restrictions restrictions;
-    private final int MAX_PHONE_LENGTH = 11;
 
     private TextView acceptedText;
     private long selected;
@@ -211,7 +208,7 @@ public class CreateNewShelterActivity extends AppCompatActivity {
         View focusView = null;
 
         if(valid) {
-            database = FirebaseDatabase.getInstance();
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference reference = database.getReference();
 //            Shelter(String name, Capacity capacity, Restrictions restrictions, double longitude,
 //            double latitude, String phone, String address, int uniqueKey, String notes) {
@@ -250,6 +247,7 @@ public class CreateNewShelterActivity extends AppCompatActivity {
             textAddress.setError(null);
         }
 
+        int MAX_PHONE_LENGTH = 11;
         if(TextUtils.isEmpty(phone)){
             textPhone.setError("Required");
             valid = false;

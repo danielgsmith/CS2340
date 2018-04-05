@@ -47,10 +47,6 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private View view;
-    private Button createShelter;
-    private Button removeShelter;
-    private Button parseFile;
     private FirebaseDatabase database;
 
     private OnFragmentInteractionListener mListener;
@@ -90,12 +86,12 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_admin_page, container, false);
-        createShelter = (Button) view.findViewById(R.id.button_admin_create_shelter);
+        View view = inflater.inflate(R.layout.fragment_admin_page, container, false);
+        Button createShelter = (Button) view.findViewById(R.id.button_admin_create_shelter);
         createShelter.setOnClickListener(this);
-        removeShelter = (Button) view.findViewById(R.id.button_admin_remove_shelter);
+        Button removeShelter = (Button) view.findViewById(R.id.button_admin_remove_shelter);
         removeShelter.setOnClickListener(this);
-        parseFile = (Button) view.findViewById(R.id.parse_file);
+        Button parseFile = (Button) view.findViewById(R.id.parse_file);
         parseFile.setOnClickListener(this);
 
         return view;
