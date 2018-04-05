@@ -34,18 +34,34 @@ public class User {
         return firstName + " " + lastName;
     }*/
 
+    /**
+     * Getter for firstName
+     * @return firstName
+     */
     public String getFirstName() {
         return firstName;
     }
 
+    /**
+     * Getter for lastName
+     * @return lastName
+     */
     public String getLastName(){
         return lastName;
     }
 
+    /**
+     * Getter for email
+     * @return email
+     */
     public String getEmail(){
         return email;
     }
 
+    /**
+     * Getter for accountType
+     * @return accountType
+     */
     public long getAccountType() {
         return accountType;
     }
@@ -73,6 +89,11 @@ public class User {
     public void setNumLoginAttempts(int numLoginAttempts) {
         this.numLoginAttempts = numLoginAttempts;
     }
+
+    /**
+     * Getter for numLoginAttempts
+     * @return numLoginAttempts
+     */
     public int getNumLoginAttempts() {
         return numLoginAttempts;
     }
@@ -81,10 +102,18 @@ public class User {
         this.lockedOut = lockedOut;
     }
 
+    /**
+     * Getter for lockedOut
+     * @return lockedOut
+     */
     public boolean isLockedOut() {
         return lockedOut;
     }
 
+    /**
+     * Getter for currentShelterPushID
+     * @return currentShelterPushID
+     */
     public String getCurrentShelterPushID() {
         return currentShelterPushID;
     }
@@ -93,6 +122,10 @@ public class User {
         this.currentShelterPushID = currentShelterPushID;
     }
 
+    /**
+     * Getter for takenSpace
+     * @return takenSpace
+     */
     public int getTakenSpace() {
         return takenSpaces;
     }
@@ -101,6 +134,10 @@ public class User {
         this.takenSpaces = takenSpaces;
     }
 
+    /**
+     * Getter for takenRooms
+     * @return takenRooms
+     */
     public int getTakenRooms() {
         return takenRooms;
     }
