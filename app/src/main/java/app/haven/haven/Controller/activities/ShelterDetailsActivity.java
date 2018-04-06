@@ -1,6 +1,7 @@
 package app.haven.haven.Controller.activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,7 +21,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
+import app.haven.haven.Controller.fragments.ShelterSearchFragment;
 import app.haven.haven.Model.User;
+import app.haven.haven.Model.shelters.Capacity;
 import app.haven.haven.Model.shelters.Shelter;
 import app.haven.haven.R;
 
@@ -34,19 +39,19 @@ public class ShelterDetailsActivity extends AppCompatActivity {
     private TextView shelterLat;
     private TextView shelterAddress;
     private TextView shelterPhone;
-    private TextView shelterSubCapacity;
     private Button claimBedButton;
     private Spinner numberSpinner;
     private Button claimRoomButton;
     private Spinner roomSpinner;
     private Button releaseSpacesButton;
     private Button releaseRoomsButton;
+    private Button showOnMapButton;
 
     private User user;
     private FirebaseUser mFireUser;
     private FirebaseDatabase database;
     private boolean guest;
-    private boolean bothButtons;
+    private boolean notEnoughSpace;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +72,12 @@ public class ShelterDetailsActivity extends AppCompatActivity {
         });
 
         shelter = MainPageActivity.getSelectedShelter();
+        Log.w("Shelter Details", shelter.getShelterName());
         mFireUser = FirebaseAuth.getInstance().getCurrentUser();
         user = MainPageActivity.getUser();
 
-        if (shelter.getShelterName().length() < 20)
+        int MAX_NAME_LENGTH = 20;
+        if (shelter.getShelterName().length() < MAX_NAME_LENGTH)
             setTitle(shelter.getShelterName() + "'s info");
         else
             setTitle("Shelter's info");
@@ -102,7 +109,9 @@ public class ShelterDetailsActivity extends AppCompatActivity {
                                     public void onClick(DialogInterface dialog, int which) {
                                         removeOccupancy();
                                         claimBed();
-                                        hideInfo();
+                                        if (!notEnoughSpace)
+                                            hideInfo();
+                                        notEnoughSpace = false;
                                         closeContextMenu();
 //                                        finish();
                                         //onBackPressed();
@@ -119,7 +128,9 @@ public class ShelterDetailsActivity extends AppCompatActivity {
                                 .show();
                     } else {
                         claimBed();
-                        hideInfo();
+                        if (!notEnoughSpace)
+                            hideInfo();
+                        notEnoughSpace = false;
                     }
                 }
 
@@ -144,7 +155,9 @@ public class ShelterDetailsActivity extends AppCompatActivity {
                                     public void onClick(DialogInterface dialog, int which) {
                                         removeOccupancy();
                                         claimBed();
-                                        hideInfo();
+                                        if (!notEnoughSpace)
+                                            hideInfo();
+                                        notEnoughSpace = false;
                                         closeContextMenu();
 //                                        finish();
                                         //onBackPressed();
@@ -161,7 +174,9 @@ public class ShelterDetailsActivity extends AppCompatActivity {
                                 .show();
                     } else {
                         claimBed();
-                        hideInfo();
+                        if (!notEnoughSpace)
+                            hideInfo();
+                        notEnoughSpace = false;
                     }
                 }
 
@@ -182,7 +197,7 @@ public class ShelterDetailsActivity extends AppCompatActivity {
                                 hideInfo();
                                 closeContextMenu();
                                 //finish();
-                                onBackPressed();
+                                //onBackPressed();
                             }
                         })
 
@@ -211,7 +226,7 @@ public class ShelterDetailsActivity extends AppCompatActivity {
                                 hideInfo();
                                 closeContextMenu();
                                 //finish();
-                                onBackPressed();
+                                //onBackPressed();
                             }
                         })
 
@@ -223,6 +238,19 @@ public class ShelterDetailsActivity extends AppCompatActivity {
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
+            }
+        });
+
+        showOnMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<Shelter> list = new ArrayList<>();
+                list.add(shelter);
+                ShelterSearchFragment.setShelterArray(list);
+
+                finish();
+                Intent i = new Intent(getApplicationContext(), MainPageActivity.class);
+                startActivity(i);
             }
         });
     }
@@ -249,6 +277,7 @@ public class ShelterDetailsActivity extends AppCompatActivity {
         shelter.getCapacity().setGroupOccupancy(rooms);
         reference.child("shelters").child(userPushID).child("capacity").child("groupOccupancy").setValue(rooms);
 
+        shelterCapacity.setText(shelter.getCapacity().toDetailedString());
         Toast.makeText(this, "Beds removed", Toast.LENGTH_SHORT).show();
     }
 
@@ -284,6 +313,10 @@ public class ShelterDetailsActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference();
         String pushKey = shelter.getPushKey();
+        if (pushKey == null) {
+            Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show();
+            return;
+        }
         int spaces = 0;
         int rooms = 0;
         switch (shelter.getCapacity().getCapacityType()) {
@@ -315,30 +348,39 @@ public class ShelterDetailsActivity extends AppCompatActivity {
         }
 
         if (spaces != 0 || rooms != 0) {
-            user.setCurrentShelterPushID(pushKey);
-            user.setTakenSpaces(spaces);
-            user.setTakenRooms(rooms);
-            reference.child("users").child(mFireUser.getUid()).child("currentShelterPushID").setValue(pushKey);
-            reference.child("users").child(mFireUser.getUid()).child("takenSpaces").setValue(spaces);
-            reference.child("users").child(mFireUser.getUid()).child("takenRooms").setValue(rooms);
+            Capacity capacity = shelter.getCapacity();
+            int shelterSpace = capacity.getIndividualCapacity() - capacity.getIndividualOccupancy();
+            int shelterRoom = capacity.getGroupCapacity() - capacity.getIndividualOccupancy();
+            if (spaces > shelterSpace || rooms > shelterRoom) {
+                Toast.makeText(getApplicationContext(), "Not enough space", Toast.LENGTH_SHORT).show();
+                notEnoughSpace = true;
+            } else {
+                user.setCurrentShelterPushID(pushKey);
+                user.setTakenSpaces(spaces);
+                user.setTakenRooms(rooms);
 
+                reference.child("users").child(mFireUser.getUid()).child("currentShelterPushID").setValue(pushKey);
+                reference.child("users").child(mFireUser.getUid()).child("takenSpaces").setValue(spaces);
+                reference.child("users").child(mFireUser.getUid()).child("takenRooms").setValue(rooms);
 
-            spaces = spaces + shelter.getCapacity().getIndividualOccupancy();
-            Log.w("Spaces", "" + spaces);
-            shelter.getCapacity().setIndividualOccupancy(spaces);
-            reference.child("shelters").child(pushKey).child("capacity").child("individualOccupancy").setValue(spaces);
+                spaces = spaces + capacity.getIndividualOccupancy();
+                Log.w("Spaces", "" + spaces);
+                capacity.setIndividualOccupancy(spaces);
+                reference.child("shelters").child(pushKey).child("capacity").child("individualOccupancy").setValue(spaces);
 
-            rooms = rooms + shelter.getCapacity().getGroupOccupancy();
-            Log.w("Rooms", "" + rooms);
-            shelter.getCapacity().setGroupOccupancy(rooms);
-            reference.child("shelters").child(pushKey).child("capacity").child("groupOccupancy").setValue(rooms);
+                rooms = rooms + shelter.getCapacity().getGroupOccupancy();
+                Log.w("Rooms", "" + rooms);
+                capacity.setGroupOccupancy(rooms);
+                reference.child("shelters").child(pushKey).child("capacity").child("groupOccupancy").setValue(rooms);
 
-            claimBedButton.setText("RELEASE");
+                //claimBedButton.setText("RELEASE");
 
-            claimRoomButton.setText("RELEASE");
+                //claimRoomButton.setText("RELEASE");
+                //shelterCapacity.setText(shelter.getCapacity().subtractDetailedString(spaces, rooms));
+                shelterCapacity.setText(shelter.getCapacity().toDetailedString());
 
-
-            Toast.makeText(getApplicationContext(), "Bed Claimed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Bed Claimed", Toast.LENGTH_SHORT).show();
+            }
         } else {
             Toast.makeText(getApplicationContext(), "Must select amount of beds", Toast.LENGTH_SHORT).show();
         }
@@ -346,7 +388,9 @@ public class ShelterDetailsActivity extends AppCompatActivity {
 
     private void hideInfo(){
         boolean claimed = false;
-        if (shelter.getPushKey().equals(user.getCurrentShelterPushID())) {
+        if (shelter.getPushKey() == null) {
+
+        } else if (shelter.getPushKey().equals(user.getCurrentShelterPushID())) {
             claimed = true;
             Log.w("Claimed", "TRUE");
         }
@@ -357,6 +401,9 @@ public class ShelterDetailsActivity extends AppCompatActivity {
                 findViewById(R.id.bed_room_holder).setVisibility(View.GONE);
                 claimBedButton.setText("CLAIM BEDS");
                 numberSpinner.setVisibility(View.VISIBLE);
+                claimRoomButton.setVisibility(View.GONE);
+                claimBedButton.setVisibility(View.VISIBLE);
+                releaseSpacesButton.setVisibility(View.GONE);
                 if (claimed) {
                     claimRoomButton.setVisibility(View.GONE);
                     claimBedButton.setVisibility(View.GONE);
@@ -371,6 +418,9 @@ public class ShelterDetailsActivity extends AppCompatActivity {
                 findViewById(R.id.bed_room_holder).setVisibility(View.VISIBLE);
                 claimRoomButton.setText("CLAIM ROOMS");
                 roomSpinner.setVisibility(View.VISIBLE);
+                claimRoomButton.setVisibility(View.VISIBLE);
+                claimBedButton.setVisibility(View.GONE);
+                releaseSpacesButton.setVisibility(View.GONE);
                 if (claimed) {
                     claimRoomButton.setVisibility(View.GONE);
                     claimBedButton.setVisibility(View.GONE);
@@ -385,6 +435,9 @@ public class ShelterDetailsActivity extends AppCompatActivity {
                 findViewById(R.id.bed_room_holder).setVisibility(View.VISIBLE);
                 claimRoomButton.setText("CLAIM ROOMS");
                 roomSpinner.setVisibility(View.VISIBLE);
+                claimRoomButton.setVisibility(View.VISIBLE);
+                claimBedButton.setVisibility(View.GONE);
+                releaseSpacesButton.setVisibility(View.GONE);
                 if (claimed) {
                     claimRoomButton.setVisibility(View.GONE);
                     claimBedButton.setVisibility(View.GONE);
@@ -401,7 +454,11 @@ public class ShelterDetailsActivity extends AppCompatActivity {
                 claimBedButton.setText("CLAIM BEDS");
                 roomSpinner.setVisibility(View.VISIBLE);
                 numberSpinner.setVisibility(View.VISIBLE);
-                bothButtons = true;
+                claimRoomButton.setVisibility(View.VISIBLE);
+                claimBedButton.setVisibility(View.VISIBLE);
+                releaseSpacesButton.setVisibility(View.GONE);
+                releaseRoomsButton.setVisibility(View.GONE);
+                boolean bothButtons = true;
                 if (claimed) {
                     claimRoomButton.setVisibility(View.GONE);
                     claimBedButton.setVisibility(View.GONE);
@@ -432,13 +489,14 @@ public class ShelterDetailsActivity extends AppCompatActivity {
         shelterLat = findViewById(R.id.info_shelter_latitude);
         shelterAddress = findViewById(R.id.info_shelter_address);
         shelterPhone = findViewById(R.id.info_shelter_phone);
-        shelterSubCapacity = findViewById(R.id.info_shelter_subcapacity);
+        TextView shelterSubCapacity = findViewById(R.id.info_shelter_subcapacity);
         claimBedButton = findViewById(R.id.button_claim_bed);
         claimRoomButton = findViewById(R.id.button_claim_room);
         roomSpinner = findViewById(R.id.number_spinner_room);
         numberSpinner = findViewById(R.id.number_spinner_space);
         releaseSpacesButton = findViewById(R.id.button_release_bed);
         releaseRoomsButton = findViewById(R.id.button_release_room);
+        showOnMapButton = findViewById(R.id.button_show_on_map);
     }
 
     private void setSpinners() {

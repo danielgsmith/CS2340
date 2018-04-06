@@ -47,15 +47,7 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    View view;
-    Button createShelter;
-    Button removeShelter;
-    Button parseFile;
-    FirebaseDatabase database;
+    private FirebaseDatabase database;
 
     private OnFragmentInteractionListener mListener;
 
@@ -85,8 +77,8 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            String mParam1 = getArguments().getString(ARG_PARAM1);
+            String mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -94,12 +86,12 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_admin_page, container, false);
-        createShelter = (Button) view.findViewById(R.id.button_admin_create_shelter);
+        View view = inflater.inflate(R.layout.fragment_admin_page, container, false);
+        Button createShelter = (Button) view.findViewById(R.id.button_admin_create_shelter);
         createShelter.setOnClickListener(this);
-        removeShelter = (Button) view.findViewById(R.id.button_admin_remove_shelter);
+        Button removeShelter = (Button) view.findViewById(R.id.button_admin_remove_shelter);
         removeShelter.setOnClickListener(this);
-        parseFile = (Button) view.findViewById(R.id.parse_file);
+        Button parseFile = (Button) view.findViewById(R.id.parse_file);
         parseFile.setOnClickListener(this);
 
         return view;
@@ -203,7 +195,7 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
 
     private List<Shelter> shelterList;
 
-    public void CSVParser(File file) {
+    private void CSVParser(File file) {
         shelterList = new ArrayList<>();
         try {
             InputStream is = getResources().openRawResource(R.raw.homeless);

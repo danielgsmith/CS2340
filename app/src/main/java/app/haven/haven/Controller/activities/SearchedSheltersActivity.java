@@ -15,7 +15,7 @@ public class SearchedSheltersActivity extends AppCompatActivity
         implements
         ShelterSearchFragment.OnListFragmentInteractionListener {
 
-    public static Shelter selectedShelter;
+    private static Shelter selectedShelter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +42,17 @@ public class SearchedSheltersActivity extends AppCompatActivity
 
     @Override
     public void onListFragmentInteraction(Shelter shelter) {
-        Intent i = new Intent(getApplicationContext(), ShelterListDetailsActivity.class);
-        startActivity(i);
         selectedShelter = shelter;
+        MainPageActivity.setSelectedShelter(shelter);
+        Intent i = new Intent(getApplicationContext(), ShelterDetailsActivity.class);
+        startActivity(i);
     }
 
     public static Shelter getSelectedShelter(){
         return selectedShelter;
+    }
+
+    public static void setSelectedShelter(Shelter shelter) {
+        selectedShelter = shelter;
     }
 }

@@ -1,9 +1,5 @@
 package app.haven.haven.Model.shelters;
 
-/**
- * Created by Matt on 2/26/2018.
- */
-
 public class Capacity {
     public enum CapacityType {
         SPACES(true, false, " spaces", null),
@@ -25,22 +21,42 @@ public class Capacity {
             this.groupSuffix = groupSuffix;
         }
 
+        /**
+         * get individual string suffix
+         * @return individualSuffix
+         */
         public String getIndividualSuffix() {
             return individualSuffix;
         }
 
+        /**
+         * gets group suffix string
+         * @return groupSuffix
+         */
         public String getGroupSuffix() {
             return groupSuffix;
         }
 
+        /**
+         * gets boolean for individual rooms
+         * @return individualRooms
+         */
         public boolean hasIndividualRooms() {
             return individualRooms;
         }
 
+        /**
+         * gets boolean for groupRooms
+         * @return groupRooms
+         */
         public boolean hasGroupRooms() {
             return groupRooms;
         }
 
+        /**
+         * converts values into a string array
+         * @returns a string array with uppercase first letter of values
+         */
         public static String[] stringValues() {
             if (stringValues == null) {
                 stringValues = new String[values().length];
@@ -60,26 +76,50 @@ public class Capacity {
     private int individualOccupancy;
     private int groupOccupancy;
 
+    /**
+     * gets an int for a user's individual occupancy
+     * @return individualOccupancy
+     */
     public int getIndividualOccupancy() {
         return individualOccupancy;
     }
 
+    /**
+     * sets the value of individualOccupancy to new individualOccupancy
+     * @param individualOccupancy the new occupancy
+     */
     public void setIndividualOccupancy(int individualOccupancy) {
         this.individualOccupancy = individualOccupancy;
     }
 
+    /**
+     * gets the int for group occupancy
+     * @return groupOccupancy
+     */
     public int getGroupOccupancy() {
         return groupOccupancy;
     }
 
+    /**
+     * sets the value of groupOccupancy to new groupOccupancy
+     * @param groupOccupancy the new groupOccupancy
+     */
     public void setGroupOccupancy(int groupOccupancy) {
         this.groupOccupancy = groupOccupancy;
     }
 
+    /**
+     * sets the value of individualCapacity to new individualCapacity
+     * @param individualCapacity the new individualCapacity
+     */
     public void setIndividualCapacity(int individualCapacity) {
         this.individualCapacity = individualCapacity;
     }
 
+    /**
+     * sets the value of groupCapacity to new groupCapacity
+     * @param groupCapacity the new groupCapacity
+     */
     public void setGroupCapacity(int groupCapacity) {
         this.groupCapacity = groupCapacity;
     }
@@ -88,24 +128,41 @@ public class Capacity {
 //        this(CapacityType.SPACES, 0);
     }
 
-    public Capacity(CapacityType capacityType, int individualRoom, int groupRoom) {
+    private Capacity(CapacityType capacityType, int individualRoom, int groupRoom) {
         this.capacityType = capacityType;
         this.individualCapacity = individualRoom;
         this.groupCapacity = groupRoom;
     }
 
+    /**
+     * constructs a new Capacity Object
+     * @param capacityType the type of capacity
+     * @param slots the number of slots
+     */
     public Capacity(CapacityType capacityType, int slots) {
         this(capacityType, capacityType.individualRooms ? slots : 0, capacityType.groupRooms ? slots : 0);
     }
 
+    /**
+     * creates a new capacity object
+     * @param capacityType the type of capacity
+     */
     public Capacity(CapacityType capacityType) {
         this(capacityType, 0, 0);
     }
 
+    /**
+     * gets a Capacity type
+     * @return capacity type
+     */
     public CapacityType getCapacityType() {
         return capacityType;
     }
 
+    /**
+     * sets the capacity type to the new capacityType
+     * @param capacityType the new capacityType
+     */
     public void setCapacityType(CapacityType capacityType) {
         this.capacityType = capacityType;
     }
@@ -142,14 +199,27 @@ public class Capacity {
 //        return capacityType.individualRooms ? individualCapacity : groupCapacity;
 //    }
 
+    /**
+     * gets the int individualCapacity
+     * @return individualCapacity
+     */
     public int getIndividualCapacity() {
         return individualCapacity;
     }
 
+    /**
+     * gets the int groupCapacity
+     * @return groupCapacity
+     */
     public int getGroupCapacity() {
         return groupCapacity;
     }
 
+    /**
+     * parses a text file
+     * @param s a string to parse
+     * @return Capacity representing shelter information
+     */
     public static Capacity parseFromString(String s) {
         s = s.toLowerCase().replaceAll("[., ]*", "")
                 .replaceAll("\n", "").replaceAll("\"","");
@@ -183,6 +253,10 @@ public class Capacity {
         }
     }
 
+    /**
+     * converts Capacity object to a meaningful string
+     * @return String
+     */
     @Override
     public String toString() {
         return "Capacity{" +
@@ -192,10 +266,26 @@ public class Capacity {
                 '}';
     }
 
-    public String toDetailedString() {
+    /**
+     * converts to a meaningul string
+     * @return charSequence
+     */
+    public CharSequence toDetailedString() {
         return (capacityType.individualRooms ? individualCapacity - individualOccupancy + capacityType.individualSuffix : "") +
                 (capacityType.groupRooms && capacityType.individualRooms ? "\n" : "") +
                 (capacityType.groupRooms ? groupCapacity - groupOccupancy + capacityType.groupSuffix : "");
+    }
+
+    /**
+     * creates a new string without space and room
+     * @param space the space
+     * @param room the room
+     * @return a string containing the new information
+     */
+    public String subtractDetailedString(int space, int room) {
+        return (capacityType.individualRooms ? individualCapacity - individualOccupancy - space + capacityType.individualSuffix : "") +
+                (capacityType.groupRooms && capacityType.individualRooms ? "\n" : "") +
+                (capacityType.groupRooms ? groupCapacity - groupOccupancy - room + capacityType.groupSuffix : "");
     }
 
 }

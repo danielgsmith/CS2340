@@ -17,7 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="108dp"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/ic_haven_banner" />
+        app:srcCompat="@drawable/ic_haven_banner"
+        android:contentDescription="Haven Logo" />
 
     <ProgressBar
         android:id="@+id/login_progress"
@@ -109,7 +110,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Forogt Password" />
+                    android:text="Forgot Password" />
 
                 <Button
                     android:id="@+id/continue_as_guest_button"

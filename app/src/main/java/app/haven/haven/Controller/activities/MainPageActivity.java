@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -39,7 +40,8 @@ import app.haven.haven.R;
 
 public class MainPageActivity extends AppCompatActivity
         implements
-        ShelterMapFragment.OnFragmentInteractionListener,
+
+
         AdminPageFragment.OnFragmentInteractionListener,
         ShelterListFragment.OnListFragmentInteractionListener,
         CriteriaFragment.OnFragmentInteractionListener,
@@ -50,15 +52,14 @@ public class MainPageActivity extends AppCompatActivity
     private FirebaseUser mFireUser;
     private FirebaseDatabase database;
     private static User user = new User();
-    private DatabaseReference mDataRef;
     private NavigationView navigationView;
-    public static Shelter selectedShelter;
+    private static Shelter selectedShelter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_side_bar);
+        setContentView(R.layout.activity_main_page);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -83,12 +84,13 @@ public class MainPageActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         mFireUser = FirebaseAuth.getInstance().getCurrentUser();
-        mDataRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference mDataRef = FirebaseDatabase.getInstance().getReference();
         //Gets user out of the database
         if (!mFireUser.isAnonymous() && mFireUser != null) {
             mDataRef.child("users").child(mFireUser.getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+
                     // Grabs saved user class from database
                     user = dataSnapshot.getValue(User.class);
                     if (user == null) {
@@ -170,7 +172,7 @@ public class MainPageActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         Fragment fragment = null;
@@ -256,14 +258,19 @@ public class MainPageActivity extends AppCompatActivity
     @Override
     public void onListFragmentInteraction(Shelter shelter) {
         //Toast.makeText(this, "Item Clicked " + shelter.getShelterName(), Toast.LENGTH_SHORT).show();
+        selectedShelter = shelter;
         Intent i = new Intent(getApplicationContext(), ShelterDetailsActivity.class);
         startActivity(i);
-        selectedShelter = shelter;
+
 
     }
 
     public static Shelter getSelectedShelter(){
         return selectedShelter;
+    }
+
+    public static void setSelectedShelter(Shelter shelter) {
+        selectedShelter = shelter;
     }
 
     public static User getUser() {

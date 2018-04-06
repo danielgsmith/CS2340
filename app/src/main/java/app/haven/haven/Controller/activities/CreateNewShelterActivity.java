@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,25 +33,14 @@ import app.haven.haven.R;
 
 public class CreateNewShelterActivity extends AppCompatActivity {
 
-    FirebaseDatabase database;
-
     private EditText textShelterName;
     private EditText textShelterCapacity;
-    private CheckBox checkMale;
-    private CheckBox checkFemale;
-    private CheckBox checkYoung;
-    private CheckBox checkNew;
-    private CheckBox checkFamily;
-    private CheckBox checkChildren;
-    private CheckBox checkAdult;
-    private CheckBox checkVeteran;
     private EditText textLongitude;
     private EditText textLatitude;
     private EditText textAddress;
     private EditText textPhone;
     private EditText textKey;
     private EditText textNotes;
-    private Button addShelter;
     private Spinner capacitySpinner;
     private EditText selectedCapacity;
     private int key;
@@ -62,7 +52,6 @@ public class CreateNewShelterActivity extends AppCompatActivity {
     private String phone;
     private String address;
     private int uniqueKey;
-    private String notes;
     private int occupancy;
     private Restrictions restrictions;
 
@@ -100,27 +89,27 @@ public class CreateNewShelterActivity extends AppCompatActivity {
 
         textShelterName = findViewById(R.id.shelter_name);
 //        textShelterCapacity = findViewById(R.id.shelter_capacity);
-        checkMale = findViewById(R.id.check_male);
-        checkFemale = findViewById(R.id.check_female);
+        CheckBox checkMale = findViewById(R.id.check_male);
+        CheckBox checkFemale = findViewById(R.id.check_female);
         textLongitude = findViewById(R.id.shelter_longitude);
         textLatitude = findViewById(R.id.shelter_latitude);
         textAddress = findViewById(R.id.shelter_address);
         textPhone = findViewById(R.id.shelter_phone);
-        checkYoung = findViewById(R.id.check_young_children);
-        checkNew = findViewById(R.id.check_newborn);
-        checkAdult = findViewById(R.id.check_adult);
-        checkFamily = findViewById(R.id.check_family);
-        checkChildren = findViewById(R.id.check_children);
-        checkVeteran = findViewById(R.id.check_vets);
+        CheckBox checkYoung = findViewById(R.id.check_young_children);
+        CheckBox checkNew = findViewById(R.id.check_newborn);
+        CheckBox checkAdult = findViewById(R.id.check_adult);
+        CheckBox checkFamily = findViewById(R.id.check_family);
+        CheckBox checkChildren = findViewById(R.id.check_children);
+        CheckBox checkVeteran = findViewById(R.id.check_vets);
         textKey = findViewById(R.id.shelter_key);
         acceptedText = findViewById(R.id.text_shelter_criteria);
         textNotes = findViewById(R.id.shelter_notes);
 
-        UsPhoneNumberFormatter addLineNumberFormatter = new UsPhoneNumberFormatter(
+        TextWatcher addLineNumberFormatter = new UsPhoneNumberFormatter(
                 new WeakReference<EditText>(textPhone));
         textPhone.addTextChangedListener(addLineNumberFormatter);
 
-        addShelter = (Button) findViewById(R.id.button_create_shelter);
+        Button addShelter = (Button) findViewById(R.id.button_create_shelter);
         addShelter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,31 +130,31 @@ public class CreateNewShelterActivity extends AppCompatActivity {
 //                }
 //
 //                if(selected == 0) {
-//                    findViewById(R.id.holer_spaces).setVisibility(View.VISIBLE);
+//                    findViewById(R.id.holder_spaces).setVisibility(View.VISIBLE);
 //                    findViewById(R.id.holder_family_rooms).setVisibility(View.GONE);
 //                    findViewById(R.id.holder_single_rooms).setVisibility(View.GONE);
 //                    findViewById(R.id.holder_apartments).setVisibility(View.GONE);
 //                    selectedCapacity = findViewById(R.id.shelter_capacity);
 //                } else if(selected == 1) {
-//                    findViewById(R.id.holer_spaces).setVisibility(View.GONE);
+//                    findViewById(R.id.holder_spaces).setVisibility(View.GONE);
 //                    findViewById(R.id.holder_family_rooms).setVisibility(View.VISIBLE);
 //                    findViewById(R.id.holder_single_rooms).setVisibility(View.GONE);
 //                    findViewById(R.id.holder_apartments).setVisibility(View.GONE);
 //                    selectedCapacity = findViewById(R.id.shelter_capacity_family_rooms);
 //                } else if(selected == 2){
-//                    findViewById(R.id.holer_spaces).setVisibility(View.GONE);
+//                    findViewById(R.id.holder_spaces).setVisibility(View.GONE);
 //                    findViewById(R.id.holder_family_rooms).setVisibility(View.GONE);
 //                    findViewById(R.id.holder_single_rooms).setVisibility(View.VISIBLE);
 //                    findViewById(R.id.holder_apartments).setVisibility(View.GONE);
 //                    selectedCapacity = findViewById(R.id.shelter_capacity_single_rooms);
 //                } else if(selected == 3){
-//                    findViewById(R.id.holer_spaces).setVisibility(View.GONE);
+//                    findViewById(R.id.holder_spaces).setVisibility(View.GONE);
 //                    findViewById(R.id.holder_family_rooms).setVisibility(View.VISIBLE);
 //                    findViewById(R.id.holder_single_rooms).setVisibility(View.VISIBLE);
 //                    findViewById(R.id.holder_apartments).setVisibility(View.GONE);
 //                    selectedCapacity = findViewById(R.id.shelter_capacity_family_rooms);
 //                } else if(selected == 4) {
-//                    findViewById(R.id.holer_spaces).setVisibility(View.GONE);
+//                    findViewById(R.id.holder_spaces).setVisibility(View.GONE);
 //                    findViewById(R.id.holder_family_rooms).setVisibility(View.GONE);
 //                    findViewById(R.id.holder_single_rooms).setVisibility(View.GONE);
 //                    findViewById(R.id.holder_apartments).setVisibility(View.VISIBLE);
@@ -211,7 +200,7 @@ public class CreateNewShelterActivity extends AppCompatActivity {
         }
         if(!TextUtils.isEmpty(textKey.getText().toString()))
             key = Integer.parseInt(textKey.getText().toString());
-        notes = textNotes.getText().toString();
+        String notes = textNotes.getText().toString();
 
         // Checks if all parts are filled and correct
         boolean valid = validateForm();
@@ -219,7 +208,7 @@ public class CreateNewShelterActivity extends AppCompatActivity {
         View focusView = null;
 
         if(valid) {
-            database = FirebaseDatabase.getInstance();
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference reference = database.getReference();
 //            Shelter(String name, Capacity capacity, Restrictions restrictions, double longitude,
 //            double latitude, String phone, String address, int uniqueKey, String notes) {
@@ -258,10 +247,11 @@ public class CreateNewShelterActivity extends AppCompatActivity {
             textAddress.setError(null);
         }
 
+        int MAX_PHONE_LENGTH = 11;
         if(TextUtils.isEmpty(phone)){
             textPhone.setError("Required");
             valid = false;
-        } else if ((phone.length() < 10 && phone.length() != 11) || (phone.length() > 10 && phone.length() != 11))
+        } else if ((phone.length() < 10 && phone.length() != MAX_PHONE_LENGTH) || (phone.length() > 10 && phone.length() != MAX_PHONE_LENGTH))
         {
             textPhone.setError("Must be a valid phone number.");
             valid = false;

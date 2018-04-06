@@ -1,12 +1,14 @@
 package app.haven.haven.Model.shelters;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /******************************************************************************
  *  Taken from some Princeton class, it's open source and will be useful
  ******************************************************************************/
 
-public class Location { 
+class Location {
     private double longitude;
-    private double latitude;   
+    private double latitude;
 
     public Location(double latitude, double longitude) {
         this.latitude  = latitude;
@@ -32,6 +34,9 @@ public class Location {
         return statuteMiles;
     }
 
+    public LatLng toLatLng() {
+        return new LatLng(latitude, longitude);
+    }
     // return string representation of this point
     public String toString() {
         return "(" + latitude + ", " + longitude + ")";

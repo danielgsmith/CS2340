@@ -114,13 +114,19 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="250dp" />
+            android:layout_height="230dp" />
 
         <Button
             android:id="@+id/search_shelters"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Search For Shelters" />
+
+        <Button
+            android:id="@+id/button_see_on_map"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="see on map" />
     </LinearLayout>
 
 </FrameLayout>
