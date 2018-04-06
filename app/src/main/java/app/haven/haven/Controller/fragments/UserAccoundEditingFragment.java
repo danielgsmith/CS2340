@@ -1,7 +1,6 @@
 package app.haven.haven.Controller.fragments;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,18 +14,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.v7.app.AlertDialog;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 import app.haven.haven.Controller.activities.LoginActivity;
@@ -63,16 +61,10 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
     private String oldEmail;
     private String updatedEmail;
 
-    private TextView textUserFirstName;
-    private TextView firstNameText;
-    private EditText editTextUserFirstName;
-    private String oldFirstName;
-    private String updatedFirstName;
-
-    private TextView textUserLastName;
-    private EditText editTextUserLastName;
-    private String oldLastName;
-    private String updatedLastName;
+    private TextView textUserName;
+    private EditText editTextUserName;
+    private String oldName;
+    private String updatedName;
 
     private TextView textTelephoneNumber;
     private EditText editTextUserTelephoneNumber;
@@ -81,12 +73,12 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 
 
     //buttons:
-    private Button sendPasswordResetButton;
     private Button saveInfoButton;
     private Button editInfoButton;
 
     private boolean editing;
-//    private boolean readyToSwitsch;
+
+
 
     public UserAccoundEditingFragment() {
         // Required empty public constructor
@@ -117,9 +109,7 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 //            mParam1 = getArguments().getString(ARG_PARAM1);
 //            mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        mUser = MainPageActivity.getUser();
-        mAuth = FirebaseAuth.getInstance();
-        mFireUser = mAuth.getCurrentUser();
+        mFireUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mDataRef = database.getReference();
     }
@@ -129,73 +119,32 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_user_accound_editing, container, false);
-
-        //establish View:
-        oldFirstName = mUser.getFirstName();
-        textUserFirstName = view.findViewById(R.id.updated_first_name);
-        textUserFirstName.setText(oldFirstName);
-
-        oldLastName = mUser.getLastName();
-        textUserLastName = view.findViewById(R.id.updated_last_name);
-        textUserLastName.setText(oldLastName);
-
-        oldEmail = mUser.getEmail();
-        textEmail = view.findViewById(R.id.updated_email);
-        textEmail.setText(oldEmail);
-
-        oldTelephoneNumber = mUser.getTelephoneNumber();
-        textTelephoneNumber = view.findViewById(R.id.updated_telephone_number);
-        if (oldTelephoneNumber == null) {
-            textTelephoneNumber.setText("No telephone added yet");
-        } else {
-            textTelephoneNumber.setText(oldTelephoneNumber);
-        }
-
-
-        //Initialize the editing screen, but still on the view screen
-        editTextUserFirstName = view.findViewById(R.id.input_user_first_name);
-        editTextUserFirstName.setText(oldFirstName);
-
-        editTextUserLastName = view.findViewById(R.id.input_user_last_name);
-        editTextUserLastName.setText(oldLastName);
-
+        editTextUserName = view.findViewById(R.id.input_user_name);
         editTextUserEmail = view.findViewById(R.id.input_user_email);
-        editTextUserEmail.setText(oldEmail);
-
         editTextUserTelephoneNumber = view.findViewById(R.id.input_user_telephone_number);
-        editTextUserTelephoneNumber.setText("No telephone added yet");
+        textUserName = view.findViewById(R.id.textUserName);
+        textEmail = view.findViewById(R.id.textUserEmail);
+        textTelephoneNumber = view.findViewById(R.id.textUserTelephoneNumber);
 
-        sendPasswordResetButton = (Button) view.findViewById(R.id.change_Password_Button);
+        textUserName.setText(mUser.getFirstName() + " " + mUser.getLastName());
+        textEmail.setText(mUser.getEmail());
+        textTelephoneNumber.setText("No telephone number added");
+
+        editTextUserName.setText(mUser.getFirstName() + " " + mUser.getLastName());
+        editTextUserEmail.setText(mUser.getEmail());
+        editTextUserTelephoneNumber.setText("No telephone number added");
+
         editInfoButton = (Button) view.findViewById(R.id.edit_Info_Button);
         saveInfoButton = (Button) view.findViewById(R.id.save_Info_Button);
 
-
-        //BUTTON: SEND PASSWORD RESET EMAIL //////////////////////////////////
-        sendPasswordResetButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view){
-                sendResetEmail();
-            }
-        });
-
-        //BUTTON: EDIT ///////////////////////////////////////////////
         editInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Log.d("Edit Info Button", "Clicked");
-
                 editing = true;
 
-                editInfoButton.setVisibility(View.GONE);
-                saveInfoButton.setVisibility(View.VISIBLE);
-
-                textUserFirstName.setVisibility((View.GONE));
-                editTextUserFirstName.setVisibility(View.VISIBLE);
-//                firstNameText.setGravity(10); //TODO FIX THIS!
-
-
-                textUserLastName.setVisibility((View.GONE));
-                editTextUserLastName.setVisibility(View.VISIBLE);
+                textUserName.setVisibility((View.GONE));
+                editTextUserName.setVisibility(View.VISIBLE);
 
                 textEmail.setVisibility((View.GONE));
                 editTextUserEmail.setVisibility((View.VISIBLE));
@@ -208,34 +157,17 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
         saveInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Log.d("Save Info Button", "Clicked");
-
                 if (editing == true) {
 //                    update everything and switch back to textView
 
-                    saveInfoButton.setVisibility(View.GONE);
-                    editInfoButton.setVisibility(View.VISIBLE);
-
-                    updatedFirstName = editTextUserFirstName.getText().toString();
-                    updatedLastName = editTextUserLastName.getText().toString();
+                    updatedName = editTextUserName.getText().toString();
                     updatedEmail = editTextUserEmail.getText().toString();
                     updatedTelephoneNumber = editTextUserTelephoneNumber.getText().toString();
 
-                    mUser.setFirstName(updatedFirstName);
-                    mUser.setLastName(updatedLastName);
-                    mUser.setEmail(updatedEmail);
-                    mUser.setTelephoneNumber(updatedTelephoneNumber);
+                    editing = false;
 
-                    editTextUserFirstName.setVisibility(View.GONE);
-                    textUserFirstName.setVisibility((View.VISIBLE));
-//                    editTextUserFirstName.setText(updatedFirstName);
-//                    textUserFirstName.setText(updatedFirstName);
-
-                    editTextUserLastName.setVisibility(View.GONE);
-                    textUserLastName.setVisibility(View.VISIBLE);
-//                    editTextUserLastName.setText(updatedLastName);
-//                    textUserLastName.setText(updatedLastName);
+                    editTextUserName.setVisibility(View.GONE);
+                    textUserName.setVisibility((View.VISIBLE));
 
                     editTextUserEmail.setVisibility((View.GONE));
                     textEmail.setVisibility((View.VISIBLE));
@@ -244,13 +176,11 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
                     textTelephoneNumber.setVisibility((View.VISIBLE));
 
                     updateInfo();
-//                    editing = false;
 
                 } else {
-                    Toast.makeText(getActivity(), "Invalid Field Entered", Toast.LENGTH_SHORT).show();
-//                    Log.w("TRUEORFALSE", editing + " " + readyToSwitsch);
-//                    System.out.println(editing + " " + readyToSwitsch);
+                    //throw an exception TOAST?
                 }
+
             }
         });
 
@@ -258,44 +188,24 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
         mDataRef.child("users").child(mFireUser.getUid()).addValueEventListener(new ValueEventListener() {
 
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) { //data snapshot is where in the database you are
-
-//                mUser = dataSnapshot.child("users").getValue(User.class); // does this override the file?
-
-
-//                firebaseID[0] = dataSnapshot.child("users").child(emailWithout).getValue(String.class);
-                //Log.w("String", firebaseID[0]);
-
-//                User currentUser = dataSnapshot.child("users").child(mFireUser.getUid()).getValue(User.class);
-
-//                updatedFirstName = editTextUserFirstName.getText().toString();
-//                mUser.setFirstName(updatedFirstName);
-////                mFireUser.updateProfile(
-//                        firstName: updatedFirstName,
-//                }).then(function() {
-//                    // Update successful.
-//                }).catch(function(error) {
-//                    // An error happened.
-//                });
+            public void onDataChange(DataSnapshot dataSnapshot) { //data snapchot is where in the database you are
+                mUser = dataSnapshot.getValue(User.class);
+                textUserName.setText(mUser.getFirstName() + " " + mUser.getLastName());
+                oldName = mUser.getFirstName() + " " + mUser.getLastName();
+                textEmail.setText(mUser.getEmail());
+                oldEmail = mUser.getEmail();
+                String tNum = mUser.getTelephoneNumber();
+                if (tNum == null) {
+                    textTelephoneNumber.setText("No telephone added yet");
+                } else {
+                    textTelephoneNumber.setText(mUser.getTelephoneNumber());
+                }
+                oldTelephoneNumber = textTelephoneNumber.getText().toString();
 
 
-//                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-//                        .setDisplayName(updatedFirstName)
-//
-//                        .build();
-//
-//                mFireUser.updateProfile(profileUpdates)
-//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                if (task.isSuccessful()) {
-//                                    Log.d("update", "User profile updated.");
-//                                }
-//                            }
-//                        });
-
-//                mDataRef.child("users").child(mFireUser.getUid()).child("firstName").setValue(mUser.getFirstName());
-//                updateInfo();
+                //update Info
+                //anything that uses the updated info
+                //set text boxes to equal current info
             }
 
             @Override
@@ -312,6 +222,18 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    public void onClick(View view) {
+//        switch (view.getId()) {
+//            case R.id.update_button:
+//                Log.w("Update :", "Worked");
+////                Intent i = new Intent(getActivity(), ShowUserAccountActivity.class);
+////                startActivity(i);
+//                break;
+////            case R.id.button_admin_remove_shelter:
+////                Log.w("RemoveShelter:", "Worked");
+//        }
     }
 
     @Override
@@ -331,11 +253,6 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
         mListener = null;
     }
 
-    @Override
-    public void onClick(View view) {
-
-    }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -351,70 +268,58 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
         void onFragmentInteraction(Uri uri);
     }
 
-    /**
-     * checks if individual fields were actually altered and then changes the view
-     */
     public void updateInfo() {
-        if (!oldFirstName.equals(updatedFirstName)) {
-            textUserFirstName.setText(updatedFirstName);
-            editTextUserFirstName.setText(updatedFirstName);
-            mUser.setFirstName(updatedFirstName);
-            oldFirstName = mUser.getFirstName();
-            mDataRef.child("users").child(mFireUser.getUid()).child("firstName").setValue(updatedFirstName);
-//            readyToSwitsch = true;
+
+        if (!oldName.equals(updatedName)) {
+            textUserName.setText(updatedName);
+            mUser.setFirstName("JOE"); //TODO fix this first and last Name
         }
 
-        if (!oldLastName.equals(updatedLastName)) {
-            textUserLastName.setText(updatedLastName);
-            editTextUserLastName.setText(updatedLastName);
-            mUser.setLastName(updatedLastName);
-            oldLastName = updatedLastName;
-            mDataRef.child("users").child(mFireUser.getUid()).child("lastName").setValue(updatedLastName);
-//            readyToSwitsch = true;
-        }
-
-        if (!updatedEmail.contains("@") && !updatedEmail.contains(".")) {
-            Toast.makeText(getActivity(), "Invalid Email", Toast.LENGTH_SHORT).show();
-            textEmail.setText(oldEmail);
-            editTextUserEmail.setText(oldEmail);
-            mUser.setEmail(oldEmail);
-            editing = true;
-        } else if (!oldEmail.equals((updatedEmail))) {
-            textEmail.setText(updatedEmail);
+        if (!oldEmail.equals(updatedEmail)) {
             editTextUserEmail.setText(updatedEmail);
             mUser.setEmail(updatedEmail);
-            oldEmail = updatedEmail;
-            mDataRef.child("users").child(mFireUser.getUid()).child("email").setValue(updatedEmail);
-            editing = false;
         }
+        //if old is not equal to the new, then update User and setText
+//
+//        mUser.setFirstName(newName);
+//                mUser.setLastName(newLastName);
+//                mUser.setEmail(newEmail);
+//                mUser.setPassword(newPasswod);
+//                mUser.setAccountType(newAccountType);
+////                //same for fireuser?
+//////                update the screen!
 
+        /**
+         * TODO:is this needed? what if they only edit one thing
+         * TODO:have these as private variables at the top and update when the user actually changes them
+         */
 
-        if (updatedTelephoneNumber == null) {
-            textTelephoneNumber.setText("No telephone added yet");
-            editTextUserTelephoneNumber.setText("No telephone added yet");
-            oldTelephoneNumber = "No telephone added yet";
-//            readyToSwitsch = true;
+//        String updatedName = EditTextUserName.getText().toString();
+//        String updatedEmail = EditTextUserEmail.getText().toString();
+//        String updatedPassword = EditTextUserPassword.getText().toString();
+//        String updatedAccountType = EditTextUserAccountType.getText().toString();
+////        EditTextUserName.setSelection(updatedName);
 
-        } else {
-            textTelephoneNumber.setText(updatedTelephoneNumber);
-            editTextUserTelephoneNumber.setText(updatedTelephoneNumber);
-            oldTelephoneNumber = updatedTelephoneNumber;
-//            readyToSwitsch = true;
-        }
+//        EditTextUserEmail.setSelection(newEmail);
+//        EditTextUserPassword.setSelection(newPassword);
+//        EditTextUserAccountType.setSelection(newAccountType);
 
     }
 
-    private void sendResetEmail(){
-        mAuth.sendPasswordResetEmail(mUser.getEmail());
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-        builder.setTitle("Password Reset Email Sent!")
-                .setMessage("Follow the instructions in your email to reset your password")
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert).show();
-
-    }
+//    private void sendResetEmail(){
+//        mAuth.sendPasswordResetEmail(emailAddress)
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        if (task.isSuccessful()) {
+//                            Toast.makeText(LoginActivity.this, "Reset Email sent.",
+//                                    Toast.LENGTH_SHORT).show();
+//                            Log.d(TAG, "Email sent.");
+//                        } else {
+//                            Toast.makeText(LoginActivity.this, "Reset Failed.",
+//                                    Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+//    }
 }
