@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mLoginFormView;
     private View mCancelButtonView;
     private boolean canceledLogin;
-    private boolean signedIn;
+    public boolean signedIn;
     private String emailAddress = "";
     //private FirebaseDatabase database = FirebaseDatabase.getInstance();
     //DatabaseReference myRef = database.getReference("message");
@@ -569,7 +569,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     //Sign into FireBase Authentication
-    private void signIn(final String email, String password) {
+    public void signIn(final String email, String password) {
         Log.d(TAG, "signIn:" + email);
         //getLocked(email);
         Log.w(TAG, "Locked" + locked[0]);

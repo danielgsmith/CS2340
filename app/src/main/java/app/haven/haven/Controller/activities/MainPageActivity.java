@@ -276,4 +276,8 @@ public class MainPageActivity extends AppCompatActivity
     public static User getUser() {
         return user;
     }
+
+    public static void setUser(User here) {
+        user = here;
+    }
 }
