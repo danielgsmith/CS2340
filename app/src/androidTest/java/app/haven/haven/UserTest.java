@@ -1,6 +1,10 @@
 package app.haven.haven;
 
+import android.support.test.runner.AndroidJUnit4;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import app.haven.haven.Model.shelters.Capacity;
 import static org.junit.Assert.*;
 
@@ -8,7 +12,8 @@ import static org.junit.Assert.*;
  * Created by DanielSmith
  */
 
-public class UserTests {
+@RunWith(AndroidJUnit4.class)
+public class UserTest {
 
     @Test
     public void nullTest() {
