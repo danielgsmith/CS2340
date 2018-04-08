@@ -37,7 +37,9 @@ import app.haven.haven.Model.shelters.Shelter;
 import app.haven.haven.Model.User;
 import app.haven.haven.R;
 
-
+/**
+ * The main page
+ */
 public class MainPageActivity extends AppCompatActivity
         implements
 
@@ -265,18 +267,34 @@ public class MainPageActivity extends AppCompatActivity
 
     }
 
+    /**
+     * get selected shelter
+     * @return Shelter
+     */
     public static Shelter getSelectedShelter(){
         return selectedShelter;
     }
 
+    /**
+     * set selected shelter
+     * @param shelter shelter to be selected
+     */
     public static void setSelectedShelter(Shelter shelter) {
         selectedShelter = shelter;
     }
 
+    /**
+     * gets user
+     * @return user
+     */
     public static User getUser() {
         return user;
     }
 
+    /**
+     * sets user
+     * @param here user to set
+     */
     public static void setUser(User here) {
         user = here;
     }

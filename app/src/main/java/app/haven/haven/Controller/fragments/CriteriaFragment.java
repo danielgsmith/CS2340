@@ -56,6 +56,9 @@ public class CriteriaFragment extends Fragment {
     public static String searchedName;
     private EditText textName;
 
+    /**
+     * Fragment with criteria
+     */
     public CriteriaFragment() {
         // Required empty public constructor
     }
@@ -174,7 +177,10 @@ public class CriteriaFragment extends Fragment {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    /**
+     * Unused
+     * @param uri unused button press
+     */
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -209,7 +215,10 @@ public class CriteriaFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+        /**
+         * unused
+         * @param uri unused button press
+         */
         void onFragmentInteraction(Uri uri);
     }
 

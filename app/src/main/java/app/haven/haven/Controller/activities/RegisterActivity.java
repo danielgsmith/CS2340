@@ -28,6 +28,9 @@ import app.haven.haven.Controller.adapters.NothingSelectedSpinnerAdapter;
 import app.haven.haven.Model.User;
 import app.haven.haven.R;
 
+/**
+ * Activity where accounts are made
+ */
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "EmailPassword";
@@ -40,9 +43,9 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText mLastName;
     private EditText mEmail;
     private EditText mPassword;
-    private EditText mConfirmPassowrd;
+    private EditText mConfirmPassword;
     private Spinner userSpinner;
-    //private Button mCreatAccountButton;
+    //private Button mCreateAccountButton;
 
 
     @Override
@@ -68,7 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
         mLastName = findViewById(R.id.reg_users_last_name);
         mEmail = findViewById(R.id.reg_user_username);
         mPassword = findViewById(R.id.reg_user_password);
-        mConfirmPassowrd = findViewById(R.id.reg_user_confirm_password);
+        mConfirmPassword = findViewById(R.id.reg_user_confirm_password);
 
         //Create Account Button
         Button mCreateAccountButton = (Button) findViewById(R.id.button_reg_create_account);
@@ -120,7 +123,7 @@ public class RegisterActivity extends AppCompatActivity {
         mPassword.setError(null);
         mFirstName.setError(null);
         mLastName.setError(null);
-        mConfirmPassowrd.setError(null);
+        mConfirmPassword.setError(null);
         ((TextView)userSpinner.getSelectedView()).setError(null);
 
         //Saved Strings
@@ -129,7 +132,7 @@ public class RegisterActivity extends AppCompatActivity {
         //final String firstName = mFirstName.getText().toString();
         //final String lastName = mLastName.getText().toString();
 
-        String confirm = mConfirmPassowrd.toString();
+        String confirm = mConfirmPassword.toString();
 
         //Checks if all parts are filled and correct
         boolean valid = validateForm();
@@ -290,7 +293,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         //checks if Password is there and if passwords match
         String password = mPassword.getText().toString();
-        String confirm = mConfirmPassowrd.getText().toString();
+        String confirm = mConfirmPassword.getText().toString();
         if (TextUtils.isEmpty(password)) {
             mPassword.setError("Required.");
             valid = false;
@@ -298,11 +301,11 @@ public class RegisterActivity extends AppCompatActivity {
             mPassword.setError("Must beat least 6 characters long.");
             valid = false;
         }else if (!password.equals(confirm)) {
-            mConfirmPassowrd.setError("Passwords must match.");
+            mConfirmPassword.setError("Passwords must match.");
             valid = false;
         } else { //removes errors
             mPassword.setError(null);
-            mConfirmPassowrd.setError(null);
+            mConfirmPassword.setError(null);
         }
 
         //Checks if First Name field is written to and not just empty or spaces

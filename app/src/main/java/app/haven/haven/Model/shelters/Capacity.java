@@ -1,5 +1,8 @@
 package app.haven.haven.Model.shelters;
 
+/**
+ * Capacity object
+ */
 public class Capacity {
     public enum CapacityType {
         SPACES(true, false, " spaces", null),
@@ -55,7 +58,7 @@ public class Capacity {
 
         /**
          * converts values into a string array
-         * @returns a string array with uppercase first letter of values
+         * @return a string array with uppercase first letter of values
          */
         public static String[] stringValues() {
             if (stringValues == null) {
@@ -124,6 +127,9 @@ public class Capacity {
         this.groupCapacity = groupCapacity;
     }
 
+    /**
+     * Needed for firebase, default capacity
+     */
     public Capacity(){
 //        this(CapacityType.SPACES, 0);
     }
@@ -267,7 +273,7 @@ public class Capacity {
     }
 
     /**
-     * converts to a meaningul string
+     * converts to a meaningful string
      * @return charSequence
      */
     public CharSequence toDetailedString() {

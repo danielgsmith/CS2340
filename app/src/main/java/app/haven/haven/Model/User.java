@@ -1,5 +1,8 @@
 package app.haven.haven.Model;
 
+/**
+ * An object of user
+ */
 public class User {
 
     private String firstName;
@@ -111,14 +114,14 @@ public class User {
     }
 
     /**
-     * incrases numLoginAttemps by 1
+     * increases numLoginAttempts by 1
      */
     public void increaseNumLoginAttempts() {
         numLoginAttempts++;
     }
 
     /**
-     * Setter for numLoginAttampts
+     * Setter for numLoginAttempts
      * @param numLoginAttempts the number of login attempts
      */
     public void setNumLoginAttempts(int numLoginAttempts) {
@@ -158,7 +161,7 @@ public class User {
     }
 
     /**
-     * Setter for curentShelterPushID
+     * Setter for currentShelterPushID
      * @param currentShelterPushID the new ID
      */
     public void setCurrentShelterPushID(String currentShelterPushID) {

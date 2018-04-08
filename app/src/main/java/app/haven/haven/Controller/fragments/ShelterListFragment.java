@@ -152,6 +152,10 @@ public class ShelterListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
+        /**
+         * lets sub access info
+         * @param shelter the shelter being used
+         */
         void onListFragmentInteraction(Shelter shelter);
     }
 }

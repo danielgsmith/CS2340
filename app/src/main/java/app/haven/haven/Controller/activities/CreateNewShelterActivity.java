@@ -31,6 +31,9 @@ import app.haven.haven.Model.shelters.Shelter;
 import app.haven.haven.Controller.adapters.UsPhoneNumberFormatter;
 import app.haven.haven.R;
 
+/**
+ * Creates a new shelter
+ */
 public class CreateNewShelterActivity extends AppCompatActivity {
 
     private EditText textShelterName;

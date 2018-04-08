@@ -22,6 +22,11 @@ public class MyShelterSearchRecyclerViewAdapter extends RecyclerView.Adapter<MyS
     private final List<Shelter> mValues;
     private final ShelterSearchFragment.OnListFragmentInteractionListener mListener;
 
+    /**
+     * sets info
+     * @param items list of shelters
+     * @param listener listener
+     */
     public MyShelterSearchRecyclerViewAdapter(List<Shelter> items, ShelterSearchFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
@@ -63,6 +68,10 @@ public class MyShelterSearchRecyclerViewAdapter extends RecyclerView.Adapter<MyS
         public final TextView mContentView;
         public Shelter mItem;
 
+        /**
+         * sets info on view
+         * @param view view being set
+         */
         public ViewHolder(View view) {
             super(view);
             mView = view;

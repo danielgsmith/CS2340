@@ -11,6 +11,9 @@ import app.haven.haven.Controller.fragments.ShelterSearchFragment;
 import app.haven.haven.Model.shelters.Shelter;
 import app.haven.haven.R;
 
+/**
+ * Searched shelters list
+ */
 public class SearchedSheltersActivity extends AppCompatActivity
         implements
         ShelterSearchFragment.OnListFragmentInteractionListener {
@@ -46,13 +49,5 @@ public class SearchedSheltersActivity extends AppCompatActivity
         MainPageActivity.setSelectedShelter(shelter);
         Intent i = new Intent(getApplicationContext(), ShelterDetailsActivity.class);
         startActivity(i);
-    }
-
-    public static Shelter getSelectedShelter(){
-        return selectedShelter;
-    }
-
-    public static void setSelectedShelter(Shelter shelter) {
-        selectedShelter = shelter;
     }
 }

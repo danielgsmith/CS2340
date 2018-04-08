@@ -55,7 +55,6 @@ public class ShelterSearchFragment extends Fragment {
     public ShelterSearchFragment() {
     }
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static ShelterSearchFragment newInstance(int columnCount) {
         ShelterSearchFragment fragment = new ShelterSearchFragment();
@@ -180,9 +179,17 @@ public class ShelterSearchFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
+        /**
+         * sends shelter to next screen
+         * @param shelter the shelter being used
+         */
         void onListFragmentInteraction(Shelter shelter);
     }
 
+    /**
+     * get shelter array
+     * @return array of shelters
+     */
     public static ArrayList<Shelter> getSheltersArray() {
         if (sheltersArray == null || sheltersArray.isEmpty()) {
             sheltersArray = new ArrayList<>();
@@ -207,6 +214,10 @@ public class ShelterSearchFragment extends Fragment {
         return sheltersArray;
     }
 
+    /**
+     * sets array
+     * @param array array to set it to
+     */
     public static void setShelterArray(ArrayList<Shelter> array) {
         sheltersArray = array;
     }

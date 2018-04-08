@@ -2,6 +2,9 @@ package app.haven.haven.Model.shelters;
 
 import com.google.android.gms.maps.model.LatLng;
 
+/**
+ * Shelter object
+ */
 public class Shelter {
 
     private String shelterName;

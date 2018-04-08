@@ -148,7 +148,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        //Button that comes up when you try to log in, if clicked cancels and mvoes back to ;login screen
+        //Button that comes up when you try to log in, if clicked cancels and moves back to login screen
         mCancelButtonView = (Button) findViewById(R.id.cancel_action_button);
         mCancelButtonView.setOnClickListener(new OnClickListener() {
             @Override
@@ -568,7 +568,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-    //Sign into FireBase Authentication
+    /**
+     * signed into firebase
+     * @param email the email
+     * @param password the password
+     */
     public void signIn(final String email, String password) {
         Log.d(TAG, "signIn:" + email);
         //getLocked(email);

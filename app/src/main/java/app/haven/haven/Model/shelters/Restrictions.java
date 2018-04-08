@@ -1,5 +1,8 @@
 package app.haven.haven.Model.shelters;
 
+/**
+ * Restrictions Object
+ */
 public enum Restrictions {
 
     WOMEN_CHILDREN("women/children", false, true, false, false, false, false, false, true, false),
@@ -39,6 +42,11 @@ public enum Restrictions {
         this.adultsOnly = adultsOnly;
     }
 
+    /**
+     * Parses restrictions from strings
+     * @param text the text being parsed
+     * @return restrictions
+     */
     public static Restrictions parseFrom(String text) {
         text = text.replace("\n", "")
                 .replace(" ", "").toLowerCase();
@@ -50,37 +58,73 @@ public enum Restrictions {
         throw new IllegalArgumentException("No enum found for: " + text);
     }
 
+    /**
+     * are men allowed
+     * @return boolean true if man false otherwise
+     */
     public boolean isMen() {
         return men;
     }
 
+    /**
+     * are women allowed
+     * @return boolean true if woman false otherwise
+     */
     public boolean isWomen() {
         return women;
     }
 
+    /**
+     * are families allowed
+     * @return boolean true if true false otherwise
+     */
     public boolean isFamilyOnly() {
         return familyOnly;
     }
 
+    /**
+     * are newborns allowed
+     * @return boolean true if true false otherwise
+     */
     public boolean isNewbornsOnly() {
         return newbornsOnly;
     }
 
+    /**
+     * are children allowed
+     * @return boolean true if true false otherwise
+     */
     public boolean isChildrenUnder5Only() {
         return childrenUnder5Only;
     }
 
+    /**
+     * are young adults allowed
+     * @return boolean true if true false otherwise
+     */
     public boolean isYoungAdultsOnly() {
         return youngAdultsOnly;
     }
 
+    /**
+     * are veterans allowed
+     * @return boolean true if true false otherwise
+     */
     public boolean isVeteransOnly() {
         return veteransOnly;
     }
 
+    /**
+     * are children allowed
+     * @return boolean true if true false otherwise
+     */
     public boolean isAllowsChildren() {
         return allowsChildren;
     }
 
+    /**
+     * are adults allowed
+     * @return boolean true if true false otherwise
+     */
     public boolean isAdultsOnly() { return adultsOnly; }
 }

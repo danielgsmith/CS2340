@@ -13,6 +13,9 @@ import app.haven.haven.R;
  */
 public class ShelterDetailsActivityFragment extends Fragment {
 
+    /**
+     * Details fragment
+     */
     public ShelterDetailsActivityFragment() {
     }
 

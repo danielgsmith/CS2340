@@ -51,6 +51,9 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
 
     private OnFragmentInteractionListener mListener;
 
+    /**
+     * the admin page fragment
+     */
     public AdminPageFragment() {
         // Required empty public constructor
     }
@@ -97,7 +100,10 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    /**
+     * if button is pressed
+     * @param uri unused
+     */
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -185,6 +191,10 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
+        /**
+         * unused
+         * @param uri unused
+         */
         void onFragmentInteraction(Uri uri);
     }
 
@@ -225,6 +235,10 @@ public class AdminPageFragment extends Fragment implements View.OnClickListener 
         }
     }
 
+    /**
+     * List of shelters
+     * @return list of shelters
+     */
     public List<Shelter> getShelterList() {
         return shelterList;
     }

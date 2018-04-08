@@ -25,6 +25,9 @@ import app.haven.haven.Model.shelters.Capacity;
 import app.haven.haven.Model.shelters.Shelter;
 import app.haven.haven.R;
 
+/**
+ * Gives shelter details
+ */
 public class ShelterListDetailsActivity extends AppCompatActivity {
 
     private Shelter shelter;

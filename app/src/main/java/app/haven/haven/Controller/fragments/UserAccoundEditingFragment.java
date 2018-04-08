@@ -88,6 +88,9 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
     private boolean editing;
 //    private boolean readyToSwitsch;
 
+    /**
+     * Account Editing Fragment
+     */
     public UserAccoundEditingFragment() {
         // Required empty public constructor
     }
@@ -248,8 +251,8 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 
                 } else {
                     Toast.makeText(getActivity(), "Invalid Field Entered", Toast.LENGTH_SHORT).show();
-//                    Log.w("TRUEORFALSE", editing + " " + readyToSwitsch);
-//                    System.out.println(editing + " " + readyToSwitsch);
+//                    Log.w("TRUEORFALSE", editing + " " + readyToSwitch);
+//                    System.out.println(editing + " " + readyToSwitch);
                 }
             }
         });
@@ -307,7 +310,10 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    /**
+     * unused
+     * @param uri unused
+     */
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -347,7 +353,10 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+        /**
+         * unused
+         * @param uri unused
+         */
         void onFragmentInteraction(Uri uri);
     }
 

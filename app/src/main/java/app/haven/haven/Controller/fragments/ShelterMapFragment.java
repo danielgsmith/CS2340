@@ -47,6 +47,9 @@ import app.haven.haven.R;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
+/**
+ * Fragment that shows the google map
+ */
 public class ShelterMapFragment extends Fragment {
 
     MapView mMapView;
