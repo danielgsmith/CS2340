@@ -73,11 +73,17 @@ public class LocationTest {
         dis.distanceTo(that);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void zero() {
         Location dis = new Location(0, 0);
         Location that = new Location(0, 0);
-        assertEquals(0, dis.distanceTo(that));
+        assertEquals(0.0, dis.distanceTo(that));
+    }
+    @Test
+    public void nonZero() {
+        Location dis = new Location(1.0, 5.0);
+        Location that = new Location(-4.0, -1.0);
+        assertEquals(539.0621514341841, dis.distanceTo(that));
     }
 }
 
