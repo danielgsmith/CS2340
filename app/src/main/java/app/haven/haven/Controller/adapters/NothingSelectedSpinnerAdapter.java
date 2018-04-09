@@ -27,7 +27,7 @@ public class NothingSelectedSpinnerAdapter implements SpinnerAdapter, ListAdapte
      * @param spinnerAdapter wrapped Adapter.
      * @param nothingSelectedLayout layout for nothing selected, perhaps
      * you want text grayed out like a prompt...
-     * @param context where the context is
+     * @param context
      */
     public NothingSelectedSpinnerAdapter(
             SpinnerAdapter spinnerAdapter,
@@ -71,8 +71,8 @@ public class NothingSelectedSpinnerAdapter implements SpinnerAdapter, ListAdapte
     /**
      * View to show in Spinner with Nothing Selected
      * Override this to do something dynamic... e.g. "37 Options Found"
-     * @param parent the parent
-     * @return a new layout
+     * @param parent
+     * @return
      */
     private View getNothingSelectedView(ViewGroup parent) {
         return layoutInflater.inflate(nothingSelectedLayout, parent, false);
@@ -95,8 +95,8 @@ public class NothingSelectedSpinnerAdapter implements SpinnerAdapter, ListAdapte
     /**
      * Override this to do something dynamic... For example, "Pick your favorite
      * of these 37".
-     * @param parent the parent
-     * @return a new layout
+     * @param parent
+     * @return
      */
     private View getNothingSelectedDropdownView(ViewGroup parent) {
         return layoutInflater.inflate(nothingSelectedDropdownLayout, parent, false);

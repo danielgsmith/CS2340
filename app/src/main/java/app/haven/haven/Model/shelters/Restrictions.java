@@ -45,9 +45,11 @@ public enum Restrictions {
     /**
      * Parses restrictions from strings
      * @param text the text being parsed
+     * @throws IllegalArgumentException if null, empty or not a valid Restriction
      * @return restrictions
      */
     public static Restrictions parseFrom(String text) {
+        if (text == null || text.length() == 0) throw new IllegalArgumentException("Empty argument");
         text = text.replace("\n", "")
                 .replace(" ", "").toLowerCase();
         for (Restrictions restriction : values()) {
