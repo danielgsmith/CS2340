@@ -28,7 +28,7 @@ public class LocationTest {
     @Test(expected = IllegalArgumentException.class)
     public void thatLongLowTest() {
         Location dis = new Location(0, 0);
-        Location that = new Location(0, -100);
+        Location that = new Location(0, -200);
         dis.distanceTo(that);
     }
 
@@ -41,7 +41,7 @@ public class LocationTest {
     @Test(expected = IllegalArgumentException.class)
     public void thisLongLowTest() {
         Location that = new Location(0, 0);
-        Location dis = new Location(0, -100);
+        Location dis = new Location(0, -200);
         dis.distanceTo(that);
     }
 
@@ -55,7 +55,7 @@ public class LocationTest {
     @Test(expected = IllegalArgumentException.class)
     public void thatLongHighTest() {
         Location dis = new Location(0, 0);
-        Location that = new Location(0, 100);
+        Location that = new Location(0, 200);
         dis.distanceTo(that);
     }
 
@@ -69,7 +69,7 @@ public class LocationTest {
     @Test(expected = IllegalArgumentException.class)
     public void thisLongHighTest() {
         Location that = new Location(0, 0);
-        Location dis = new Location(0, 100);
+        Location dis = new Location(0, 200);
         dis.distanceTo(that);
     }
 
