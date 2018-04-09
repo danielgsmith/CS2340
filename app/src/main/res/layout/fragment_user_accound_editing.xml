@@ -175,13 +175,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/change_Password_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Send Reset Password Email"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
         </LinearLayout>
 
         <Space
@@ -190,23 +183,58 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/edit_Info_Button"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/Password_and_Edit"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Edit Info" />
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/save_Info_Button"
-                android:layout_width="109dp"
-                android:layout_height="wrap_content"
+                <Button
+                    android:id="@+id/change_Password_Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Send Reset Password Email"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                <Button
+                    android:id="@+id/edit_Info_Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Edit Info" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/Save_and_Cancel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Save Info"
-                android:visibility="gone" />
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/save_Info_Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Save Info"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/cancel_Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cancel"
+                    android:visibility="gone" />
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
