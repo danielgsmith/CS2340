@@ -10,6 +10,9 @@ import static org.junit.Assert.*;
 
 /**
  * Created by DanielSmith
+ *
+ * JUnit tests for the parseFromString method in the Capacity class
+ * M10
  */
 
 @RunWith(AndroidJUnit4.class)
