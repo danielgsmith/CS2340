@@ -32,6 +32,7 @@ import app.haven.haven.Controller.fragments.AdminPageFragment;
 import app.haven.haven.Controller.fragments.CriteriaFragment;
 import app.haven.haven.Controller.fragments.ShelterListFragment;
 import app.haven.haven.Controller.fragments.ShelterMapFragment;
+import app.haven.haven.Controller.fragments.UserAccoundEditingFragment;
 import app.haven.haven.Model.shelters.Shelter;
 import app.haven.haven.Model.User;
 import app.haven.haven.R;
@@ -44,7 +45,8 @@ public class MainPageActivity extends AppCompatActivity
         AdminPageFragment.OnFragmentInteractionListener,
         ShelterListFragment.OnListFragmentInteractionListener,
         CriteriaFragment.OnFragmentInteractionListener,
-        NavigationView.OnNavigationItemSelectedListener {
+        NavigationView.OnNavigationItemSelectedListener,
+        UserAccoundEditingFragment.OnFragmentInteractionListener {
 
     private ValueEventListener mUserlistener;
     private FirebaseUser mFireUser;
@@ -80,7 +82,6 @@ public class MainPageActivity extends AppCompatActivity
         // The icons/buttons on the sidebar
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
 
         mFireUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference mDataRef = FirebaseDatabase.getInstance().getReference();
@@ -226,10 +227,12 @@ public class MainPageActivity extends AppCompatActivity
                         Toast.LENGTH_SHORT).show();
             }
         } else if (id == R.id.nav_account) {
+
             if (mFireUser.isAnonymous() && mFireUser != null) {
                 Toast.makeText(this, "Must be logged in.",
                         Toast.LENGTH_SHORT).show();
             } else {
+                fragment = new UserAccoundEditingFragment();
                 setTitle("Account Settings");
                 Log.w("Logged in:", "Implement account page");
             }

@@ -16,6 +16,7 @@ public class User {
      * 1 for admin
      */
     private long accountType;
+    private String telephoneNumber;
 
     /**
      * default constructor
@@ -194,4 +195,21 @@ public class User {
     public void setTakenRooms(int takenRooms) {
         this.takenRooms = takenRooms;
     }
+
+    /**
+     * gets the telephone number
+     * @return telephoneNumber
+     */
+    public String getTelephoneNumber() {
+        return telephoneNumber;
+    }
+
+    /**
+     * sets the old telephoneNumber to the new telephoneNumber
+     * @param telephoneNumber the new telephoneNumber
+     */
+    public void setTelephoneNumber(String telephoneNumber) {
+        this.telephoneNumber = telephoneNumber;
+    }
+
 }

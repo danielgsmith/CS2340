@@ -55,7 +55,6 @@ public class CriteriaFragment extends Fragment {
     public static long rangeSelected;
     public static String searchedName;
     private EditText textName;
-    private Button seeMap;
 
     public CriteriaFragment() {
         // Required empty public constructor
@@ -160,7 +159,7 @@ public class CriteriaFragment extends Fragment {
             }
         });
 
-        seeMap = view.findViewById(R.id.button_see_on_map);
+        Button seeMap = view.findViewById(R.id.button_see_on_map);
         seeMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
