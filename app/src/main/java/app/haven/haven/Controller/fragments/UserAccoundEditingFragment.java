@@ -424,7 +424,11 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 
     }
 
-    private boolean isEmailCorrect(String email) {
+
+    public boolean isEmailCorrect(String email) {
+        if (email == null) {
+            throw new IllegalArgumentException("email passed in is null");
+        }
         return !email.isEmpty() && email.contains("@") && email.contains(".");
     }
 
