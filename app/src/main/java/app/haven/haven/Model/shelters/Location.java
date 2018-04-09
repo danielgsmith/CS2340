@@ -72,8 +72,4 @@ public class Location {
         return "(" + latitude + ", " + longitude + ")";
     }
 
-    private double getLongitude() {return longitude;}
-
-    private double getLatitude() {return latitude;}
-
 }
