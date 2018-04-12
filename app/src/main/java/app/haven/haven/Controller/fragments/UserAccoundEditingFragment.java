@@ -83,18 +83,19 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
     private String oldTelephoneNumber;
     private String updatedTelephoneNumber;
 
-
     //buttons:
     private Button sendPasswordResetButton;
     private Button saveInfoButton;
     private Button editInfoButton;
     private Button cancelButton;
 
-    private LinearLayout editAndPassword;
-    private LinearLayout saveAndCancel;
+    private LinearLayout buttonHolder;
+//    private LinearLayout editAndPassword;
+//    private LinearLayout saveAndCancel;
 
-    private boolean editing;
+    private boolean currentlyEditing;
     private boolean emailInUse;
+//    private boolean readyToSwitch;
 
     public UserAccoundEditingFragment() {
         // Required empty public constructor
@@ -159,8 +160,9 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
             textTelephoneNumber.setText(oldTelephoneNumber);
         }
 
-        editAndPassword = (LinearLayout) view.findViewById(R.id.Password_and_Edit);
-        saveAndCancel = (LinearLayout) view.findViewById(R.id.Save_and_Cancel);
+        buttonHolder = (LinearLayout) view.findViewById(R.id.ButtonHolder);
+//        editAndPassword = (LinearLayout) view.findViewById(R.id.Password_and_Edit);
+//        saveAndCancel = (LinearLayout) view.findViewById(R.id.Save_and_Cancel);
 
         //Initialize the editing screen, but still on the view screen
         editTextUserFirstName = view.findViewById(R.id.input_user_first_name);
@@ -193,96 +195,109 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
             @Override
             public void onClick(View view) {
 
+
                 Log.d("Edit Info Button", "Clicked");
+                currentlyEditing = true;
+//                readyToSwitch = true;
 
-                editing = true;
+//                editAndPassword.setVisibility(View.GONE);
+//                saveAndCancel.setVisibility(View.VISIBLE);
+                    editInfoButton.setVisibility(View.GONE);
+                    sendPasswordResetButton.setVisibility(View.GONE);
+                    saveInfoButton.setVisibility(View.VISIBLE);
+                    cancelButton.setVisibility(View.VISIBLE);
 
-                editAndPassword.setVisibility(View.GONE);
-                saveAndCancel.setVisibility(View.VISIBLE);
-//                editInfoButton.setVisibility(View.GONE);
-//                saveInfoButton.setVisibility(View.VISIBLE);
-//                cancelButton.setVisibility(View.VISIBLE);
-//                sendPasswordResetButton.setVisibility(View.GONE);
-
-                textUserFirstName.setVisibility((View.GONE));
-                editTextUserFirstName.setVisibility(View.VISIBLE);
+                    textUserFirstName.setVisibility((View.GONE));
+                    editTextUserFirstName.setVisibility(View.VISIBLE);
 //                firstNameText.setGravity(10); //TODO FIX THIS!
 
+                    textUserLastName.setVisibility((View.GONE));
+                    editTextUserLastName.setVisibility(View.VISIBLE);
 
-                textUserLastName.setVisibility((View.GONE));
-                editTextUserLastName.setVisibility(View.VISIBLE);
+                    textEmail.setVisibility((View.GONE));
+                    editTextUserEmail.setVisibility((View.VISIBLE));
 
-                textEmail.setVisibility((View.GONE));
-                editTextUserEmail.setVisibility((View.VISIBLE));
+                    textTelephoneNumber.setVisibility((View.GONE));
+                    editTextUserTelephoneNumber.setVisibility((View.VISIBLE));
 
-                textTelephoneNumber.setVisibility((View.GONE));
-                editTextUserTelephoneNumber.setVisibility((View.VISIBLE));
             }
         });
 
+        //////////////// SAVE BUTTON //////////////////////////////////////////////////////////////
         saveInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Log.d("Save Info Button", "Clicked");
+                Log.d("LOGIC FOR SWITCHING", "" + currentlyEditing);
 
-                if (editing == true) {
-//                    update everything and switch back to textView
 
-                    editAndPassword.setVisibility(View.VISIBLE);
-                    saveAndCancel.setVisibility(View.GONE);
 
-//                    saveInfoButton.setVisibility(View.GONE);
-//                    cancelButton.setVisibility(View.GONE);
-//                    editInfoButton.setVisibility(View.VISIBLE);
 
-                    updatedFirstName = editTextUserFirstName.getText().toString();
-                    updatedLastName = editTextUserLastName.getText().toString();
+                if (currentlyEditing) { //&& readyToSwitch
+
+
                     updatedEmail = editTextUserEmail.getText().toString();
-                    updatedTelephoneNumber = editTextUserTelephoneNumber.getText().toString();
 
-                    mUser.setFirstName(updatedFirstName);
-                    mUser.setLastName(updatedLastName);
-                    mUser.setEmail(updatedEmail);
-                    mUser.setTelephoneNumber(updatedTelephoneNumber);
+                    checkEmailInUse(updatedEmail);
 
-                    editTextUserFirstName.setVisibility(View.GONE);
-                    textUserFirstName.setVisibility((View.VISIBLE));
-//                    editTextUserFirstName.setText(updatedFirstName);
-//                    textUserFirstName.setText(updatedFirstName);
+                    if (emailInUse == true) {
+                        Log.d("Check Email", "Is email in use: " + emailInUse
+                                + "\n" + "Old Email: " + oldEmail
+                                + "\n" + "Updated Email: " + updatedEmail);
+                        Toast.makeText(getActivity(), "Email is already in use",
+                                Toast.LENGTH_SHORT).show();
 
-                    editTextUserLastName.setVisibility(View.GONE);
-                    textUserLastName.setVisibility(View.VISIBLE);
-//                    editTextUserLastName.setText(updatedLastName);
-//                    textUserLastName.setText(updatedLastName);
+                    } else {
 
-                    editTextUserEmail.setVisibility((View.GONE));
-                    textEmail.setVisibility((View.VISIBLE));
+                        updatedFirstName = editTextUserFirstName.getText().toString();
+                        updatedLastName = editTextUserLastName.getText().toString();
+                        updatedTelephoneNumber = editTextUserTelephoneNumber.getText().toString();
 
-                    editTextUserTelephoneNumber.setVisibility((View.GONE));
-                    textTelephoneNumber.setVisibility((View.VISIBLE));
+//                        mUser.setFirstName(updatedFirstName);
+//                        mUser.setLastName(updatedLastName);
+//                        mUser.setEmail(updatedEmail);
+//                        mUser.setTelephoneNumber(updatedTelephoneNumber);
 
-                    updateInfo();
-//                    editing = false;
+                        editTextUserFirstName.setVisibility(View.GONE);
+                        textUserFirstName.setVisibility((View.VISIBLE));
 
-                } else {
-                    Toast.makeText(getActivity(), "Invalid Field Entered", Toast.LENGTH_SHORT).show();
-//                    Log.w("TRUEORFALSE", editing + " " + readyToSwitsch);
-//                    System.out.println(editing + " " + readyToSwitsch);
+                        editTextUserLastName.setVisibility(View.GONE);
+                        textUserLastName.setVisibility(View.VISIBLE);
+
+
+                        editTextUserEmail.setVisibility((View.GONE));
+                        textEmail.setVisibility((View.VISIBLE));
+
+                        editTextUserTelephoneNumber.setVisibility((View.GONE));
+                        textTelephoneNumber.setVisibility((View.VISIBLE));
+
+                        updateInfo();
+
+                        saveInfoButton.setVisibility(View.GONE);
+                        cancelButton.setVisibility(View.GONE);
+                        editInfoButton.setVisibility(View.VISIBLE);
+                        sendPasswordResetButton.setVisibility(View.VISIBLE);
+
+
+                        currentlyEditing = false;
+                    }
+
                 }
             }
         });
 
+        ////////////////////// CANCEL BUTTON //////////////////////////////////////////////////////
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("Cancel Button", "Clicked");
-                editAndPassword.setVisibility(View.VISIBLE);
-                saveAndCancel.setVisibility(View.GONE);
-//                saveInfoButton.setVisibility(View.GONE);
-//                cancelButton.setVisibility(View.GONE);
-//                editInfoButton.setVisibility(View.VISIBLE);
-//                sendPasswordResetButton.setVisibility(View.VISIBLE);
+
+
+                saveInfoButton.setVisibility(View.GONE);
+                cancelButton.setVisibility(View.GONE);
+                editInfoButton.setVisibility(View.VISIBLE);
+                sendPasswordResetButton.setVisibility(View.VISIBLE);
 
                 editTextUserFirstName.setVisibility(View.GONE);
                 textUserFirstName.setVisibility((View.VISIBLE));
@@ -296,7 +311,7 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
                 editTextUserTelephoneNumber.setVisibility((View.GONE));
                 textTelephoneNumber.setVisibility((View.VISIBLE));
 
-                editing = false;
+                currentlyEditing = false;
             }
         });
 
@@ -371,7 +386,6 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
             mUser.setFirstName(updatedFirstName);
             oldFirstName = mUser.getFirstName();
             mDataRef.child("users").child(mFireUser.getUid()).child("firstName").setValue(updatedFirstName);
-//            readyToSwitsch = true;
         }
 
         if (!oldLastName.equals(updatedLastName)) {
@@ -380,34 +394,20 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
             mUser.setLastName(updatedLastName);
             oldLastName = updatedLastName;
             mDataRef.child("users").child(mFireUser.getUid()).child("lastName").setValue(updatedLastName);
-//            readyToSwitsch = true;
         }
 
-        if (!isEmailCorrect(updatedEmail)) {
-            Toast.makeText(getActivity(), "Invalid Email", Toast.LENGTH_SHORT).show();
-            textEmail.setText(oldEmail);
-            editTextUserEmail.setText(oldEmail);
-            mUser.setEmail(oldEmail);
-            editing = true;
-        } else if (isEmailCorrect(updatedEmail) && !oldEmail.equals((updatedEmail))) {
-            checkEmailInUse(updatedEmail);
-            if (emailInUse) {
-                Log.d("Check Email", emailInUse + " ");
-                editing = true;
-            } else {
-                Log.d("Check Email", emailInUse + " ");
-                textEmail.setText(updatedEmail);
-                editTextUserEmail.setText(updatedEmail);
-                mUser.setEmail(updatedEmail);
-                oldEmail = updatedEmail;
-                mDataRef.child("users").child(mFireUser.getUid()).child("email").setValue(updatedEmail);
-                mFireUser.updateEmail(updatedEmail);
-                String emailWithout = updatedEmail.replace(".", "|");
-                mDataRef.child("emailtouid").child(emailWithout).setValue(mFireUser.getUid());
+        if (isEmailCorrect(updatedEmail) && !oldEmail.equals((updatedEmail))) {
 
-                editing = false;
-            }
+            Log.d("Check Email", emailInUse + ", " + oldEmail + ", " + updatedEmail);
 
+            textEmail.setText(updatedEmail);
+            editTextUserEmail.setText(updatedEmail);
+            mUser.setEmail(updatedEmail);
+            oldEmail = updatedEmail;
+            mDataRef.child("users").child(mFireUser.getUid()).child("email").setValue(updatedEmail);
+            mFireUser.updateEmail(updatedEmail);
+            String emailWithout = updatedEmail.replace(".", "|");
+            mDataRef.child("emailtouid").child(emailWithout).setValue(mFireUser.getUid());
         }
 
 
@@ -420,11 +420,16 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
             textTelephoneNumber.setText(updatedTelephoneNumber);
             editTextUserTelephoneNumber.setText(updatedTelephoneNumber);
             oldTelephoneNumber = updatedTelephoneNumber;
+            mUser.setTelephoneNumber(updatedTelephoneNumber);
         }
-
     }
 
 
+    /**
+     * checks if email is in correct format
+     * @param email the email to check
+     * @return true if it is not empty and contains an "@" and "."
+     */
     public boolean isEmailCorrect(String email) {
         if (email == null) {
             throw new IllegalArgumentException("email passed in is null");
@@ -433,25 +438,18 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
     }
 
     private void checkEmailInUse(String email) {
-        mAuth.fetchProvidersForEmail(email)
-                .addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<ProviderQueryResult> task) {
-
-                        emailInUse = !task.getResult().getProviders().isEmpty();
-
-//                        if(emailInUse) {
-//                            wrong = true;
-//                            Toast.makeText(getActivity(), "Email already in use.",
-//                                    Toast.LENGTH_SHORT).show();
-//
-//                        }
-////                        else {
-////                            Toast.makeText(getActivity(), "Authentication failed.",
-////                                    Toast.LENGTH_SHORT).show();
-////                        }
-                    }
-                });
+        if (email.isEmpty()) {
+            Log.d("Email is empty", "Email is Empty");
+        } else {
+            mAuth.fetchProvidersForEmail(email)
+                    .addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<ProviderQueryResult> task) {
+                            emailInUse = !(task.getResult().getProviders().isEmpty());
+                            //means that the list of users with this email is empty
+                        }
+                    });
+        }
     }
 
     private void sendResetEmail(){
