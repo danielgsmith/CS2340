@@ -211,7 +211,7 @@ public class ShelterMapFragment extends Fragment {
                 }
 
 
-                // For zooming automatically to the location of the marker
+//                 For zooming automatically to the location of the marker
                 LocationManager lm = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
                 Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(

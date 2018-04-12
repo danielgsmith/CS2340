@@ -241,7 +241,14 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 
                     checkEmailInUse(updatedEmail);
 
-                    if (emailInUse == true) {
+
+                    if (!isEmailCorrect(updatedEmail)) {
+                        Log.d("Email Incorrect", "Is email in use: " + emailInUse
+                                + "\n" + "Old Email: " + oldEmail
+                                + "\n" + "Updated Email: " + updatedEmail);
+                        Toast.makeText(getActivity(), "Email is already in use",
+                                Toast.LENGTH_SHORT).show();
+                    } else if (emailInUse == true) {
                         Log.d("Check Email", "Is email in use: " + emailInUse
                                 + "\n" + "Old Email: " + oldEmail
                                 + "\n" + "Updated Email: " + updatedEmail);
@@ -396,7 +403,7 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
             mDataRef.child("users").child(mFireUser.getUid()).child("lastName").setValue(updatedLastName);
         }
 
-        if (isEmailCorrect(updatedEmail) && !oldEmail.equals((updatedEmail))) {
+        if (!oldEmail.equals((updatedEmail))) {
 
             Log.d("Check Email", emailInUse + ", " + oldEmail + ", " + updatedEmail);
 
