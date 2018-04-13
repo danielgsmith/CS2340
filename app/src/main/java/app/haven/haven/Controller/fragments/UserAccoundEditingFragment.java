@@ -154,17 +154,11 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 
         oldTelephoneNumber = mUser.getTelephoneNumber();
         textTelephoneNumber = view.findViewById(R.id.updated_telephone_number);
-        if (oldTelephoneNumber == null) {
-            textTelephoneNumber.setText("No telephone added yet");
-        } else {
-            textTelephoneNumber.setText(oldTelephoneNumber);
-        }
+        textTelephoneNumber.setText(oldTelephoneNumber);
+
 
         buttonHolder = (LinearLayout) view.findViewById(R.id.ButtonHolder);
-//        editAndPassword = (LinearLayout) view.findViewById(R.id.Password_and_Edit);
-//        saveAndCancel = (LinearLayout) view.findViewById(R.id.Save_and_Cancel);
 
-        //Initialize the editing screen, but still on the view screen
         editTextUserFirstName = view.findViewById(R.id.input_user_first_name);
         editTextUserFirstName.setText(oldFirstName);
 
@@ -175,7 +169,7 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
         editTextUserEmail.setText(oldEmail);
 
         editTextUserTelephoneNumber = view.findViewById(R.id.input_user_telephone_number);
-        editTextUserTelephoneNumber.setText("No telephone added yet");
+        editTextUserTelephoneNumber.setText(oldTelephoneNumber);
 
         sendPasswordResetButton = (Button) view.findViewById(R.id.change_Password_Button);
         editInfoButton = (Button) view.findViewById(R.id.edit_Info_Button);
@@ -195,13 +189,9 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
             @Override
             public void onClick(View view) {
 
-
                 Log.d("Edit Info Button", "Clicked");
                 currentlyEditing = true;
-//                readyToSwitch = true;
 
-//                editAndPassword.setVisibility(View.GONE);
-//                saveAndCancel.setVisibility(View.VISIBLE);
                     editInfoButton.setVisibility(View.GONE);
                     sendPasswordResetButton.setVisibility(View.GONE);
                     saveInfoButton.setVisibility(View.VISIBLE);
@@ -233,13 +223,17 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 
 
 
+                Log.d("test", "" + possibleUsersIsEmpty);
 
                 if (currentlyEditing) { //&& readyToSwitch
 
-
+                    updatedTelephoneNumber = editTextUserTelephoneNumber.getText().toString();
                     updatedEmail = editTextUserEmail.getText().toString();
-
-                    checkEmailInUse(updatedEmail);
+//                    possibleUsersIsEmpty = true;
+                    if (!oldEmail.equals(updatedEmail)) {
+                        checkEmailInUse(updatedEmail);
+                    }
+//                    Log.d("test", "" + possibleUsersIsEmpty);
 
 
                     if (!isEmailCorrect(updatedEmail)) {
@@ -256,6 +250,12 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
                         Toast.makeText(getActivity(), "Email is already in use",
                                 Toast.LENGTH_SHORT).show();
 
+                    } else if (!isTelephoneNumberValid(updatedTelephoneNumber)) {
+                        Log.d("Phone Number Incorrect", "\n Incorrect Telephone Number Format: "
+                                + "\n" + "Old Telephone Number: " + oldTelephoneNumber
+                                + "\n" + "Updated Telephone Number: " + updatedTelephoneNumber);
+                        Toast.makeText(getActivity(), "Incorrect telephone number format",
+                                Toast.LENGTH_SHORT).show();
                     } else {
 
                         updatedFirstName = editTextUserFirstName.getText().toString();
@@ -281,10 +281,8 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
                         editInfoButton.setVisibility(View.VISIBLE);
                         sendPasswordResetButton.setVisibility(View.VISIBLE);
 
-
                         currentlyEditing = false;
                     }
-
                 }
             }
         });
@@ -413,16 +411,12 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
         }
 
 
-        if (updatedTelephoneNumber == null) {
-            textTelephoneNumber.setText("No telephone added yet");
-            editTextUserTelephoneNumber.setText("No telephone added yet");
-            oldTelephoneNumber = "No telephone added yet";
-
-        } else {
+        if (!oldTelephoneNumber.equals(updatedTelephoneNumber)) {
             textTelephoneNumber.setText(updatedTelephoneNumber);
             editTextUserTelephoneNumber.setText(updatedTelephoneNumber);
             oldTelephoneNumber = updatedTelephoneNumber;
             mUser.setTelephoneNumber(updatedTelephoneNumber);
+            mDataRef.child("users").child(mFireUser.getUid()).child("telephoneNumber").setValue(updatedTelephoneNumber);
         }
     }
 
@@ -437,6 +431,10 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
             throw new IllegalArgumentException("email passed in is null");
         }
         return !email.isEmpty() && email.contains("@") && email.contains(".");
+    }
+
+    private boolean isTelephoneNumberValid(String telephoneNumber) {
+        return telephoneNumber.contains("-") && telephoneNumber.length() == 12;
     }
 
     private void checkEmailInUse(String email) {
