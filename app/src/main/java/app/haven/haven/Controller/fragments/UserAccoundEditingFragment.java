@@ -94,7 +94,7 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 //    private LinearLayout saveAndCancel;
 
     private boolean currentlyEditing;
-    private boolean emailInUse;
+    private boolean possibleUsersIsEmpty;
 //    private boolean readyToSwitch;
 
     public UserAccoundEditingFragment() {
@@ -229,7 +229,7 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
             public void onClick(View view) {
 
                 Log.d("Save Info Button", "Clicked");
-                Log.d("LOGIC FOR SWITCHING", "" + currentlyEditing);
+                Log.d("Currenly Editing: ", "" + currentlyEditing);
 
 
 
@@ -243,15 +243,16 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 
 
                     if (!isEmailCorrect(updatedEmail)) {
-                        Log.d("Email Incorrect", "Is email in use: " + emailInUse
+                        Log.d("Email Incorrect", "\n Incorrect Email Format: "
                                 + "\n" + "Old Email: " + oldEmail
                                 + "\n" + "Updated Email: " + updatedEmail);
-                        Toast.makeText(getActivity(), "Email is already in use",
+                        Toast.makeText(getActivity(), "Incorrect email format",
                                 Toast.LENGTH_SHORT).show();
-                    } else if (emailInUse == true) {
-                        Log.d("Check Email", "Is email in use: " + emailInUse
+                    } else if (possibleUsersIsEmpty == false) { //email is in use
+                        Log.d("Check Email", "\n Is List of possible users empty: " + possibleUsersIsEmpty
                                 + "\n" + "Old Email: " + oldEmail
                                 + "\n" + "Updated Email: " + updatedEmail);
+
                         Toast.makeText(getActivity(), "Email is already in use",
                                 Toast.LENGTH_SHORT).show();
 
@@ -261,17 +262,11 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
                         updatedLastName = editTextUserLastName.getText().toString();
                         updatedTelephoneNumber = editTextUserTelephoneNumber.getText().toString();
 
-//                        mUser.setFirstName(updatedFirstName);
-//                        mUser.setLastName(updatedLastName);
-//                        mUser.setEmail(updatedEmail);
-//                        mUser.setTelephoneNumber(updatedTelephoneNumber);
-
                         editTextUserFirstName.setVisibility(View.GONE);
                         textUserFirstName.setVisibility((View.VISIBLE));
 
                         editTextUserLastName.setVisibility(View.GONE);
                         textUserLastName.setVisibility(View.VISIBLE);
-
 
                         editTextUserEmail.setVisibility((View.GONE));
                         textEmail.setVisibility((View.VISIBLE));
@@ -405,7 +400,7 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
 
         if (!oldEmail.equals((updatedEmail))) {
 
-            Log.d("Check Email", emailInUse + ", " + oldEmail + ", " + updatedEmail);
+            Log.d("Check Email", "CAPABLE OF CHANGING EMAIL: " + possibleUsersIsEmpty + ", " + oldEmail + ", " + updatedEmail);
 
             textEmail.setText(updatedEmail);
             editTextUserEmail.setText(updatedEmail);
@@ -452,7 +447,11 @@ public class UserAccoundEditingFragment extends Fragment implements View.OnClick
                     .addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
                         @Override
                         public void onComplete(@NonNull Task<ProviderQueryResult> task) {
-                            emailInUse = !(task.getResult().getProviders().isEmpty());
+                           if (task.getResult().getProviders().isEmpty() == true) {
+                               possibleUsersIsEmpty = true;
+                           } else {
+                               possibleUsersIsEmpty = false;
+                           }
                             //means that the list of users with this email is empty
                         }
                     });
